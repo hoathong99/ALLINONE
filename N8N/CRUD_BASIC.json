@@ -1,0 +1,1300 @@
+{
+  "name": "CRUD BASIC",
+  "nodes": [
+    {
+      "parameters": {
+        "collection": "Submission",
+        "options": {
+          "projection": ""
+        },
+        "query": "={\n    \"data.id\": \"{{ $json.body.data }}\"\n} "
+      },
+      "type": "n8n-nodes-base.mongoDb",
+      "typeVersion": 1.1,
+      "position": [
+        100,
+        140
+      ],
+      "id": "0e3dffcc-4485-48cc-850f-538135a10da8",
+      "name": "MongoDB2",
+      "credentials": {
+        "mongoDb": {
+          "id": "uZBJYKWIUnsdVQVp",
+          "name": "MongoDB account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "allIncomingItems",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        320,
+        140
+      ],
+      "id": "9ff2128f-7e8b-4bda-94d3-56692883f7a6",
+      "name": "Respond to Webhook10"
+    },
+    {
+      "parameters": {
+        "collection": "Submission",
+        "options": {
+          "limit": 1,
+          "sort": "{\n  \"data.timestamp\": -1\n}",
+          "projection": "{\n  \"_id\" : 0\n}"
+        },
+        "query": "={\n  \"parent\": \"{{ $json.body.data }}\"\n}"
+      },
+      "type": "n8n-nodes-base.mongoDb",
+      "typeVersion": 1.1,
+      "position": [
+        100,
+        300
+      ],
+      "id": "340a3b62-4751-403c-a04d-4769bf0326ca",
+      "name": "MongoDB8",
+      "credentials": {
+        "mongoDb": {
+          "id": "uZBJYKWIUnsdVQVp",
+          "name": "MongoDB account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "allIncomingItems",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        320,
+        300
+      ],
+      "id": "ed271532-2d87-4a39-bd56-ffd1dd61b6d0",
+      "name": "Respond to Webhook11"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "GetLatestSubmit",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -120,
+        300
+      ],
+      "id": "3d6527f6-56bb-4426-91b7-5a6c012c462c",
+      "name": "GetLatestSubmission",
+      "webhookId": "3e5f04e9-b66c-4ca6-bc86-4c68590eae9f"
+    },
+    {
+      "parameters": {
+        "operation": "delete",
+        "collection": "Submission",
+        "query": "={\n  \"data.id\" :\"{{ $json.body.data }}\"\n} "
+      },
+      "type": "n8n-nodes-base.mongoDb",
+      "typeVersion": 1.1,
+      "position": [
+        100,
+        -20
+      ],
+      "id": "5597be95-7fde-4563-b289-f33a2fbf0867",
+      "name": "Save submission1",
+      "credentials": {
+        "mongoDb": {
+          "id": "uZBJYKWIUnsdVQVp",
+          "name": "MongoDB account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "=",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        540,
+        -20
+      ],
+      "id": "6a88e1ee-2141-474e-bef7-2f7e757a9d22",
+      "name": "Respond to Webhook13"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "57d96943-f550-4222-b5ed-1eb1fd4804ed",
+              "name": "parent",
+              "value": "={{ $json.parent }}",
+              "type": "string"
+            },
+            {
+              "id": "465a23f8-1a03-4d4e-bfee-fc816a3bd110",
+              "name": "data",
+              "value": "={{ $json.data }}",
+              "type": "object"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        320,
+        -20
+      ],
+      "id": "d1410a05-d232-4347-a8b9-b306bfdacac3",
+      "name": "Edit Fields3"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "DeleteSubmission",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -120,
+        -20
+      ],
+      "id": "9780e700-34ce-4b48-819b-cdd43e6b2969",
+      "name": "Delete submission",
+      "webhookId": "7f9761a6-cd5e-4117-b3f6-ab2b94288e2e"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{$json}}",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        320,
+        780
+      ],
+      "id": "6a9bc49a-dff9-4471-892c-f271d003b54f",
+      "name": "Respond to Webhook1"
+    },
+    {
+      "parameters": {
+        "collection": "GraphTemplate",
+        "options": {
+          "projection": "{\n  \"_id\":0\n}"
+        },
+        "query": "={\n  \"graphId\": \"{{ $json.body.graphId }}\"\n}"
+      },
+      "type": "n8n-nodes-base.mongoDb",
+      "typeVersion": 1.1,
+      "position": [
+        100,
+        780
+      ],
+      "id": "fd387920-94bf-4142-90f5-0c80ebcb2af4",
+      "name": "Get Graph1",
+      "credentials": {
+        "mongoDb": {
+          "id": "uZBJYKWIUnsdVQVp",
+          "name": "MongoDB account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "get-template",
+        "responseMode": "responseNode",
+        "options": {
+          "allowedOrigins": "*"
+        }
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -120,
+        780
+      ],
+      "id": "5206f27c-982b-4953-a58c-9451b70eef35",
+      "name": "Get_Flow_Template",
+      "webhookId": "fcc4549f-5f81-462e-b57d-52c64b3204e7"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{$json}}",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        540,
+        620
+      ],
+      "id": "5655b034-5d68-497e-8cec-f2fcf4276a24",
+      "name": "Respond to Webhook15"
+    },
+    {
+      "parameters": {
+        "collection": "GraphTemplate",
+        "options": {
+          "projection": "{\n  \"_id\":0\n}"
+        },
+        "query": "={\n  \"graphId\": \"{{ $json.body.graphId }}\"\n}"
+      },
+      "type": "n8n-nodes-base.mongoDb",
+      "typeVersion": 1.1,
+      "position": [
+        100,
+        620
+      ],
+      "id": "bb57e9b3-1ccd-4a0e-86ef-a16c5a8dd446",
+      "name": "Get Graph2",
+      "credentials": {
+        "mongoDb": {
+          "id": "uZBJYKWIUnsdVQVp",
+          "name": "MongoDB account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "cloneGraph",
+        "responseMode": "responseNode",
+        "options": {
+          "allowedOrigins": "*"
+        }
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -120,
+        620
+      ],
+      "id": "8374bb01-04b9-4205-a819-cdf689319480",
+      "name": "Clone flow template",
+      "webhookId": "fcc4549f-5f81-462e-b57d-52c64b3204e7"
+    },
+    {
+      "parameters": {
+        "operation": "insert",
+        "collection": "GraphData",
+        "fields": "=graphId, domain, status, currentEvent, history, definition",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.mongoDb",
+      "typeVersion": 1.1,
+      "position": [
+        320,
+        620
+      ],
+      "id": "a5a99a65-e4c6-4570-ba32-9d127f6c9259",
+      "name": "MongoDB11",
+      "credentials": {
+        "mongoDb": {
+          "id": "uZBJYKWIUnsdVQVp",
+          "name": "MongoDB account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## CURRENT RUNNING",
+        "width": 220
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -440,
+        400
+      ],
+      "id": "797fc229-bcd8-430e-a8eb-b1b419e6865e",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{$json}}",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        520,
+        940
+      ],
+      "id": "f16a7e45-02c4-4d5c-ab14-badd50cef771",
+      "name": "Respond to Webhook18"
+    },
+    {
+      "parameters": {
+        "operation": "insert",
+        "collection": "Employee",
+        "fields": "status, basicInfo",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.mongoDb",
+      "typeVersion": 1.1,
+      "position": [
+        320,
+        940
+      ],
+      "id": "d8642064-8480-4cbd-b610-e1262c247d98",
+      "name": "Get Graph4",
+      "credentials": {
+        "mongoDb": {
+          "id": "uZBJYKWIUnsdVQVp",
+          "name": "MongoDB account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "CreateEmployee",
+        "responseMode": "responseNode",
+        "options": {
+          "allowedOrigins": "*"
+        }
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -120,
+        940
+      ],
+      "id": "df766400-7330-4683-a088-6de8f7023792",
+      "name": "Save Empoyee Record",
+      "webhookId": "fcc4549f-5f81-462e-b57d-52c64b3204e7"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{$json}}",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        500,
+        1100
+      ],
+      "id": "03743803-3e86-44b6-a08e-70253f3a962b",
+      "name": "Respond to Webhook19"
+    },
+    {
+      "parameters": {
+        "operation": "insert",
+        "collection": "Contract",
+        "fields": "ContractInfo",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.mongoDb",
+      "typeVersion": 1.1,
+      "position": [
+        320,
+        1100
+      ],
+      "id": "5130dba2-0f1f-4b83-8b74-cdb4690ff2ef",
+      "name": "Get Graph5",
+      "credentials": {
+        "mongoDb": {
+          "id": "uZBJYKWIUnsdVQVp",
+          "name": "MongoDB account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "CreateEmployeeRecord",
+        "responseMode": "responseNode",
+        "options": {
+          "allowedOrigins": "*"
+        }
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -120,
+        1100
+      ],
+      "id": "4369b531-a82a-439d-a3b9-97da5ebf8815",
+      "name": "Save Contract Record",
+      "webhookId": "fcc4549f-5f81-462e-b57d-52c64b3204e7"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "476e7efa-a56d-45b4-add1-cf479c4c323f",
+              "name": "status",
+              "value": "=pending",
+              "type": "string"
+            },
+            {
+              "id": "5263e07e-fc2e-4a3b-994f-555823bb14fa",
+              "name": "basicInfo",
+              "value": "={{ $json.body }}",
+              "type": "object"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        100,
+        940
+      ],
+      "id": "90ef5081-46a9-4448-b4f9-e2b1c94808d4",
+      "name": "Edit Fields2"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "9086225c-819c-4904-8c30-aeeca191cf32",
+              "name": "ContractInfo",
+              "value": "={{ $json.body }}",
+              "type": "object"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        100,
+        1100
+      ],
+      "id": "fbee0bf5-6e14-4012-9957-0249c267d4b4",
+      "name": "Edit Fields4"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{$json}}",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        500,
+        1260
+      ],
+      "id": "fae41dba-9159-417d-850e-d0dd2c176847",
+      "name": "Respond to Webhook20"
+    },
+    {
+      "parameters": {
+        "operation": "insert",
+        "collection": "GraphData",
+        "fields": "graphId, domain, status, currentEvent, history, definition ",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.mongoDb",
+      "typeVersion": 1.1,
+      "position": [
+        320,
+        1260
+      ],
+      "id": "0df20189-c67b-4d57-9944-95a483034699",
+      "name": "Get Graph6",
+      "credentials": {
+        "mongoDb": {
+          "id": "uZBJYKWIUnsdVQVp",
+          "name": "MongoDB account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "SaveFlowGarph",
+        "responseMode": "responseNode",
+        "options": {
+          "allowedOrigins": "*"
+        }
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -120,
+        1260
+      ],
+      "id": "01a267b2-b78b-45eb-be9e-cf4aa1e1fd88",
+      "name": "Save Graph",
+      "webhookId": "fcc4549f-5f81-462e-b57d-52c64b3204e7"
+    },
+    {
+      "parameters": {
+        "jsCode": "\nreturn $input.first().json.body;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        100,
+        1260
+      ],
+      "id": "5b2364b5-bc61-47cb-b5cb-26e16a4d0dae",
+      "name": "Code1"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{$json}}",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        540,
+        460
+      ],
+      "id": "ff5df1c1-5c04-46cd-ac53-b2c3f117f6fc",
+      "name": "Respond to Webhook21"
+    },
+    {
+      "parameters": {
+        "operation": "insert",
+        "collection": "Submission",
+        "fields": "parentId, data, timestamp",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.mongoDb",
+      "typeVersion": 1.1,
+      "position": [
+        320,
+        460
+      ],
+      "id": "25f6b1cc-8c41-45f7-80f0-a9f4e00159e9",
+      "name": "Get Graph7",
+      "credentials": {
+        "mongoDb": {
+          "id": "uZBJYKWIUnsdVQVp",
+          "name": "MongoDB account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "\nreturn $input.first().json.body;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        100,
+        460
+      ],
+      "id": "6668b5c1-6b7d-43cb-8361-698b08017b31",
+      "name": "Code9"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "savesubmit",
+        "responseMode": "responseNode",
+        "options": {
+          "allowedOrigins": "*"
+        }
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -120,
+        460
+      ],
+      "id": "e5ce8c94-2ca8-446e-86f4-a7f92853e27c",
+      "name": "save submission 2",
+      "webhookId": "fcc4549f-5f81-462e-b57d-52c64b3204e7"
+    },
+    {
+      "parameters": {
+        "operation": "aggregate",
+        "collection": "Employee",
+        "query": "[\n  {\n    \"$match\": {}\n  }\n]"
+      },
+      "type": "n8n-nodes-base.mongoDb",
+      "typeVersion": 1.1,
+      "position": [
+        1040,
+        1100
+      ],
+      "id": "f3caca63-6e50-4805-9e74-fba12724d385",
+      "name": "MongoDB12",
+      "credentials": {
+        "mongoDb": {
+          "id": "uZBJYKWIUnsdVQVp",
+          "name": "MongoDB account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "allIncomingItems",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        1260,
+        1100
+      ],
+      "id": "3ac70615-8ebe-45fa-9ef3-448c71ab43f3",
+      "name": "Respond to Webhook22"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "GetAllEmployee",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        820,
+        1100
+      ],
+      "id": "24948371-4ab8-40c6-9408-57f3574d536c",
+      "name": "Get all employee",
+      "webhookId": "3e5f04e9-b66c-4ca6-bc86-4c68590eae9f"
+    },
+    {
+      "parameters": {
+        "operation": "aggregate",
+        "collection": "GraphData",
+        "query": "[\n  {\n    \"$match\": {}\n  }\n]"
+      },
+      "type": "n8n-nodes-base.mongoDb",
+      "typeVersion": 1.1,
+      "position": [
+        1040,
+        940
+      ],
+      "id": "f52658d9-d258-4610-aef1-0d5a324e4de0",
+      "name": "MongoDB13",
+      "credentials": {
+        "mongoDb": {
+          "id": "uZBJYKWIUnsdVQVp",
+          "name": "MongoDB account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "allIncomingItems",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        1260,
+        940
+      ],
+      "id": "6edc38fb-624e-4ffe-8bcc-ad97a7a2aa42",
+      "name": "Respond to Webhook23"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "GetAllSubmit",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -120,
+        140
+      ],
+      "id": "167a6e8b-9b76-4116-8375-94129719a4b1",
+      "name": "Get Submission",
+      "webhookId": "3e5f04e9-b66c-4ca6-bc86-4c68590eae9f"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "generateSchema",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -120,
+        1460
+      ],
+      "id": "e7d419f5-85ec-404e-bacb-8a148a389d16",
+      "name": "generate schema",
+      "webhookId": "f515dee6-4eca-4522-a59c-f09b28a8590d"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "gpt-4o-mini"
+        },
+        "options": {
+          "responseFormat": "json_object"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        260,
+        1680
+      ],
+      "id": "5a046737-ce5a-46db-ac20-799ff95fe010",
+      "name": "OpenAI Chat Model3",
+      "credentials": {
+        "openAiApi": {
+          "id": "2pkr5LWfXRcMUb8B",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        1040,
+        1460
+      ],
+      "id": "855b487d-d9c3-4988-bc80-a407df555786",
+      "name": "Respond to Webhook24"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=From the following form structure and its description:\n\nHTML: {{ $json.html }}\n\nForm description: {{ $json.description }}\n\nAnalyze the form and generate ONLY a valid JSON object with this structure:\n\n{ \"formSchema\": { ... }, \"uiSchema\": { ... } }\n\nGuidelines:\n\n\"formSchema\" must be a valid JSON Schema Draft-07 object.\n\n\"uiSchema\" must be a valid RJSF UI Schema using proper layout structures (e.g., VerticalLayout, Group, Control).\n\nUse the correct \"scope\" format for RJSF: #/properties/fieldName.\n\nInfer field types and formats from input elements and descriptions (e.g., type=\"date\" → format: \"date\", type=\"email\" → format: \"email\").\n\nIf a field involves file upload or attachment, use format: \"data-url\" and add \"ui:widget\": \"file\" in its control’s options.\n\nGroup logically related fields using Group elements with appropriate labels if the form has sections.\n\nAll required fields mentioned in the description must appear in the \"required\" array of formSchema.\n\nThe root of uiSchema must be a single VerticalLayout element wrapping all groups and controls.\n\nEnsure the JSON output is compatible with RJSF Material Renderers and Material Cells.\n\nReturn ONLY the raw JSON object with formSchema and uiSchema. Do not include markdown, code blocks, or extra explanations.",
+        "hasOutputParser": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.8,
+      "position": [
+        320,
+        1460
+      ],
+      "id": "50a2ad81-42c7-4532-b839-68bbe3a3762f",
+      "name": "AI Agent1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "14139d57-ca59-4a75-b6c4-747f77733cbd",
+              "name": "html",
+              "value": "={{ $json.body.html }}",
+              "type": "string"
+            },
+            {
+              "id": "32e061a6-c086-45da-b56f-891b541303db",
+              "name": "description",
+              "value": "={{ $json.body.describe }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        100,
+        1460
+      ],
+      "id": "7675d8b2-0bc5-4869-af1f-42c22a8351bb",
+      "name": "Edit Fields5"
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n  \"formSchema\": {\n    \"$schema\": \"http://json-schema.org/draft-07/schema#\",\n    \"type\": \"object\",\n    \"properties\": {\n      \"employee\": {\n        \"type\": \"string\"\n      },\n      \"contractCode\": {\n        \"type\": \"string\"\n      },\n      \"contractName\": {\n        \"type\": \"string\"\n      },\n      \"department\": {\n        \"type\": \"string\"\n      },\n      \"position\": {\n        \"type\": \"string\"\n      },\n      \"workingMode\": {\n        \"type\": \"string\"\n      },\n      \"level\": {\n        \"type\": \"string\"\n      },\n      \"workingPlace\": {\n        \"type\": \"string\"\n      },\n      \"expiredDate\": {\n        \"type\": \"string\",\n        \"format\": \"date\"\n      },\n      \"workingTime\": {\n        \"type\": \"string\"\n      },\n      \"signingDate\": {\n        \"type\": \"string\",\n        \"format\": \"date\"\n      },\n      \"signer\": {\n        \"type\": \"string\"\n      },\n      \"salaryAllowance\": {\n        \"type\": \"string\"\n      },\n      \"salaryFrom\": {\n        \"type\": \"string\",\n        \"format\": \"date\"\n      },\n      \"salaryMode\": {\n        \"type\": \"string\"\n      },\n      \"salaryAmount\": {\n        \"type\": \"number\"\n      },\n      \"description\": {\n        \"type\": \"string\"\n      },\n      \"attachment\": {\n        \"type\": \"string\",\n        \"format\": \"data-url\"\n      }\n    },\n    \"required\": [\n      \"employee\",\n      \"contractCode\",\n      \"contractName\",\n      \"department\",\n      \"position\",\n      \"level\",\n      \"workingPlace\",\n      \"expiredDate\",\n      \"workingTime\",\n      \"signingDate\",\n      \"signer\"\n    ]\n  },\n  \"uiSchema\": {\n    \"employee\": {\n      \"ui:widget\": \"text\"\n    },\n    \"contractCode\": {\n      \"ui:widget\": \"text\"\n    },\n    \"contractName\": {\n      \"ui:widget\": \"text\"\n    },\n    \"department\": {\n      \"ui:widget\": \"text\"\n    },\n    \"position\": {\n      \"ui:widget\": \"text\"\n    },\n    \"workingMode\": {\n      \"ui:widget\": \"text\"\n    },\n    \"level\": {\n      \"ui:widget\": \"text\"\n    },\n    \"workingPlace\": {\n      \"ui:widget\": \"text\"\n    },\n    \"expiredDate\": {\n      \"ui:widget\": \"date\"\n    },\n    \"workingTime\": {\n      \"ui:widget\": \"text\"\n    },\n    \"signingDate\": {\n      \"ui:widget\": \"date\"\n    },\n    \"signer\": {\n      \"ui:widget\": \"text\"\n    },\n    \"salaryAllowance\": {\n      \"ui:widget\": \"text\"\n    },\n    \"salaryFrom\": {\n      \"ui:widget\": \"date\"\n    },\n    \"salaryMode\": {\n      \"ui:widget\": \"text\"\n    },\n    \"salaryAmount\": {\n      \"ui:widget\": \"number\"\n    },\n    \"description\": {\n      \"ui:widget\": \"textarea\"\n    },\n    \"attachment\": {\n      \"ui:widget\": \"file\"\n    }\n  }\n}\n"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.2,
+      "position": [
+        500,
+        1680
+      ],
+      "id": "6c309331-1e97-42e4-8d04-b884d94ddb49",
+      "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "9bf5d300-ebcc-4a40-ad31-ccc48658baf7",
+              "name": "dataSchema",
+              "value": "={{ $json.output }}",
+              "type": "object"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        760,
+        1460
+      ],
+      "id": "73b2d555-3271-478f-a4a7-62bc87b6f136",
+      "name": "Edit Fields6"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "GetGraphData",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        820,
+        940
+      ],
+      "id": "118e0f28-32c2-4d70-ba08-4a3bf5756051",
+      "name": "Get all graph data",
+      "webhookId": "3e5f04e9-b66c-4ca6-bc86-4c68590eae9f"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "MongoDB2": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook10",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MongoDB8": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook11",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GetLatestSubmission": {
+      "main": [
+        [
+          {
+            "node": "MongoDB8",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Save submission1": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields3": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook13",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Delete submission": {
+      "main": [
+        [
+          {
+            "node": "Save submission1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Graph1": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get_Flow_Template": {
+      "main": [
+        [
+          {
+            "node": "Get Graph1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Graph2": {
+      "main": [
+        [
+          {
+            "node": "MongoDB11",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Clone flow template": {
+      "main": [
+        [
+          {
+            "node": "Get Graph2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MongoDB11": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook15",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Graph4": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook18",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Save Empoyee Record": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Graph5": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook19",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Save Contract Record": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields2": {
+      "main": [
+        [
+          {
+            "node": "Get Graph4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields4": {
+      "main": [
+        [
+          {
+            "node": "Get Graph5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Graph6": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook20",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Save Graph": {
+      "main": [
+        [
+          {
+            "node": "Code1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code1": {
+      "main": [
+        [
+          {
+            "node": "Get Graph6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Graph7": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook21",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code9": {
+      "main": [
+        [
+          {
+            "node": "Get Graph7",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "save submission 2": {
+      "main": [
+        [
+          {
+            "node": "Code9",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MongoDB12": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook22",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get all employee": {
+      "main": [
+        [
+          {
+            "node": "MongoDB12",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MongoDB13": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook23",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Submission": {
+      "main": [
+        [
+          {
+            "node": "MongoDB2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "generate schema": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model3": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent1": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields5": {
+      "main": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields6": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook24",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get all graph data": {
+      "main": [
+        [
+          {
+            "node": "MongoDB13",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "acb73676-7ba0-4f35-8470-c3ce7afd90c5",
+  "meta": {
+    "instanceId": "60f558f2754ed85e2688a3bdaa286b8e7ee6e02ba567810884cfd3266c594ce4"
+  },
+  "id": "Vvd17uNI2aFPqCvx",
+  "tags": []
+}

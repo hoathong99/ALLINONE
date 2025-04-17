@@ -1,0 +1,23 @@
+/* Override panel menu styles */
+.custom-panel-menu .p-panelmenu .p-panelmenu-header {
+    background-color: rgb(31, 44, 100) !important;
+    color: white !important;
+  }
+  
+  .custom-panel-menu .p-panelmenu .p-panelmenu-header a {
+    color: white !important;
+  }
+  
+  .custom-panel-menu .p-panelmenu .p-menuitem-link {
+    background-color: rgb(31, 44, 100) !important;
+    color: white !important;
+  }
+  
+  /* Selected / active item */
+  .custom-panel-menu .p-panelmenu .p-menuitem-link.p-highlight,
+  .custom-panel-menu .p-panelmenu .p-menuitem-link:focus,
+  .custom-panel-menu .p-panelmenu .p-menuitem-link:hover {
+    background-color: rgb(31, 44, 100) !important;
+    color: white !important;
+  }
+

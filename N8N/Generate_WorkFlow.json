@@ -1,0 +1,314 @@
+{
+  "name": "Generate WorkFlow",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "InitProcess",
+        "responseMode": "responseNode",
+        "options": {
+          "allowedOrigins": "*"
+        }
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -180,
+        -80
+      ],
+      "id": "fba251c6-73af-4b0a-925c-e82677e71de5",
+      "name": "On Create New Employee Process",
+      "webhookId": "7f9761a6-cd5e-4117-b3f6-ab2b94288e2e"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://127.0.0.1:5678/webhook/CreateEmployee",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "basicInfo",
+              "value": "={{ $json }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1180,
+        -80
+      ],
+      "id": "62da0995-fa14-436f-aafa-20dbfb0b2298",
+      "name": "Submit basic info data"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://127.0.0.1:5678/webhook/CreateEmployeeRecord",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json) }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        780,
+        -80
+      ],
+      "id": "1177d22f-437e-4ff1-bba0-9ae19ca0addc",
+      "name": "Submit contract form data"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        2000,
+        -80
+      ],
+      "id": "f527fc59-ce36-42ad-9ae8-c1af57ef80e6",
+      "name": "Respond to Webhook17"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://127.0.0.1:5678/webhook/get-template",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "graphId",
+              "value": "={{ $('On Create New Employee Process').item.json.body.templateId }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1400,
+        -80
+      ],
+      "id": "93f4b878-0ea8-4111-8464-e689131836ee",
+      "name": "Get Flow Template"
+    },
+    {
+      "parameters": {
+        "jsCode": "return $input.first().json.data.data.formData.contractInfo"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        540,
+        -80
+      ],
+      "id": "02358547-08d7-44c7-8607-1e47477edc0f",
+      "name": "Filter Contract info"
+    },
+    {
+      "parameters": {
+        "jsCode": "let graph = $input.first().json\ngraph.history.push({\n  n8nLoader: $('On Create New Employee Process').first().json.body.content.id\n})\nreturn $input.all();"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1600,
+        -80
+      ],
+      "id": "8559eb7d-894f-4eb5-ad38-0d369121e491",
+      "name": "Code"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://127.0.0.1:5678/webhook/SaveFlowGarph",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json) }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1800,
+        -80
+      ],
+      "id": "95c24745-639c-46d4-8997-c94a34b21f9e",
+      "name": "Save Graph to DB"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://127.0.0.1:5678/webhook/savesubmit",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json) }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        300,
+        -80
+      ],
+      "id": "9ecb9297-0dee-4b88-bc98-2e8e0d9b0aa8",
+      "name": "Submit form"
+    },
+    {
+      "parameters": {
+        "jsCode": "\nreturn $('On Create New Employee Process').first().json.body.content.data.formData.basicInfo"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        980,
+        -80
+      ],
+      "id": "3bb42060-814d-495b-ba4b-fd1825db743e",
+      "name": "Filter basic info"
+    },
+    {
+      "parameters": {
+        "jsCode": "let formdata = $('On Create New Employee Process').first().json.body.content\nlet result = {\n  parentId : $('On Create New Employee Process').first().json.body.content.parentId,\n  data: formdata\n}\nreturn result;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        60,
+        -80
+      ],
+      "id": "e3e1933e-6afb-4e7f-ad14-6c63745f1137",
+      "name": "filter form data"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "On Create New Employee Process": {
+      "main": [
+        [
+          {
+            "node": "filter form data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Submit basic info data": {
+      "main": [
+        [
+          {
+            "node": "Get Flow Template",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Submit contract form data": {
+      "main": [
+        [
+          {
+            "node": "Filter basic info",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Flow Template": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter Contract info": {
+      "main": [
+        [
+          {
+            "node": "Submit contract form data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "Save Graph to DB",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Save Graph to DB": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook17",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Submit form": {
+      "main": [
+        [
+          {
+            "node": "Filter Contract info",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter basic info": {
+      "main": [
+        [
+          {
+            "node": "Submit basic info data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "filter form data": {
+      "main": [
+        [
+          {
+            "node": "Submit form",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "fe4fd8b1-f5c2-4fc8-9133-5eb54e366a10",
+  "meta": {
+    "instanceId": "60f558f2754ed85e2688a3bdaa286b8e7ee6e02ba567810884cfd3266c594ce4"
+  },
+  "id": "MnEdJpWMpxRRt4xh",
+  "tags": []
+}

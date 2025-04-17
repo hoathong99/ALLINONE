@@ -1,0 +1,18 @@
+.custom-confirm-dialog .p-dialog-header {
+    background-color: #dc3545; /* Bootstrap red */
+    color: white;
+    font-weight: bold;
+    padding: 1rem;
+  }
+  
+  .custom-confirm-dialog .p-dialog .p-dialog-header-close {
+    color: white;
+  }
+  
+  .custom-confirm-dialog .p-confirm-dialog-message {
+    padding: 1rem 0;
+  }
+
+  .no-header-dialog .p-dialog-header {
+    display: none;
+  }
