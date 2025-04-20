@@ -92,31 +92,139 @@ interface GenerateFormResponse {
 //   }
 // }
 
-const dummyForm: JSONSchema7 = {
-  title: "Upload Form",
-  type: "object",
-  properties: {
-    file: {
-      type: "string",
-      format: "data-url",
-      title: "Single File Upload"
+const dummyForm = {
+  "formSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+      "employee": {
+        "type": "string"
+      },
+      "contractCode": {
+        "type": "string"
+      },
+      "contractName": {
+        "type": "string"
+      },
+      "department": {
+        "type": "string"
+      },
+      "position": {
+        "type": "string"
+      },
+      "workingMode": {
+        "type": "string"
+      },
+      "level": {
+        "type": "string"
+      },
+      "workingPlace": {
+        "type": "string"
+      },
+      "expiredDate": {
+        "type": "string",
+        "format": "date"
+      },
+      "workingTime": {
+        "type": "string"
+      },
+      "signingDate": {
+        "type": "string",
+        "format": "date"
+      },
+      "signer": {
+        "type": "string"
+      },
+      "salaryAllowance": {
+        "type": "string"
+      },
+      "salaryFrom": {
+        "type": "string",
+        "format": "date"
+      },
+      "salaryMode": {
+        "type": "string"
+      },
+      "salaryAmount": {
+        "type": "number"
+      },
+      "description": {
+        "type": "string"
+      },
+      "attachment": {
+        "type": "string",
+        "format": "data-url"
+      }
     },
-    email: {
-      type: "string",
-      format: "email",
-      title: "Your Email"
+    "required": [
+      "employee",
+      "contractCode",
+      "contractName",
+      "department",
+      "position",
+      "level",
+      "workingPlace",
+      "expiredDate",
+      "workingTime",
+      "signingDate",
+      "signer"
+    ]
+  },
+  "uiSchema": {
+    "employee": {
+      "ui:widget": "text"
+    },
+    "contractCode": {
+      "ui:widget": "text"
+    },
+    "contractName": {
+      "ui:widget": "text"
+    },
+    "department": {
+      "ui:widget": "text"
+    },
+    "position": {
+      "ui:widget": "text"
+    },
+    "workingMode": {
+      "ui:widget": "text"
+    },
+    "level": {
+      "ui:widget": "text"
+    },
+    "workingPlace": {
+      "ui:widget": "text"
+    },
+    "expiredDate": {
+      "ui:widget": "date"
+    },
+    "workingTime": {
+      "ui:widget": "text"
+    },
+    "signingDate": {
+      "ui:widget": "date"
+    },
+    "signer": {
+      "ui:widget": "text"
+    },
+    "salaryAllowance": {
+      "ui:widget": "text"
+    },
+    "salaryFrom": {
+      "ui:widget": "date"
+    },
+    "salaryMode": {
+      "ui:widget": "text"
+    },
+    "salaryAmount": {
+      "ui:widget": "updown"
+    },
+    "description": {
+      "ui:widget": "textarea"
+    },
+    "attachment": {
+      "ui:widget": "file"
     }
-  },
-  required: ["file", "email"]
-};
-
-
-const dummyUi = {
-  file: {
-    "ui:widget": "file"
-  },
-  email: {
-    "ui:widget": "email"
   }
 };
 
@@ -135,26 +243,26 @@ const FormFactory: React.FC = () => {
 
 
   const onGenerateSchema = async (data: FormInput) => {
-    if (!loading) {
-      setLoading(true);
-      try {
-        const result = await HandleGenerateFormSchema(data);
-        setSchema(result);
-        console.log(result);
-        setFormSchema(result.dataSchema.formSchema);
-        setUISchema(result.dataSchema.uiSchema);
-      } catch (error) {
-        console.error("Schema generation failed:", error);
-      } finally {
-        setFormPreviewData({})
-        setLoading(false);
-      }
-    } else {
-      console.log("WAIT A SECOND");
-    }
-    // setSchema({});
-    // setFormSchema(dummpuFrom);
-    // setUISchema(dummyUi);
+    // if (!loading) {
+    //   setLoading(true);
+    //   try {
+    //     const result = await HandleGenerateFormSchema(data);
+    //     setSchema(result);
+    //     console.log(result);
+    //     setFormSchema(result.dataSchema.formSchema);
+    //     setUISchema(result.dataSchema.uiSchema);
+    //   } catch (error) {
+    //     console.error("Schema generation failed:", error);
+    //   } finally {
+    //     setFormPreviewData({})
+    //     setLoading(false);
+    //   }
+    // } else {
+    //   console.log("WAIT A SECOND");
+    // }
+    setSchema(dummyForm);
+    setFormSchema(dummyForm.formSchema);
+    setUISchema(dummyForm.uiSchema);
     // setLoading(false);
   };
 

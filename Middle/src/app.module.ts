@@ -6,10 +6,17 @@ import { ProcessControllerController } from './Controller/process-controller/pro
 import { HttpModule } from '@nestjs/axios';
 import { ProcessService } from './Services/Process/ProcessService';
 import { FormService } from './Services/Process/FormService';
+import { AuthController } from './Controller/auth/auth.controller';
+import { AuthService } from './Guard/AuthService';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
-  imports: [HttpModule],
-  controllers: [AppController, BasicControllerController, ProcessControllerController],
-  providers: [AppService, ProcessService, FormService],
+  imports: [HttpModule,
+    ConfigModule.forRoot({
+      isGlobal: true, // Makes ConfigModule available in all modules
+    })
+  ],
+  controllers: [AppController, BasicControllerController, ProcessControllerController, AuthController],
+  providers: [AppService, ProcessService, FormService, AuthService],
 })
-export class AppModule {}
+export class AppModule { }

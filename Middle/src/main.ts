@@ -1,6 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import { GoogleAuthGuard } from './Guard/GoogleAuthGuard';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -8,6 +9,8 @@ async function bootstrap() {
     origin: 'http://localhost:5173',  // Allow only this origin
     methods: 'GET,POST,PUT,DELETE',  // Allow only certain methods
   });
+
+  // app.useGlobalGuards(app.get(GoogleAuthGuard));
   
   const config = new DocumentBuilder()
     .setTitle('Cats example')

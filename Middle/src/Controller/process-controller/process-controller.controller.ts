@@ -144,4 +144,9 @@ export class ProcessControllerController {
             }
         }
     }
+    @Get('profile')
+    getProfile(@Req() req) {
+    return req.user; // user info from Google token
+}
+
 }
