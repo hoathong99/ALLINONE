@@ -1,0 +1,193 @@
+{
+  "name": "Authorization",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "Login",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -500,
+        -100
+      ],
+      "id": "e998511b-3a5a-4c04-b257-52bc4205523c",
+      "name": "Login",
+      "webhookId": "0c808d8e-54a7-4f5d-a527-e12c606eaeb2"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "createUser",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -500,
+        80
+      ],
+      "id": "d9a535c8-295a-4005-8b0e-5568f7160b52",
+      "name": "Create user",
+      "webhookId": "0c808d8e-54a7-4f5d-a527-e12c606eaeb2"
+    },
+    {
+      "parameters": {
+        "collection": "User",
+        "options": {},
+        "query": "={\n  \"email\":\"{{ $json.body.email }}\"\n} "
+      },
+      "type": "n8n-nodes-base.mongoDb",
+      "typeVersion": 1.1,
+      "position": [
+        -280,
+        -100
+      ],
+      "id": "4c30bdd4-43a2-4c69-8cb4-7622d1de2118",
+      "name": "MongoDB",
+      "alwaysOutputData": true,
+      "credentials": {
+        "mongoDb": {
+          "id": "uZBJYKWIUnsdVQVp",
+          "name": "MongoDB account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        -60,
+        -100
+      ],
+      "id": "9c1463e5-d387-4b53-b494-e469c6cb5050",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "operation": "insert",
+        "collection": "User",
+        "fields": "email, name, sub, role",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.mongoDb",
+      "typeVersion": 1.1,
+      "position": [
+        -60,
+        80
+      ],
+      "id": "695a9039-8ea8-4536-bae0-374ce86fec5f",
+      "name": "MongoDB1",
+      "credentials": {
+        "mongoDb": {
+          "id": "uZBJYKWIUnsdVQVp",
+          "name": "MongoDB account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "\nreturn $input.first().json.body;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -280,
+        80
+      ],
+      "id": "6f3f3e2b-0354-4b01-9c49-957fa4a23e7a",
+      "name": "Code"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        160,
+        80
+      ],
+      "id": "80ffd644-3cc2-4d74-872b-a756b445b4f0",
+      "name": "Respond to Webhook1"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Login": {
+      "main": [
+        [
+          {
+            "node": "MongoDB",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create user": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MongoDB": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MongoDB1": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "MongoDB1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "0f53387f-701e-4829-8d33-b7b35c093344",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "60f558f2754ed85e2688a3bdaa286b8e7ee6e02ba567810884cfd3266c594ce4"
+  },
+  "id": "HtVH5UMnEoH8bG5K",
+  "tags": []
+}
