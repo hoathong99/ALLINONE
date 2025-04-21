@@ -42,11 +42,6 @@ const FileUploadControl = ({ data, handleChange, path, label, errors }: FileUplo
   );
 };
 
-
-
-
-
-
 interface FormInput {
   id: string;
   type: string;
@@ -241,33 +236,47 @@ const FormFactory: React.FC = () => {
   const [uiSchema, setUISchema] = useState<any | null>(null);
   const [htmlPreview, setHtmlPreview] = useState<string>("");
 
+  function downloadJSON(data: object, filename = 'schema.json') {
+    const json = JSON.stringify(data, null, 2); // Pretty print with 2-space indentation
+    const blob = new Blob([json], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+  
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    a.click();
+  
+    URL.revokeObjectURL(url);
+  }
 
   const onGenerateSchema = async (data: FormInput) => {
-    // if (!loading) {
-    //   setLoading(true);
-    //   try {
-    //     const result = await HandleGenerateFormSchema(data);
-    //     setSchema(result);
-    //     console.log(result);
-    //     setFormSchema(result.dataSchema.formSchema);
-    //     setUISchema(result.dataSchema.uiSchema);
-    //   } catch (error) {
-    //     console.error("Schema generation failed:", error);
-    //   } finally {
-    //     setFormPreviewData({})
-    //     setLoading(false);
-    //   }
-    // } else {
-    //   console.log("WAIT A SECOND");
-    // }
-    setSchema(dummyForm);
-    setFormSchema(dummyForm.formSchema);
-    setUISchema(dummyForm.uiSchema);
-    // setLoading(false);
+    if (!loading) {
+      setLoading(true);
+      try {
+        setSchema(null);
+        const result = await HandleGenerateFormSchema(data);
+        setSchema(result);
+        console.log(result);
+        setFormSchema(result.dataSchema.formSchema);
+        setUISchema(result.dataSchema.uiSchema);
+      } catch (error) {
+        console.error("Schema generation failed:", error);
+      } finally {
+        setFormPreviewData({})
+        setLoading(false);
+      }
+    } else {
+      console.log("WAIT A SECOND");
+    }
+    // setSchema(dummyForm);
+    // setFormSchema(dummyForm.formSchema);
+    // setUISchema(dummyForm.uiSchema);
+    setLoading(false);
   };
 
   const SubmitForm = () => {
     console.log("Submitting schema:", schema);
+    downloadJSON(schema);
   };
 
   return (
@@ -468,10 +477,43 @@ const FormFactory: React.FC = () => {
                 )}
               </div>
             </TabPanel>
+
+            <TabPanel header="Example json render">
+              <div
+                style={{
+                  height: "calc(100vh - 300px)",
+                  overflowY: "auto",
+                  background: "white",
+                  padding: "1rem",
+                  borderRadius: "6px"
+                }}
+              >
+                <Form
+                  schema={dummyForm.formSchema}
+                  uiSchema={dummyForm.uiSchema}
+                  validator={validator}
+                />
+              </div>
+            </TabPanel>
+            <TabPanel header="Example json schema">
+              <div
+                style={{
+                  height: "calc(100vh - 300px)",
+                  overflowY: "auto",
+                  background: "white",
+                  padding: "1rem",
+                  borderRadius: "6px"
+                }}
+              >
+                <pre style={{ whiteSpace: "pre-wrap", wordWrap: "break-word" }}>
+                  {JSON.stringify(dummyForm, null, 2)}
+                  </pre>
+              </div>
+            </TabPanel>
           </TabView>
 
           <button onClick={SubmitForm} className="btn btn-primary w-100 mt-3">
-            Submit
+            Download Json
           </button>
         </div>
 

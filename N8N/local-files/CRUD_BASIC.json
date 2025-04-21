@@ -814,7 +814,7 @@
     {
       "parameters": {
         "promptType": "define",
-        "text": "=From the following form structure and its description:\n\nHTML: {{ $json.html }}\n\nForm description: {{ $json.description }}\n\nAnalyze the form and generate ONLY a valid JSON object with this structure:\n\n{ \"formSchema\": { ... }, \"uiSchema\": { ... } }\n\nGuidelines:\n\n\"formSchema\" must be a valid JSON Schema Draft-07 object.\n\n\"uiSchema\" must be a valid RJSF UI Schema using proper layout structures (e.g., VerticalLayout, Group, Control).\n\nUse the correct \"scope\" format for RJSF: #/properties/fieldName.\n\nInfer field types and formats from input elements and descriptions (e.g., type=\"date\" → format: \"date\", type=\"email\" → format: \"email\").\n\nIf a field involves file upload or attachment, use format: \"data-url\" and add \"ui:widget\": \"file\" in its control’s options.\n\nGroup logically related fields using Group elements with appropriate labels if the form has sections.\n\nAll required fields mentioned in the description must appear in the \"required\" array of formSchema.\n\nThe root of uiSchema must be a single VerticalLayout element wrapping all groups and controls.\n\nEnsure the JSON output is compatible with RJSF Material Renderers and Material Cells.\n\nReturn ONLY the raw JSON object with formSchema and uiSchema. Do not include markdown, code blocks, or extra explanations.",
+        "text": "=From the following form structure and description:\n\nHTML:\n{{ $json.html }}\n\nForm Description:\n{{ $json.description }}\n\nAnalyze the form and return only a valid JSON object in this exact format:\n\njson\nCopy\nEdit\n{\n  \"formSchema\": { ... },\n  \"uiSchema\": { ... }\n}\nGuidelines:\n\n\"formSchema\" must be a valid JSON Schema Draft-07 object describing the form fields.\n\n\"uiSchema\" must be a valid RJSF UI Schema using layout elements like VerticalLayout, Group, and Control.\n\nUse \"scope\": \"#/properties/fieldName\" in all controls.\n\nInfer field type and format from the HTML and description:\n\ntype=\"date\" → \"format\": \"date\"\n\ntype=\"email\" → \"format\": \"email\"\n\nFile upload → \"format\": \"data-url\" and \"ui:widget\": \"file\"\n\nGroup related fields logically using \"type\": \"Group\" and assign appropriate \"label\"s based on form structure or section headings.\n\nAdd all required fields (from description or required attribute) to the \"required\" array of formSchema.\n\nThe uiSchema must have a root VerticalLayout element that wraps all content.\n\nOutput must be compatible with RJSF Material Renderers and Material Cells.\n\nReturn only the raw JSON object. Do not include markdown, code blocks, quotes, or explanations.",
         "hasOutputParser": true,
         "options": {}
       },
@@ -858,12 +858,13 @@
     },
     {
       "parameters": {
-        "jsonSchemaExample": "{\n  \"formSchema\": {\n    \"$schema\": \"http://json-schema.org/draft-07/schema#\",\n    \"type\": \"object\",\n    \"properties\": {\n      \"employee\": {\n        \"type\": \"string\"\n      },\n      \"contractCode\": {\n        \"type\": \"string\"\n      },\n      \"contractName\": {\n        \"type\": \"string\"\n      },\n      \"department\": {\n        \"type\": \"string\"\n      },\n      \"position\": {\n        \"type\": \"string\"\n      },\n      \"workingMode\": {\n        \"type\": \"string\"\n      },\n      \"level\": {\n        \"type\": \"string\"\n      },\n      \"workingPlace\": {\n        \"type\": \"string\"\n      },\n      \"expiredDate\": {\n        \"type\": \"string\",\n        \"format\": \"date\"\n      },\n      \"workingTime\": {\n        \"type\": \"string\"\n      },\n      \"signingDate\": {\n        \"type\": \"string\",\n        \"format\": \"date\"\n      },\n      \"signer\": {\n        \"type\": \"string\"\n      },\n      \"salaryAllowance\": {\n        \"type\": \"string\"\n      },\n      \"salaryFrom\": {\n        \"type\": \"string\",\n        \"format\": \"date\"\n      },\n      \"salaryMode\": {\n        \"type\": \"string\"\n      },\n      \"salaryAmount\": {\n        \"type\": \"number\"\n      },\n      \"description\": {\n        \"type\": \"string\"\n      },\n      \"attachment\": {\n        \"type\": \"string\",\n        \"format\": \"data-url\"\n      }\n    },\n    \"required\": [\n      \"employee\",\n      \"contractCode\",\n      \"contractName\",\n      \"department\",\n      \"position\",\n      \"level\",\n      \"workingPlace\",\n      \"expiredDate\",\n      \"workingTime\",\n      \"signingDate\",\n      \"signer\"\n    ]\n  },\n  \"uiSchema\": {\n    \"employee\": {\n      \"ui:widget\": \"text\"\n    },\n    \"contractCode\": {\n      \"ui:widget\": \"text\"\n    },\n    \"contractName\": {\n      \"ui:widget\": \"text\"\n    },\n    \"department\": {\n      \"ui:widget\": \"text\"\n    },\n    \"position\": {\n      \"ui:widget\": \"text\"\n    },\n    \"workingMode\": {\n      \"ui:widget\": \"text\"\n    },\n    \"level\": {\n      \"ui:widget\": \"text\"\n    },\n    \"workingPlace\": {\n      \"ui:widget\": \"text\"\n    },\n    \"expiredDate\": {\n      \"ui:widget\": \"date\"\n    },\n    \"workingTime\": {\n      \"ui:widget\": \"text\"\n    },\n    \"signingDate\": {\n      \"ui:widget\": \"date\"\n    },\n    \"signer\": {\n      \"ui:widget\": \"text\"\n    },\n    \"salaryAllowance\": {\n      \"ui:widget\": \"text\"\n    },\n    \"salaryFrom\": {\n      \"ui:widget\": \"date\"\n    },\n    \"salaryMode\": {\n      \"ui:widget\": \"text\"\n    },\n    \"salaryAmount\": {\n      \"ui:widget\": \"number\"\n    },\n    \"description\": {\n      \"ui:widget\": \"textarea\"\n    },\n    \"attachment\": {\n      \"ui:widget\": \"file\"\n    }\n  }\n}\n"
+        "schemaType": "manual",
+        "inputSchema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"formSchema\": {\n      \"type\": \"object\"\n    },\n    \"uiSchema\": {\n      \"type\": \"object\"\n    }\n  },\n  \"required\": [\"formSchema\", \"uiSchema\"]\n}\n"
       },
       "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
       "typeVersion": 1.2,
       "position": [
-        500,
+        540,
         1680
       ],
       "id": "6c309331-1e97-42e4-8d04-b884d94ddb49",
@@ -1291,7 +1292,7 @@
   "settings": {
     "executionOrder": "v1"
   },
-  "versionId": "acb73676-7ba0-4f35-8470-c3ce7afd90c5",
+  "versionId": "e712d835-28ed-4134-ba46-3f2fb4212c76",
   "meta": {
     "instanceId": "60f558f2754ed85e2688a3bdaa286b8e7ee6e02ba567810884cfd3266c594ce4"
   },
