@@ -86,6 +86,15 @@ export class ProcessControllerController {
                     return { error: 'Failed to fetch flow chart from external API' };
                 }
             }
+            case 'GET_SUBMISSION_BY_LOADER': {
+                try {
+                    let data = rq.body.data.loader;
+                    const respond = await this.formService.GetSubmissionByLoader(data);
+                    return respond;
+                } catch (error) {
+                    return { error: 'Failed to fetch flow chart from external API' };
+                }
+            }
             case 'GET_LATEST_SUBMISSION': {
                 console.log("---------------------------------------------------------GET_SUBMISSION---------------------------------------------------------");
                 try {

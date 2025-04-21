@@ -230,12 +230,13 @@ export const LazyLoadNodeHistory = async (eventId: string): Promise<NodeSubmissi
   };
 }
 
-export const SubmitForm = async (data: any, eventId: string): Promise<any> => {
+export const SubmitForm = async (data: any, graphId: string): Promise<any> => {
   const requestBody: ToGateWayPayload = {
     type: "SUBMIT_FORM",
     data: {
       data: data,
-      parentId: eventId,
+      parentId: data.parentId,
+      graphId: graphId
     }
   }
   try {
@@ -269,9 +270,25 @@ export const CloneGraph = async (graphId: string): Promise<GraphDataLazyLoad> =>
   // return transformedDataForLazyLoad;
 }
 
-export const FetchSubmission = async (loaderId: string): Promise<any> => {
+export const FetchSubmission = async (loaderId: string, from? : string): Promise<any> => {
   const requestBody: ToGateWayPayload = {
     type: "GET_SUBMISSION",
+    data: {
+      loader: loaderId,
+    }
+  }
+  try {
+    const respond = await ToGateWay(requestBody);
+    return respond.json();
+  } catch (error) {
+    console.error("Error fetching schema:", error);
+    return [];
+  }
+}
+
+export const FetchSubmissionByLoader = async (loaderId: string): Promise<any> => {
+  const requestBody: ToGateWayPayload = {
+    type: "GET_SUBMISSION_BY_LOADER",
     data: {
       loader: loaderId,
     }

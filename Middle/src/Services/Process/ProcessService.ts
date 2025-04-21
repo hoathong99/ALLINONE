@@ -7,33 +7,6 @@ import { firstValueFrom } from 'rxjs';
 export class ProcessService {
     constructor(private readonly httpService: HttpService) { }
 
-    // async GetFlowChart(rqId: string, chartId: string): Promise<any> {
-    //     const url = `http://localhost:5678/webhook/${encodeURIComponent(rqId)}`;
-    //     try {
-    //         const response = await this.httpService.post(url, chartId);
-    //         console.log(response);
-    //         return response;
-    //     } catch (error: unknown) {
-    //         if (error && typeof error === 'object' && 'isAxiosError' in error) {
-    //             const axiosError = error as AxiosError;
-
-    //             const status = axiosError.response?.status || 500;
-    //             const message = axiosError.response?.data || 'External API Error';
-
-    //             console.error('Axios Error:', message);
-
-    //             throw new HttpException(
-    //                 {
-    //                     statusCode: status,
-    //                     message: 'Failed to call external API',
-    //                     error: message,
-    //                 },
-    //                 status
-    //             );
-    //         }
-    //     }
-    // }
-
     async getFlowChart(rqId: string, chartId: string): Promise<any> {
         const url = `http://localhost:5678/webhook/${encodeURIComponent(rqId)}`;
         const payload = {

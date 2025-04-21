@@ -50,7 +50,7 @@ const EmployeeUIBootstrap: React.FC<EmploymentManagementProps> = (props: Employm
   const [graphNode, setGraphNode] = useState<GraphNodeData>();
   const [deleteObject, setDeleteObject] = useState<EmployeeTableItem>();
   const toast = useRef<Toast>(null);
-  const [grapphData, setgrapphData] = useState<any>(null);
+  const [graphData, setgraphData] = useState<any>(null);
   const [graphTable, setgraphTable] = useState<any>([]);
 
   const statusGroup = (rowData: EmployeeTableItem) => (
@@ -81,7 +81,7 @@ const EmployeeUIBootstrap: React.FC<EmploymentManagementProps> = (props: Employm
         <Button label="Edit" icon="pi pi-pencil" className="p-button-sm p-button-warning" style={{ backgroundColor: "#ffc107", borderRadius: "5px", justifyContent: "left", justifyItems: "left" }} onClick={() => {
           // setFormData(submission.data.data);
           setflowGraphMode("EDIT");
-          setgrapphData(rowData);
+          setgraphData(rowData);
           setDialogVisible(true);
         }} />
         <Button label="Delete" icon="pi pi-trash" className="p-button-sm p-button-danger" style={{ backgroundColor: "#dc3545", borderRadius: "5px", justifyContent: "left", justifyItems: "left", color: "white" }} onClick={() => OpenDeleteDialog(rowData)} />
@@ -91,7 +91,7 @@ const EmployeeUIBootstrap: React.FC<EmploymentManagementProps> = (props: Employm
 
   const OpenCreateFlowGraphDialog = () => {
     setflowGraphMode("CREATE");
-    // setgrapphData(null);
+    setgraphData(null);
     setDialogVisible(true);
   }
 
@@ -174,6 +174,7 @@ const EmployeeUIBootstrap: React.FC<EmploymentManagementProps> = (props: Employm
   const RefreshPage = () => {
     FetchEmployeeTable();
     FetchGraphs();
+    setgraphData(null);
     console.log("refresh");
   }
 
@@ -321,13 +322,16 @@ const EmployeeUIBootstrap: React.FC<EmploymentManagementProps> = (props: Employm
             onClick={() => handleFormSubmit()}
           />
         </div> */}
-        <ApprovalGraph
+        {
+          dialogVisible&&
+          <ApprovalGraph
           graphId={props.graphTemplateId}
           requestId={props.requestId}
           mode={flowGraphMode}
-          graphData={grapphData}
+          graphData={graphData}
           RefreshPage={RefreshPage}
         />
+        }
       </Dialog>
       <ConfirmDialog />
       <Dialog

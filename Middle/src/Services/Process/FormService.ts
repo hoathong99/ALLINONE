@@ -7,34 +7,6 @@ import { firstValueFrom, retry } from 'rxjs';
 export class FormService {
     constructor(private readonly httpService: HttpService) { }
 
-    // async SubmitFormData(formData: string, chartId: string): Promise<any> {
-    //     const url = `http://localhost:5678/webhook/${encodeURIComponent(rqId)}`;
-    //     try {
-    //         const response = await this.httpService.post(url, chartId);
-    //         console.log(response);
-    //         return response;
-    //     } catch (error: unknown) {
-    //         // 👇 Check if the error is an AxiosError
-    //         if (error && typeof error === 'object' && 'isAxiosError' in error) {
-    //             const axiosError = error as AxiosError;
-
-    //             const status = axiosError.response?.status || 500;
-    //             const message = axiosError.response?.data || 'External API Error';
-
-    //             console.error('Axios Error:', message);
-
-    //             throw new HttpException(
-    //                 {
-    //                     statusCode: status,
-    //                     message: 'Failed to call external API',
-    //                     error: message,
-    //                 },
-    //                 status
-    //             );
-    //         }
-    //     }
-    // }
-
     async SubmitFormData(data: any, id: string): Promise<any> {
         console.log("---------------------------SubmitFormData----------------------------------")
         const url = `http://localhost:5678/webhook/formsubmit`;
@@ -103,6 +75,28 @@ export class FormService {
     async GetAllSubmission(loader: string): Promise<any> {
         console.log("---------------------------GetSubmission----------------------------------")
         const url = `http://localhost:5678/webhook/GetAllSubmit`;
+        const payload = {
+            data: loader,
+        }
+        console.log(payload);
+        try {
+            const response = await firstValueFrom(
+                this.httpService.post(url, payload)
+            );
+            return response.data;
+            
+        } catch (error: any) {
+            console.error('FetchData error:', error?.response?.data || error.message);
+            throw new HttpException(
+                error?.response?.data || 'External API error',
+                error?.response?.status || 500,
+            );
+        }
+    }
+
+    async GetSubmissionByLoader(loader: string): Promise<any> {
+        console.log("---------------------------GetSubmission----------------------------------")
+        const url = `http://localhost:5678/webhook/GetSubmitByLoader`;
         const payload = {
             data: loader,
         }
