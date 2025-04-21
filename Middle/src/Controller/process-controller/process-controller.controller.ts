@@ -1,7 +1,8 @@
-import { Body, Controller, Get, Param, Post, Req } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Req, UseGuards } from '@nestjs/common';
 import { json } from 'stream/consumers';
 import { ProcessService } from 'src/Services/Process/ProcessService';
 import { FormService } from 'src/Services/Process/FormService';
+import { GoogleAuthGuard } from 'src/Guard/GoogleAuthGuard';
 
 @Controller('process-controller')
 export class ProcessControllerController {
@@ -11,6 +12,8 @@ export class ProcessControllerController {
     FindAll(): string {
         return 'This action returns all cats';
     }
+
+    @UseGuards(GoogleAuthGuard)
     @Post("/Gateway")
     async Portal(@Req() rq: any): Promise<any> {
         console.log(rq.body);

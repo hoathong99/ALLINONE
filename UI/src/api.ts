@@ -123,6 +123,8 @@ export const submitEvent = async (graphId: string, event: Record<string, unknown
 };
 
 //--------->Test
+const STORAGE_KEY = "superduperSecret";
+const token = localStorage.getItem(STORAGE_KEY);
 
 export const FetchData = async (graphId: string, requestId: string): Promise<GraphData> => {     // call n8n directly to get graph data
   const requestBody = {
@@ -334,12 +336,14 @@ export const DeleteSubmission = async (submissionId: string): Promise<any> => {
 
 export const ToGateWay = async (content: any): Promise<any> => {                               // Call Gateway server to handle guiding n8n instead
   const url = `http://localhost:3000/process-controller/Gateway`;                         //Gateway API 
+  const authToken = token;
   try {
     const response = await fetch(url, {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
+        Authorization: `Bearer ${authToken}`,
       },
       body: JSON.stringify(content),
     });
