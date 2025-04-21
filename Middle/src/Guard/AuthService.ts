@@ -2,9 +2,22 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { OAuth2Client } from 'google-auth-library';
 import axios from 'axios';
+import { error } from 'console';
 
 const findUserUrl = "http://localhost:5678/webhook/Login";
 const createUserUrl = "http://localhost:5678/webhook-test/createUser";
+
+enum ROLE {
+  USER,
+  ADMIN
+}
+interface userInfo {
+  name: string,
+  email: string,
+  sub: string, // gg ID
+  role: ROLE
+}
+
 @Injectable()
 export class AuthService {
   private client: OAuth2Client;
@@ -72,13 +85,24 @@ export class AuthService {
       console.log("n8n response", result);
       if (isEmptyObject || isEmptyArray) {
         console.log('User not found. Creating user...');
-        const createUserResponse = await axios.post(createUserUrl, {
-          email: userInfo.email,
-          name: userInfo.name,
-          picture: userInfo.picture,
-          sub: userInfo.sub,
-        });
-        user = createUserResponse.data;
+        // const createUserResponse = await axios.post(createUserUrl, {
+        //   email: userInfo.email,
+        //   name: userInfo.name,
+        //   picture: userInfo.picture,
+        //   sub: userInfo.sub,
+        // });
+        // user = createUserResponse.data;
+        if(userInfo.name&&userInfo.email){
+          let userDetail : userInfo = {
+            name: userInfo.name,
+            email: userInfo.email,
+            sub: userInfo.sub,
+            role: ROLE.USER
+          }
+          this.register(userDetail);
+        }else{
+          console.log('GOOGLE ACCOUNT IS MISSING CONTAIN NAME OR EMAIL');
+        }
       } else {
         user = result;
       }
@@ -106,5 +130,16 @@ export class AuthService {
       message: 'Login successful',
       user,
     };
+  }
+
+  async register(userInfo: userInfo) {
+    axios.post(createUserUrl, {
+      email: userInfo.email,
+      name: userInfo.name,
+      sub: userInfo.sub,
+      role: userInfo.role
+    })
+    .then(data => { return data })
+    .catch(error => { throw (error) });
   }
 }
