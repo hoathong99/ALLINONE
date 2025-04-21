@@ -36,14 +36,38 @@ services:
       - N8N_PORT=5678
       - N8N_PROTOCOL=http
       - N8N_EDITOR_BASE_URL=http://localhost:5678
-      - DB_TYPE=mongodb
-      - DB_MONGODB_CONNECTION_URL=mongodb://mongodb:27017/
-      - DB_MONGODB_DATABASE=n8n
+      - DB_TYPE=postgresdb
+      - DB_POSTGRESDB_HOST=postgres
+      - DB_POSTGRESDB_PORT=5432
+      - DB_POSTGRESDB_DATABASE=n8n
+      - DB_POSTGRESDB_USER=n8n
+      - DB_POSTGRESDB_PASSWORD=n8n_password
+      - DB_POSTGRESDB_SCHEMA=public
       - NODE_ENV=production
     volumes:
       - n8n_data:/home/node/.n8n
+      - ./N8N/local-files:/files
     depends_on:
-      - mongodb
+      postgres:
+        condition: service_healthy
+      
+  postgres:
+    image: postgres:15-alpine
+    ports:
+      - "5439:5432"
+    environment:
+      - POSTGRES_USER=n8n
+      - POSTGRES_PASSWORD=n8n_password
+      - POSTGRES_DB=n8n
+      - POSTGRES_NON_ROOT_USER=n8n
+      - POSTGRES_NON_ROOT_PASSWORD=n8n_password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U n8n"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
   mongodb:
     image: mongo:latest
@@ -54,4 +78,5 @@ services:
 
 volumes:
   mongodb_data:
+  postgres_data:
   n8n_data:
