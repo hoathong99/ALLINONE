@@ -5,11 +5,11 @@ import axios from 'axios';
 import { error } from 'console';
 
 const findUserUrl = "http://localhost:5678/webhook/Login";
-const createUserUrl = "http://localhost:5678/webhook-test/createUser";
+const createUserUrl = "http://localhost:5678/webhook/createUser";
 
 enum ROLE {
-  USER,
-  ADMIN
+  USER="USER",
+  ADMIN="ADMIN"
 }
 interface userInfo {
   name: string,
@@ -75,15 +75,17 @@ export class AuthService {
       // Attempt to find the user using the n8n webhook
       const findUserResponse = await axios.post(findUserUrl, {
         email: userInfo.email,
-        name: userInfo.name
+        name: userInfo.name,
+        sub: userInfo.sub
       })
 
       const result = findUserResponse.data;
-
+      // console.log("result", result);
       const isEmptyObject = result && Object.keys(result).length === 0;
-      const isEmptyArray = Array.isArray(result) && result.length === 0;
-      console.log("n8n response", result);
-      if (isEmptyObject || isEmptyArray) {
+
+      // const isEmptyArray = Array.isArray(result) && result.length === 0;
+      console.log("n8n response", isEmptyObject);
+      if (isEmptyObject) {
         console.log('User not found. Creating user...');
         // const createUserResponse = await axios.post(createUserUrl, {
         //   email: userInfo.email,
@@ -141,5 +143,34 @@ export class AuthService {
     })
     .then(data => { return data })
     .catch(error => { throw (error) });
+  }
+
+  async checkUseInDB(user : any) {
+    const extract = {
+      name: user.name,
+      email: user.email,
+      sub: user.sub
+    }
+    try {
+      // Attempt to find the user using the n8n webhook
+      const findUserResponse = await axios.post(findUserUrl, {
+        email: extract.email,
+        name: extract.name,
+        sub: extract.sub
+      })
+
+      const result = findUserResponse.data;
+      const isEmptyObject = result && Object.keys(result).length === 0;
+
+      if (isEmptyObject) {
+        console.log('User not found.');
+        return false;
+      }
+      // If user exists, the response will have the user data
+      return true;
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
   }
 }

@@ -26,7 +26,8 @@ export class GoogleAuthGuard implements CanActivate {
       // Validate the Google token using the AuthService
       const user = await this.authService.verifyGoogleToken(token);
       request.user = user;  // Attach the validated user to the request
-      return true;
+      const isUserExist = await this.authService.checkUseInDB(user);
+      return isUserExist;
     } catch (error) {
       // If token verification fails, throw UnauthorizedException
       throw new UnauthorizedException('Invalid token');
