@@ -28,7 +28,7 @@ function Sidebar() {
             <ul className="nav flex-column ms-3">
               <li><Link to="/employee" className="nav-link text-white">Employee</Link></li>
               <li><Link to="/form-factory" className="nav-link text-white">Form Factory</Link></li>
-              <li><Link to="/dashboard" className="nav-link text-white">Dashboard</Link></li>
+              <li><Link to="/graph-template" className="nav-link text-white">Form Template</Link></li>
               <li><Link to="/department" className="nav-link text-white">Department</Link></li>
               <li><Link to="/contract" className="nav-link text-white">Contract</Link></li>
               <li><Link to="/recuitment" className="nav-link text-white">Recuitment</Link></li>

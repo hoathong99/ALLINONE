@@ -7,6 +7,7 @@ import EmployeeManagement from './components/EmployeeManagement';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import Sidebar from './components/SideBar';
 import FormFactory from './components/FormFactory';
+import TemplateGraph from './components/GraphTemplate';
 
 
 function App() {
@@ -30,6 +31,13 @@ function App() {
               </EmployeeManagement>
             } />
             <Route path="/form-factory" element={<FormFactory />} />
+            <Route path="/graph-template" element={
+              <TemplateGraph
+                requestId='get-template'
+                graphId='graph-001' 
+                mode={'CREATE'}              >
+              </TemplateGraph>
+            } />
           </Routes>
           </div>
         </div>
