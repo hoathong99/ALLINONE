@@ -1,0 +1,3738 @@
+{
+  "name": "REQUEST SCHEMA",
+  "nodes": [
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{$json}}",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        120,
+        -320
+      ],
+      "id": "37f81620-cfa1-493e-a4f9-1524f1b52a61",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -1540,
+        3600
+      ],
+      "id": "5f93fd99-2f59-4317-b352-726793d9a169",
+      "name": "When clicking ‘Test workflow’"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{$json}}",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        120,
+        -160
+      ],
+      "id": "554889a9-bd6c-43b6-81e4-7fbf2b0ae3e2",
+      "name": "Respond to Webhook2"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "req-001",
+        "responseMode": "responseNode",
+        "options": {
+          "allowedOrigins": "*"
+        }
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -420,
+        -320
+      ],
+      "id": "127f7221-95d5-4a4d-a3e5-fb14af8efbcd",
+      "name": "Webhook_GET_FlowChart",
+      "webhookId": "fcc4549f-5f81-462e-b57d-52c64b3204e7"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Loop over input items and add a new field called 'myNewField' to the JSON of each one\nfor (const item of $input.all()) {\n  item.json.myNewField = 1;\n}\n\nreturn $input.all();"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1120,
+        2740
+      ],
+      "id": "acbe1ac9-c4e0-4873-b2fd-d2d7c5e0cc1f",
+      "name": "Code2"
+    },
+    {
+      "parameters": {
+        "operation": "retweet",
+        "tweetId": {
+          "__rl": true,
+          "value": "1909551615646089570",
+          "mode": "id"
+        }
+      },
+      "type": "n8n-nodes-base.twitter",
+      "typeVersion": 2,
+      "position": [
+        -1360,
+        2740
+      ],
+      "id": "3e58b560-bd06-4ba7-a6f5-f9c21be11c88",
+      "name": "X_Retweet",
+      "credentials": {
+        "twitterOAuth2Api": {
+          "id": "cj34Dqn56bU75tFH",
+          "name": "X account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "user",
+        "user": {
+          "__rl": true,
+          "value": "CatFish5stars",
+          "mode": "username"
+        }
+      },
+      "type": "n8n-nodes-base.twitter",
+      "typeVersion": 2,
+      "position": [
+        -1260,
+        3160
+      ],
+      "id": "6966fd78-3163-4401-a1a2-0f4e40335325",
+      "name": "Get User Info",
+      "credentials": {
+        "twitterOAuth2Api": {
+          "id": "PIa8IVcKxnDMh5Vm",
+          "name": "X account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.twitter.com/2/users/770638955863695360/likes",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "twitterOAuth2Api",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "tweet_id",
+              "value": "=1910185015029502096"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -680,
+        3260
+      ],
+      "id": "d9ad301d-00ab-4b87-8c67-c2937fee186c",
+      "name": "Like tweet",
+      "credentials": {
+        "twitterOAuth2Api": {
+          "id": "cj34Dqn56bU75tFH",
+          "name": "X account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://upload.twitter.com/1.1/media/upload.json",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "twitterOAuth2Api",
+        "sendBody": true,
+        "contentType": "multipart-form-data",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "media"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -820,
+        2740
+      ],
+      "id": "59536c18-80e7-42a0-8a24-162883020881",
+      "name": "upload X image",
+      "credentials": {
+        "twitterOAuth2Api": {
+          "id": "cj34Dqn56bU75tFH",
+          "name": "X account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "text": "HELLO WORLD Google.com 🚀#xyz",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.twitter",
+      "typeVersion": 2,
+      "position": [
+        -580,
+        2740
+      ],
+      "id": "2a22d576-8bfb-4b00-89c3-70d7750de9b9",
+      "name": "tweet",
+      "credentials": {
+        "twitterOAuth2Api": {
+          "id": "cj34Dqn56bU75tFH",
+          "name": "X account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "delete",
+        "tweetDeleteId": {
+          "__rl": true,
+          "value": "=1910185015029502096",
+          "mode": "id"
+        }
+      },
+      "type": "n8n-nodes-base.twitter",
+      "typeVersion": 2,
+      "position": [
+        -460,
+        3260
+      ],
+      "id": "a2d3b09b-a9c4-419a-ad9e-7a30cb41d998",
+      "name": "X",
+      "credentials": {
+        "twitterOAuth2Api": {
+          "id": "cj34Dqn56bU75tFH",
+          "name": "X account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=you are a teenage boy, browsering X to pass time, if I pass on any tweet relate to cosplay or girls, just reply 💗 or 😍 if not, just pass though and do not do anything \"{{ $json.data.tweets[0].text }}\", tweet id \"{{ $json.data.tweets[0].id }}\"\nif reply failed, just ignore it and continue",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.8,
+      "position": [
+        -160,
+        3020
+      ],
+      "id": "ed3e7377-9a00-4fd4-9526-a9e3996dae55",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "gpt-4o-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        -160,
+        2880
+      ],
+      "id": "74eaba6f-9d72-4351-bcf4-bbc2824c7810",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "2pkr5LWfXRcMUb8B",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "https://api.twitterapi.io/twitter/user/last_tweets",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "userName",
+              "value": "CatFish5stars"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-API-Key",
+              "value": "2d3e5e145fd94a0ca47f46e885d0c684"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -460,
+        3420
+      ],
+      "id": "640f4a1f-b4b1-4fbe-9bb4-8c13d7930225",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "batchSize": "=1",
+        "options": {
+          "reset": false
+        }
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        -800,
+        2940
+      ],
+      "id": "41f40e64-7355-408b-b233-06402e97de49",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Loop over input items and add a new field called 'myNewField' to the JSON of each one\nfor (const item of $input.all()) {\n  item.json.myNewField = 1;\n}\n\nreturn $input.all();"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -540,
+        2980
+      ],
+      "id": "84612a0d-fa76-4808-ba6d-18d961379300",
+      "name": "Code5"
+    },
+    {
+      "parameters": {
+        "url": "https://api.twitterapi.io/twitter/user/last_tweets",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "userId",
+              "value": "={{ $json.id }}"
+            },
+            {
+              "name": "cursor",
+              "value": "\"\""
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-API-Key",
+              "value": "2d3e5e145fd94a0ca47f46e885d0c684"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -360,
+        3000
+      ],
+      "id": "21043e18-9ccc-45e2-8de9-27191f565917",
+      "name": "get latest tweet"
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "text": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Text', ``, 'string') }}",
+        "additionalFields": {
+          "inReplyToStatusId": {
+            "mode": "id",
+            "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Reply_to_Tweet', ``, 'string') }}"
+          }
+        }
+      },
+      "type": "n8n-nodes-base.twitterTool",
+      "typeVersion": 2,
+      "position": [
+        0,
+        2880
+      ],
+      "id": "417dd983-741e-4fa1-b8d0-b2ac8c600d86",
+      "name": "reply tweet",
+      "credentials": {
+        "twitterOAuth2Api": {
+          "id": "cj34Dqn56bU75tFH",
+          "name": "X account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "followings",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        -1020,
+        2940
+      ],
+      "id": "7fe8fee2-e0d9-4903-bf41-e7c3a1650997",
+      "name": "Split Out"
+    },
+    {
+      "parameters": {
+        "collection": "Schema",
+        "options": {
+          "projection": "{\n  \"_id\":0\n}"
+        },
+        "query": "{\n  \"eventId\" : \"hr-001\"\n}"
+      },
+      "type": "n8n-nodes-base.mongoDb",
+      "typeVersion": 1.1,
+      "position": [
+        -120,
+        -160
+      ],
+      "id": "0752073d-61ca-435d-9aba-fecfb50f8df1",
+      "name": "MongoDB1",
+      "credentials": {
+        "mongoDb": {
+          "id": "uZBJYKWIUnsdVQVp",
+          "name": "MongoDB account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "collection": "GraphData",
+        "options": {
+          "projection": ""
+        },
+        "query": "={\n  \"graphId\": \"{{ $json.body.graphId }}\"\n}"
+      },
+      "type": "n8n-nodes-base.mongoDb",
+      "typeVersion": 1.1,
+      "position": [
+        -120,
+        -320
+      ],
+      "id": "15b505e6-239f-489b-b53d-59bc6104dc96",
+      "name": "Get Graph",
+      "credentials": {
+        "mongoDb": {
+          "id": "uZBJYKWIUnsdVQVp",
+          "name": "MongoDB account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "path": "loader1",
+        "responseMode": "responseNode",
+        "options": {
+          "allowedOrigins": "*"
+        }
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -420,
+        -160
+      ],
+      "id": "3373c995-98b4-4658-b6ae-1263cd77fc0c",
+      "name": "loader1",
+      "webhookId": "fcc4549f-5f81-462e-b57d-52c64b3204e7"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{$json}}",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        120,
+        0
+      ],
+      "id": "7862340c-021f-4dac-8222-c32078b6fb21",
+      "name": "Respond to Webhook3"
+    },
+    {
+      "parameters": {
+        "collection": "Schema",
+        "options": {
+          "projection": "{\n  \"_id\":0\n}"
+        },
+        "query": "{\n  \"eventId\" : \"hr-002\"\n}"
+      },
+      "type": "n8n-nodes-base.mongoDb",
+      "typeVersion": 1.1,
+      "position": [
+        -120,
+        0
+      ],
+      "id": "83359767-3493-4225-9ed2-e2302a707b53",
+      "name": "MongoDB",
+      "credentials": {
+        "mongoDb": {
+          "id": "uZBJYKWIUnsdVQVp",
+          "name": "MongoDB account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "path": "loader2",
+        "responseMode": "responseNode",
+        "options": {
+          "allowedOrigins": "*"
+        }
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -420,
+        0
+      ],
+      "id": "41f40344-0156-47a8-ab00-aecd0427b0f8",
+      "name": "loader2",
+      "webhookId": "fcc4549f-5f81-462e-b57d-52c64b3204e7"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{$json}}",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        920,
+        -320
+      ],
+      "id": "552ad762-60f5-4475-aee9-cbf4c51959a1",
+      "name": "Respond to Webhook5"
+    },
+    {
+      "parameters": {
+        "collection": "Schema",
+        "options": {
+          "projection": "{\n  \"_id\":0\n}"
+        },
+        "query": "{\n  \"eventId\" : \"hr-003\"\n}"
+      },
+      "type": "n8n-nodes-base.mongoDb",
+      "typeVersion": 1.1,
+      "position": [
+        680,
+        -320
+      ],
+      "id": "cf2cb3e9-5448-4a26-81c6-3d80c97a628c",
+      "name": "MongoDB3",
+      "credentials": {
+        "mongoDb": {
+          "id": "uZBJYKWIUnsdVQVp",
+          "name": "MongoDB account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "path": "loader3",
+        "responseMode": "responseNode",
+        "options": {
+          "allowedOrigins": "*"
+        }
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        380,
+        -320
+      ],
+      "id": "64a3b91e-5479-4083-af74-55f2ac8a8a5a",
+      "name": "loader3",
+      "webhookId": "fcc4549f-5f81-462e-b57d-52c64b3204e7"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{$json}}",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        920,
+        -160
+      ],
+      "id": "7d056842-3e56-47f3-bf17-1e3100e32f92",
+      "name": "Respond to Webhook6"
+    },
+    {
+      "parameters": {
+        "collection": "Schema",
+        "options": {
+          "projection": "{\n  \"_id\":0\n}"
+        },
+        "query": "{\n  \"eventId\" : \"hr-004\"\n}"
+      },
+      "type": "n8n-nodes-base.mongoDb",
+      "typeVersion": 1.1,
+      "position": [
+        680,
+        -160
+      ],
+      "id": "aa2a2f3b-efb5-496b-b09d-9ba4fc431890",
+      "name": "MongoDB4",
+      "credentials": {
+        "mongoDb": {
+          "id": "uZBJYKWIUnsdVQVp",
+          "name": "MongoDB account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "path": "loader4",
+        "responseMode": "responseNode",
+        "options": {
+          "allowedOrigins": "*"
+        }
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        380,
+        -160
+      ],
+      "id": "9f21d7cd-1161-4d0e-a210-87cc31ffff9a",
+      "name": "loader4",
+      "webhookId": "fcc4549f-5f81-462e-b57d-52c64b3204e7"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{$json}}",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        920,
+        0
+      ],
+      "id": "91327453-c4d2-4300-b4eb-eda5198116a3",
+      "name": "Respond to Webhook7"
+    },
+    {
+      "parameters": {
+        "collection": "Schema",
+        "options": {
+          "projection": "{\n  \"_id\":0\n}"
+        },
+        "query": "{\n  \"eventId\" : \"hr-005\"\n}"
+      },
+      "type": "n8n-nodes-base.mongoDb",
+      "typeVersion": 1.1,
+      "position": [
+        680,
+        0
+      ],
+      "id": "b34ade86-faf2-433a-a059-01029295b385",
+      "name": "MongoDB5",
+      "credentials": {
+        "mongoDb": {
+          "id": "uZBJYKWIUnsdVQVp",
+          "name": "MongoDB account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "path": "loader5",
+        "responseMode": "responseNode",
+        "options": {
+          "allowedOrigins": "*"
+        }
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        380,
+        0
+      ],
+      "id": "19bdd4ea-6294-4d6a-baa5-14b662a148f8",
+      "name": "loader5",
+      "webhookId": "fcc4549f-5f81-462e-b57d-52c64b3204e7"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{$json}}",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        1700,
+        -320
+      ],
+      "id": "251563eb-c612-4a20-b664-c3740379e72e",
+      "name": "Respond to Webhook8"
+    },
+    {
+      "parameters": {
+        "collection": "Schema",
+        "options": {
+          "projection": "{\n  \"_id\":0\n}"
+        },
+        "query": "{\n  \"eventId\" : \"hr-006\"\n}"
+      },
+      "type": "n8n-nodes-base.mongoDb",
+      "typeVersion": 1.1,
+      "position": [
+        1460,
+        -320
+      ],
+      "id": "3cae086a-be06-4d9e-ad1f-3da27b8a6931",
+      "name": "MongoDB6",
+      "credentials": {
+        "mongoDb": {
+          "id": "uZBJYKWIUnsdVQVp",
+          "name": "MongoDB account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "path": "loader6",
+        "responseMode": "responseNode",
+        "options": {
+          "allowedOrigins": "*"
+        }
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        1160,
+        -320
+      ],
+      "id": "6ce7a364-ded7-48e2-9773-67bbec8b4972",
+      "name": "loader6",
+      "webhookId": "fcc4549f-5f81-462e-b57d-52c64b3204e7"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{$json}}",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        1700,
+        -160
+      ],
+      "id": "9653aecf-7de1-4094-b6c9-32cf4c308814",
+      "name": "Respond to Webhook9"
+    },
+    {
+      "parameters": {
+        "collection": "Schema",
+        "options": {
+          "projection": "{\n  \"_id\":0\n}"
+        },
+        "query": "{\n  \"eventId\" : \"hr-007\"\n}"
+      },
+      "type": "n8n-nodes-base.mongoDb",
+      "typeVersion": 1.1,
+      "position": [
+        1460,
+        -160
+      ],
+      "id": "1be7afa3-dc40-4d72-b612-0e695881e108",
+      "name": "MongoDB7",
+      "credentials": {
+        "mongoDb": {
+          "id": "uZBJYKWIUnsdVQVp",
+          "name": "MongoDB account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "path": "loader7",
+        "responseMode": "responseNode",
+        "options": {
+          "allowedOrigins": "*"
+        }
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        1160,
+        -160
+      ],
+      "id": "5d25fd5e-21f5-4873-9731-c2439ac335b2",
+      "name": "loader7",
+      "webhookId": "fcc4549f-5f81-462e-b57d-52c64b3204e7"
+    },
+    {
+      "parameters": {
+        "url": "https://api.twitterapi.io/twitter/user/followings",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "userName",
+              "value": "CatFish5stars"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-API-Key",
+              "value": "2d3e5e145fd94a0ca47f46e885d0c684"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -1200,
+        2940
+      ],
+      "id": "9f7d3879-e473-47eb-b8b4-e7797ee9384b",
+      "name": "Get following"
+    },
+    {
+      "parameters": {
+        "url": "https://api.twitterapi.io/twitter/user/followings",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "userName",
+              "value": "={{ $json.userName }}"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-API-Key",
+              "value": "2d3e5e145fd94a0ca47f46e885d0c684"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -1100,
+        3600
+      ],
+      "id": "c46c5da2-ae83-426f-b349-9a9f202f5cec",
+      "name": "Get following1"
+    },
+    {
+      "parameters": {
+        "url": "https://api.twitterapi.io/twitter/user/last_tweets",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "userId",
+              "value": "={{$json.followings[0].id}}"
+            },
+            {
+              "name": "cursor",
+              "value": "\"\""
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-API-Key",
+              "value": "2d3e5e145fd94a0ca47f46e885d0c684"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -860,
+        3600
+      ],
+      "id": "a48c0b44-2a78-4be3-b748-ee6c2dc0cd50",
+      "name": "get latest tweet1"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4o-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        -520,
+        3800
+      ],
+      "id": "767efc63-a72c-4660-a93b-0c27da40045c",
+      "name": "OpenAI Chat Model1",
+      "credentials": {
+        "openAiApi": {
+          "id": "2pkr5LWfXRcMUb8B",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Loop over input items and add a new field called 'myNewField' to the JSON of each one\n// for (const item of $input.all()) {\n//   // item.json.myNewField = 1;\n//   DataLst.push(\n//     {\n//       id: item.json.data.tweets\n//     }\n//   );\n// }\nlet DataLst = $input.first().json.data.tweets.map((i) => ({\n  id: i.id,\n  content: i.text\n}))\n\nreturn DataLst[2];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -680,
+        3600
+      ],
+      "id": "62149afb-ae04-4f72-84d1-0ba319237db5",
+      "name": "Code3"
+    },
+    {
+      "parameters": {
+        "jsCode": "let x = {userName : \"0xCris2163\"}\nlet y = {userName : \"CatFish5stars\"}\nreturn x;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1320,
+        3600
+      ],
+      "id": "28e552a6-0203-42a9-a0e9-aa4884cc918c",
+      "name": "Set which user to get following"
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "to reply a tweet",
+        "text": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Text', ``, 'string') }}",
+        "additionalFields": {
+          "inReplyToStatusId": {
+            "mode": "id",
+            "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Reply_to_Tweet', ``, 'string') }}"
+          }
+        }
+      },
+      "type": "n8n-nodes-base.twitterTool",
+      "typeVersion": 2,
+      "position": [
+        -120,
+        3920
+      ],
+      "id": "a244913b-85b9-4b8b-8f75-8010b013aaa1",
+      "name": "tweeting",
+      "credentials": {
+        "twitterOAuth2Api": {
+          "id": "cj34Dqn56bU75tFH",
+          "name": "X account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "for quoting a X tweet",
+        "text": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Text', ``, 'string') }}",
+        "additionalFields": {
+          "inQuoteToStatusId": {
+            "mode": "id",
+            "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Quote_a_Tweet', ``, 'string') }}"
+          }
+        }
+      },
+      "type": "n8n-nodes-base.twitterTool",
+      "typeVersion": 2,
+      "position": [
+        0,
+        3920
+      ],
+      "id": "a87a669f-a625-4d52-bd65-788d8d04a211",
+      "name": "Quoting",
+      "credentials": {
+        "twitterOAuth2Api": {
+          "id": "PIa8IVcKxnDMh5Vm",
+          "name": "X account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4o-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        -1100,
+        4160
+      ],
+      "id": "f0a37bfc-b90d-455a-9790-e0379db7ae60",
+      "name": "OpenAI Chat Model2",
+      "credentials": {
+        "openAiApi": {
+          "id": "2pkr5LWfXRcMUb8B",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "to reply a tweet",
+        "text": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Text', ``, 'string') }}",
+        "additionalFields": {
+          "inReplyToStatusId": {
+            "mode": "id",
+            "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Reply_to_Tweet', ``, 'string') }}"
+          }
+        }
+      },
+      "type": "n8n-nodes-base.twitterTool",
+      "typeVersion": 2,
+      "position": [
+        -760,
+        4280
+      ],
+      "id": "1a829d7b-91da-4dd6-bfb1-b91bab201d68",
+      "name": "tweeting1",
+      "credentials": {
+        "twitterOAuth2Api": {
+          "id": "cj34Dqn56bU75tFH",
+          "name": "X account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "for quoting a X tweet",
+        "text": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Text', ``, 'string') }}",
+        "additionalFields": {
+          "inQuoteToStatusId": {
+            "mode": "id",
+            "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Quote_a_Tweet', ``, 'string') }}"
+          }
+        }
+      },
+      "type": "n8n-nodes-base.twitterTool",
+      "typeVersion": 2,
+      "position": [
+        -620,
+        4280
+      ],
+      "id": "823d938b-e9c0-448c-8089-266289bba953",
+      "name": "Quoting1",
+      "credentials": {
+        "twitterOAuth2Api": {
+          "id": "cj34Dqn56bU75tFH",
+          "name": "X account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=you are an out source tech company (have more exp in AI, block-chain, crypto) X account manager, here is all the latest tweets of a X account you are following: id: {{ $input.first().json.id}} - {{ $input.first().json.content}} (ignore all link in the tweet). summary it and return only a json in form of\n{\nid: *the id of the input tweet\ncontent: *the summary you made\n} nothing more, nothing less",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.8,
+      "position": [
+        -400,
+        3600
+      ],
+      "id": "dc4bf07d-7a65-41af-bd0f-51842c867336",
+      "name": "X manager agent"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are given an html of a form:\n\nConvert it into jsonforms schema\nOnly return the resulting JSON.",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.8,
+      "position": [
+        -940,
+        3880
+      ],
+      "id": "a3256c67-5962-4706-946d-3a353ba14ae3",
+      "name": "personal X"
+    },
+    {
+      "parameters": {
+        "operation": "retweet",
+        "tweetId": {
+          "__rl": true,
+          "value": "={{ $json.id }}",
+          "mode": "id"
+        }
+      },
+      "type": "n8n-nodes-base.twitter",
+      "typeVersion": 2,
+      "position": [
+        -1640,
+        3880
+      ],
+      "id": "db955b9a-541b-4f95-8c52-997e6ba3b601",
+      "name": "X1",
+      "credentials": {
+        "twitterOAuth2Api": {
+          "id": "cj34Dqn56bU75tFH",
+          "name": "X account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Loop over input items and add a new field called 'myNewField' to the JSON of each one\nlet json=JSON.parse($input.first().json.output);\n\nreturn json;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -600,
+        3900
+      ],
+      "id": "16910671-5268-48c9-adda-38bdfe8356b2",
+      "name": "Code4"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Loop over input items and add a new field called 'myNewField' to the JSON of each one\nfor (const item of $input.all()) {\n  item.json.myNewField = 1;\n}\n\nreturn $input.all();"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -60,
+        3600
+      ],
+      "id": "b55dfcd1-7e8f-4cab-9f1d-5a4cd7b46d4a",
+      "name": "Code6"
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "to retweet",
+        "text": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Text', ``, 'string') }}",
+        "additionalFields": {
+          "inReplyToStatusId": {
+            "mode": "id",
+            "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Reply_to_Tweet', ``, 'string') }}"
+          }
+        }
+      },
+      "type": "n8n-nodes-base.twitterTool",
+      "typeVersion": 2,
+      "position": [
+        -240,
+        3920
+      ],
+      "id": "7ae5f43d-cb80-4275-8416-eefc1d5c233f",
+      "name": "retweet",
+      "credentials": {
+        "twitterOAuth2Api": {
+          "id": "PIa8IVcKxnDMh5Vm",
+          "name": "X account 2"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.memoryPostgresChat",
+      "typeVersion": 1.3,
+      "position": [
+        -300,
+        3820
+      ],
+      "id": "927b7f84-ab10-4c2d-a896-aef2efded2cf",
+      "name": "Postgres Chat Memory",
+      "credentials": {
+        "postgres": {
+          "id": "EG84yrsFPHUfh9SY",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "write",
+        "fileName": "D:\\",
+        "dataPropertyName": "={{ $json.asdadkljas }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1,
+      "position": [
+        -1200,
+        3860
+      ],
+      "id": "3f30cb5a-c86c-4908-b73d-2db56c44281b",
+      "name": "Read/Write Files from Disk"
+    },
+    {
+      "parameters": {
+        "jsCode": "\n\nreturn {asdadkljas:\"askdjka\"};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1420,
+        3860
+      ],
+      "id": "35dc0669-790b-4a91-a8ff-0f1950e2399d",
+      "name": "Code7"
+    },
+    {
+      "parameters": {
+        "operation": "insert",
+        "collection": "Submission",
+        "fields": "=parentId,data\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.mongoDb",
+      "typeVersion": 1.1,
+      "position": [
+        -360,
+        840
+      ],
+      "id": "e5dc5984-bfb8-4be1-ad3c-27763ec78cd6",
+      "name": "Save submission",
+      "credentials": {
+        "mongoDb": {
+          "id": "uZBJYKWIUnsdVQVp",
+          "name": "MongoDB account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "5b9fc0bd-2cac-4190-bf02-3fb06c4bbfd1",
+              "name": "parentId",
+              "value": "={{ $json.body.parentId }}",
+              "type": "string"
+            },
+            {
+              "id": "e6348426-c473-4354-9eb1-a1a932b9d27f",
+              "name": "data",
+              "value": "={{ $json.body.data }}",
+              "type": "object"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -580,
+        840
+      ],
+      "id": "cd2ad0f3-de9f-4a3a-802b-1a9647f47b69",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "=",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        60,
+        840
+      ],
+      "id": "bb7029f2-5db6-4d72-aee1-df3d5e689f9a",
+      "name": "Respond to Webhook4"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "57d96943-f550-4222-b5ed-1eb1fd4804ed",
+              "name": "parent",
+              "value": "={{ $json.parent }}",
+              "type": "string"
+            },
+            {
+              "id": "465a23f8-1a03-4d4e-bfee-fc816a3bd110",
+              "name": "data",
+              "value": "={{ $json.data }}",
+              "type": "object"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -140,
+        840
+      ],
+      "id": "b693b70a-a7c8-44eb-8b05-878beacd553d",
+      "name": "Edit Fields1"
+    },
+    {
+      "parameters": {
+        "collection": "Submission",
+        "options": {
+          "projection": ""
+        },
+        "query": "={\n    \"data.id\": \"{{ $json.body.data }}\"\n} "
+      },
+      "type": "n8n-nodes-base.mongoDb",
+      "typeVersion": 1.1,
+      "position": [
+        -580,
+        520
+      ],
+      "id": "81802eec-b732-47e0-a66b-d21274420f14",
+      "name": "MongoDB2",
+      "credentials": {
+        "mongoDb": {
+          "id": "uZBJYKWIUnsdVQVp",
+          "name": "MongoDB account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "allIncomingItems",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        -360,
+        520
+      ],
+      "id": "f1289a00-31a9-4f77-b67f-a056b7548981",
+      "name": "Respond to Webhook10"
+    },
+    {
+      "parameters": {
+        "collection": "Submission",
+        "options": {
+          "limit": 1,
+          "sort": "{\n  \"data.timestamp\": -1\n}",
+          "projection": "{\n  \"_id\" : 0\n}"
+        },
+        "query": "={\n  \"parent\": \"{{ $json.body.data }}\"\n}"
+      },
+      "type": "n8n-nodes-base.mongoDb",
+      "typeVersion": 1.1,
+      "position": [
+        -580,
+        680
+      ],
+      "id": "0ce7d291-57c5-4d00-996b-0a4e9471d90e",
+      "name": "MongoDB8",
+      "credentials": {
+        "mongoDb": {
+          "id": "uZBJYKWIUnsdVQVp",
+          "name": "MongoDB account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "allIncomingItems",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        -360,
+        680
+      ],
+      "id": "4f6642e5-b6ef-4fc2-b11b-85c7e6793245",
+      "name": "Respond to Webhook11"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "GetLatestSubmit",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -800,
+        680
+      ],
+      "id": "33a5ad16-c3ce-4351-99d7-7e34fbb5cdd7",
+      "name": "GetLatestSubmission",
+      "webhookId": "3e5f04e9-b66c-4ca6-bc86-4c68590eae9f"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{$json}}",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        1700,
+        0
+      ],
+      "id": "f30664fd-b3d2-4822-a500-081d446deb88",
+      "name": "Respond to Webhook12"
+    },
+    {
+      "parameters": {
+        "collection": "Schema",
+        "options": {
+          "projection": "{\n  \"_id\":0\n}"
+        },
+        "query": "{\n  \"eventId\" : \"ER-01\"\n}"
+      },
+      "type": "n8n-nodes-base.mongoDb",
+      "typeVersion": 1.1,
+      "position": [
+        1460,
+        0
+      ],
+      "id": "cc6ae6ed-0210-406f-99f6-8bc12604510e",
+      "name": "MongoDB9",
+      "credentials": {
+        "mongoDb": {
+          "id": "uZBJYKWIUnsdVQVp",
+          "name": "MongoDB account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "path": "ER-01",
+        "responseMode": "responseNode",
+        "options": {
+          "allowedOrigins": "*"
+        }
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        1160,
+        0
+      ],
+      "id": "67213281-b5c7-48e3-83d8-ca6728ea77d8",
+      "name": "loader Employment scene",
+      "webhookId": "fcc4549f-5f81-462e-b57d-52c64b3204e7"
+    },
+    {
+      "parameters": {
+        "operation": "delete",
+        "collection": "Submission",
+        "query": "={\n  \"data.id\" :\"{{ $json.body.data }}\"\n} "
+      },
+      "type": "n8n-nodes-base.mongoDb",
+      "typeVersion": 1.1,
+      "position": [
+        -580,
+        360
+      ],
+      "id": "a158f250-1b0a-4d3a-b26c-262d1a5264c0",
+      "name": "Save submission1",
+      "credentials": {
+        "mongoDb": {
+          "id": "uZBJYKWIUnsdVQVp",
+          "name": "MongoDB account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "=",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        -140,
+        360
+      ],
+      "id": "4d100498-e599-4530-a901-b23bf1d636f4",
+      "name": "Respond to Webhook13"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "57d96943-f550-4222-b5ed-1eb1fd4804ed",
+              "name": "parent",
+              "value": "={{ $json.parent }}",
+              "type": "string"
+            },
+            {
+              "id": "465a23f8-1a03-4d4e-bfee-fc816a3bd110",
+              "name": "data",
+              "value": "={{ $json.data }}",
+              "type": "object"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -360,
+        360
+      ],
+      "id": "b84f03cc-ec93-4586-9857-fce67789ff93",
+      "name": "Edit Fields3"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "DeleteSubmission",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -800,
+        360
+      ],
+      "id": "f366ee74-90ac-484e-b2b9-84677c386fca",
+      "name": "Delete submission",
+      "webhookId": "7f9761a6-cd5e-4117-b3f6-ab2b94288e2e"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{$json}}",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        1700,
+        -460
+      ],
+      "id": "711b0ae3-e789-4404-a030-f3e1a7a597d5",
+      "name": "Respond to Webhook14"
+    },
+    {
+      "parameters": {
+        "collection": "Schema",
+        "options": {
+          "projection": "{\n  \"_id\":0\n}"
+        },
+        "query": "{\n  \"eventId\" : \"ER-02\"\n}"
+      },
+      "type": "n8n-nodes-base.mongoDb",
+      "typeVersion": 1.1,
+      "position": [
+        1460,
+        -460
+      ],
+      "id": "94e8c216-dee6-4f0c-b3c0-7bf41edda693",
+      "name": "MongoDB10",
+      "credentials": {
+        "mongoDb": {
+          "id": "uZBJYKWIUnsdVQVp",
+          "name": "MongoDB account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "path": "ER-02",
+        "responseMode": "responseNode",
+        "options": {
+          "allowedOrigins": "*"
+        }
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        1160,
+        -460
+      ],
+      "id": "15bbcacf-6100-484d-bb0f-5fa3b1176d89",
+      "name": "loader",
+      "webhookId": "fcc4549f-5f81-462e-b57d-52c64b3204e7"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{$json}}",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        -360,
+        1160
+      ],
+      "id": "bdddb9c5-0245-4a5c-98ec-b9c22d35269a",
+      "name": "Respond to Webhook1"
+    },
+    {
+      "parameters": {
+        "collection": "GraphTemplate",
+        "options": {
+          "projection": "{\n  \"_id\":0\n}"
+        },
+        "query": "={\n  \"graphId\": \"{{ $json.body.graphId }}\"\n}"
+      },
+      "type": "n8n-nodes-base.mongoDb",
+      "typeVersion": 1.1,
+      "position": [
+        -580,
+        1160
+      ],
+      "id": "675a1b14-0fe6-4cf7-93c4-bbf656898a39",
+      "name": "Get Graph1",
+      "credentials": {
+        "mongoDb": {
+          "id": "uZBJYKWIUnsdVQVp",
+          "name": "MongoDB account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "get-template",
+        "responseMode": "responseNode",
+        "options": {
+          "allowedOrigins": "*"
+        }
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -800,
+        1160
+      ],
+      "id": "4b5c57df-7e2c-42d4-809e-913ff1ee953c",
+      "name": "Get_Flow_Template",
+      "webhookId": "fcc4549f-5f81-462e-b57d-52c64b3204e7"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{$json}}",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        -140,
+        1000
+      ],
+      "id": "ec30b1a8-3db4-40fc-a62a-a9ad365f88df",
+      "name": "Respond to Webhook15"
+    },
+    {
+      "parameters": {
+        "collection": "GraphTemplate",
+        "options": {
+          "projection": "{\n  \"_id\":0\n}"
+        },
+        "query": "={\n  \"graphId\": \"{{ $json.body.graphId }}\"\n}"
+      },
+      "type": "n8n-nodes-base.mongoDb",
+      "typeVersion": 1.1,
+      "position": [
+        -580,
+        1000
+      ],
+      "id": "270ecca0-e120-4239-9b3c-aab3b0e7b57f",
+      "name": "Get Graph2",
+      "credentials": {
+        "mongoDb": {
+          "id": "uZBJYKWIUnsdVQVp",
+          "name": "MongoDB account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "cloneGraph",
+        "responseMode": "responseNode",
+        "options": {
+          "allowedOrigins": "*"
+        }
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -800,
+        1000
+      ],
+      "id": "b1b62156-ad65-481e-841d-ce918b34b417",
+      "name": "Clone flow template",
+      "webhookId": "fcc4549f-5f81-462e-b57d-52c64b3204e7"
+    },
+    {
+      "parameters": {
+        "operation": "insert",
+        "collection": "GraphData",
+        "fields": "=graphId, domain, status, currentEvent, history, definition",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.mongoDb",
+      "typeVersion": 1.1,
+      "position": [
+        -360,
+        1000
+      ],
+      "id": "ba7dbcf7-6c09-4d5d-9b88-e9074c8873dd",
+      "name": "MongoDB11",
+      "credentials": {
+        "mongoDb": {
+          "id": "uZBJYKWIUnsdVQVp",
+          "name": "MongoDB account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "InitProcess",
+        "responseMode": "responseNode",
+        "options": {
+          "allowedOrigins": "*"
+        }
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        1040,
+        340
+      ],
+      "id": "e1ed93a9-db3a-4a46-bab0-c9eda393ae4c",
+      "name": "On Create New Employee Process",
+      "webhookId": "7f9761a6-cd5e-4117-b3f6-ab2b94288e2e"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://127.0.0.1:5678/webhook/CreateEmployee",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "basicInfo",
+              "value": "={{ $json }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2400,
+        340
+      ],
+      "id": "fa6985c1-8c10-4ad3-a72c-b7e1f5d2e4a0",
+      "name": "Submit basic info data"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://127.0.0.1:5678/webhook/CreateEmployeeRecord",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json) }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2000,
+        340
+      ],
+      "id": "85920af4-77c4-46ca-a999-78697202ed88",
+      "name": "Submit contract form data"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{$json}}",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        1220,
+        -700
+      ],
+      "id": "503f85b4-d9b9-4cc8-bb06-7581a2e48b5c",
+      "name": "Respond to Webhook16"
+    },
+    {
+      "parameters": {
+        "operation": "findOneAndUpdate",
+        "collection": "GraphData",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.mongoDb",
+      "typeVersion": 1.1,
+      "position": [
+        940,
+        -700
+      ],
+      "id": "8b81598c-5411-4027-ba53-8fc8ede57a43",
+      "name": "Get Graph3",
+      "credentials": {
+        "mongoDb": {
+          "id": "uZBJYKWIUnsdVQVp",
+          "name": "MongoDB account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "UpdateGraph",
+        "responseMode": "responseNode",
+        "options": {
+          "allowedOrigins": "*"
+        }
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        680,
+        -700
+      ],
+      "id": "2ba821f2-7b62-4d11-b3ef-c27f885ef58b",
+      "name": "Update flow graph",
+      "webhookId": "fcc4549f-5f81-462e-b57d-52c64b3204e7"
+    },
+    {
+      "parameters": {
+        "content": "## TODO\n\n## 0%"
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        860,
+        -900
+      ],
+      "id": "656058eb-e6fd-4a70-8b79-4e7d79de943c",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "## IN WORK\n"
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        2080,
+        -140
+      ],
+      "id": "60d19f0b-ad31-4888-926c-28fe87276a8a",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "## CURRENT RUNNING",
+        "width": 220
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -1120,
+        780
+      ],
+      "id": "2679872b-053f-418e-85c3-de6588fa0679",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        3220,
+        340
+      ],
+      "id": "2f7099fc-1fac-4510-996c-9230f6694fc1",
+      "name": "Respond to Webhook17"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{$json}}",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        -160,
+        1320
+      ],
+      "id": "344a6dc2-a5e7-4d33-a497-3b48c2a88d99",
+      "name": "Respond to Webhook18"
+    },
+    {
+      "parameters": {
+        "operation": "insert",
+        "collection": "Employee",
+        "fields": "status, basicInfo",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.mongoDb",
+      "typeVersion": 1.1,
+      "position": [
+        -360,
+        1320
+      ],
+      "id": "00b5363e-57a3-4bfb-bea8-ee665cf474b4",
+      "name": "Get Graph4",
+      "credentials": {
+        "mongoDb": {
+          "id": "uZBJYKWIUnsdVQVp",
+          "name": "MongoDB account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "CreateEmployee",
+        "responseMode": "responseNode",
+        "options": {
+          "allowedOrigins": "*"
+        }
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -800,
+        1320
+      ],
+      "id": "edce0065-125a-41c1-83e3-8d0a3fdc461a",
+      "name": "Save Empoyee Record",
+      "webhookId": "fcc4549f-5f81-462e-b57d-52c64b3204e7"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://127.0.0.1:5678/webhook/get-template",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "graphId",
+              "value": "={{ $('On Create New Employee Process').item.json.body.templateId }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2620,
+        340
+      ],
+      "id": "d8b5e7e4-b76b-407d-bbc7-b02f133f033a",
+      "name": "Get Flow Template"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{$json}}",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        -180,
+        1480
+      ],
+      "id": "3b829216-07fd-4bf7-b817-36766b44c34a",
+      "name": "Respond to Webhook19"
+    },
+    {
+      "parameters": {
+        "operation": "insert",
+        "collection": "Contract",
+        "fields": "ContractInfo",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.mongoDb",
+      "typeVersion": 1.1,
+      "position": [
+        -360,
+        1480
+      ],
+      "id": "a03dc721-f64f-4fc9-be5f-854eb4827470",
+      "name": "Get Graph5",
+      "credentials": {
+        "mongoDb": {
+          "id": "uZBJYKWIUnsdVQVp",
+          "name": "MongoDB account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "CreateEmployeeRecord",
+        "responseMode": "responseNode",
+        "options": {
+          "allowedOrigins": "*"
+        }
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -800,
+        1480
+      ],
+      "id": "42d9cf89-de2c-4068-aed1-a630e4e5e2f2",
+      "name": "Save Contract Record",
+      "webhookId": "fcc4549f-5f81-462e-b57d-52c64b3204e7"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "476e7efa-a56d-45b4-add1-cf479c4c323f",
+              "name": "status",
+              "value": "=pending",
+              "type": "string"
+            },
+            {
+              "id": "5263e07e-fc2e-4a3b-994f-555823bb14fa",
+              "name": "basicInfo",
+              "value": "={{ $json.body }}",
+              "type": "object"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -580,
+        1320
+      ],
+      "id": "25fefebb-53ac-4094-89e9-b76b7eb984b9",
+      "name": "Edit Fields2"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "9086225c-819c-4904-8c30-aeeca191cf32",
+              "name": "ContractInfo",
+              "value": "={{ $json.body }}",
+              "type": "object"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -580,
+        1480
+      ],
+      "id": "de31f0b9-cd62-471d-be08-09fdafa21e13",
+      "name": "Edit Fields4"
+    },
+    {
+      "parameters": {
+        "jsCode": "return $input.first().json.data.data.formData.contractInfo"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1760,
+        340
+      ],
+      "id": "748619b5-a1a1-491b-83a2-6f3942d7a628",
+      "name": "Filter Contract info"
+    },
+    {
+      "parameters": {
+        "jsCode": "let graph = $input.first().json\ngraph.history.push({\n  n8nLoader: $('On Create New Employee Process').first().json.body.content.id\n})\nreturn $input.all();"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2820,
+        340
+      ],
+      "id": "6624729d-b5fe-4325-8e1f-39b84c491981",
+      "name": "Code"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{$json}}",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        -180,
+        1640
+      ],
+      "id": "ab7f1e11-44b0-4cb4-9faa-51124bd6041a",
+      "name": "Respond to Webhook20"
+    },
+    {
+      "parameters": {
+        "operation": "insert",
+        "collection": "GraphData",
+        "fields": "graphId, domain, status, currentEvent, history, definition ",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.mongoDb",
+      "typeVersion": 1.1,
+      "position": [
+        -360,
+        1640
+      ],
+      "id": "a37fd50d-91ad-4676-8127-490e60d701d4",
+      "name": "Get Graph6",
+      "credentials": {
+        "mongoDb": {
+          "id": "uZBJYKWIUnsdVQVp",
+          "name": "MongoDB account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "SaveFlowGarph",
+        "responseMode": "responseNode",
+        "options": {
+          "allowedOrigins": "*"
+        }
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -800,
+        1640
+      ],
+      "id": "27288ee2-6ee9-476d-908a-73d3485189d9",
+      "name": "Save Graph",
+      "webhookId": "fcc4549f-5f81-462e-b57d-52c64b3204e7"
+    },
+    {
+      "parameters": {
+        "jsCode": "\nreturn $input.first().json.body;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -580,
+        1640
+      ],
+      "id": "5a2fe48a-98db-4200-8987-48bb2f4e8496",
+      "name": "Code1"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://127.0.0.1:5678/webhook/SaveFlowGarph",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json) }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        3020,
+        340
+      ],
+      "id": "f35d2012-871a-441d-93bc-dc3b44a68e56",
+      "name": "Save Graph to DB"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://127.0.0.1:5678/webhook/savesubmit",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json) }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1520,
+        340
+      ],
+      "id": "361fe228-90ac-4c70-8c6a-1ff0abf8ee6e",
+      "name": "Submit form"
+    },
+    {
+      "parameters": {
+        "jsCode": "\nreturn $('On Create New Employee Process').first().json.body.content.data.formData.basicInfo"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2200,
+        340
+      ],
+      "id": "bcd3ab57-3350-4381-8a04-a79575ce444f",
+      "name": "Filter basic info"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{$json}}",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        840,
+        1640
+      ],
+      "id": "11edf139-b775-4670-8a94-9752a34dd9ab",
+      "name": "Respond to Webhook21"
+    },
+    {
+      "parameters": {
+        "operation": "insert",
+        "collection": "Submission",
+        "fields": "parentId, data, timestamp",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.mongoDb",
+      "typeVersion": 1.1,
+      "position": [
+        580,
+        1640
+      ],
+      "id": "c2d97c98-9104-48be-9d33-581ff2bba330",
+      "name": "Get Graph7",
+      "credentials": {
+        "mongoDb": {
+          "id": "uZBJYKWIUnsdVQVp",
+          "name": "MongoDB account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "\nreturn $input.first().json.body;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        360,
+        1640
+      ],
+      "id": "aed26230-3f44-4e21-bc77-b9817237bfc7",
+      "name": "Code9"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "savesubmit",
+        "responseMode": "responseNode",
+        "options": {
+          "allowedOrigins": "*"
+        }
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        140,
+        1640
+      ],
+      "id": "b5233400-926a-4e46-a3b6-7717832e55a2",
+      "name": "save submission 2",
+      "webhookId": "fcc4549f-5f81-462e-b57d-52c64b3204e7"
+    },
+    {
+      "parameters": {
+        "jsCode": "let formdata = $('On Create New Employee Process').first().json.body.content\nlet result = {\n  parentId : $('On Create New Employee Process').first().json.body.content.parentId,\n  data: formdata\n}\nreturn result;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1280,
+        340
+      ],
+      "id": "ecec423c-0223-41a3-8ac7-c29d5135caf8",
+      "name": "filter form data"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "formsubmit",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -800,
+        840
+      ],
+      "id": "2a981cd2-57ad-4f88-943c-6f54be45e2af",
+      "name": "onSumitForm - Broken dont use",
+      "webhookId": "7f9761a6-cd5e-4117-b3f6-ab2b94288e2e"
+    },
+    {
+      "parameters": {
+        "operation": "aggregate",
+        "collection": "Employee",
+        "query": "[\n  {\n    \"$match\": {}\n  }\n]"
+      },
+      "type": "n8n-nodes-base.mongoDb",
+      "typeVersion": 1.1,
+      "position": [
+        360,
+        1480
+      ],
+      "id": "e015c72f-9fa1-4046-92be-82f05c56e9c9",
+      "name": "MongoDB12",
+      "credentials": {
+        "mongoDb": {
+          "id": "uZBJYKWIUnsdVQVp",
+          "name": "MongoDB account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "allIncomingItems",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        580,
+        1480
+      ],
+      "id": "fd9fe44d-6721-456e-b368-c5afc3a60f77",
+      "name": "Respond to Webhook22"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "GetAllEmployee",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        140,
+        1480
+      ],
+      "id": "514d7ce2-9604-44fb-9ccf-8eae977f209d",
+      "name": "Get all employee",
+      "webhookId": "3e5f04e9-b66c-4ca6-bc86-4c68590eae9f"
+    },
+    {
+      "parameters": {
+        "operation": "aggregate",
+        "collection": "GraphData",
+        "query": "[\n  {\n    \"$match\": {}\n  }\n]"
+      },
+      "type": "n8n-nodes-base.mongoDb",
+      "typeVersion": 1.1,
+      "position": [
+        360,
+        1320
+      ],
+      "id": "06e8f61e-c351-4aa7-849b-7d9afa1b8fc6",
+      "name": "MongoDB13",
+      "credentials": {
+        "mongoDb": {
+          "id": "uZBJYKWIUnsdVQVp",
+          "name": "MongoDB account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "allIncomingItems",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        580,
+        1320
+      ],
+      "id": "2ff9ac79-9e44-4179-83ff-90659469277d",
+      "name": "Respond to Webhook23"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "GetGraphData",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        140,
+        1320
+      ],
+      "id": "34767ed5-5238-46dd-b291-8139d99922e2",
+      "name": "Get all graph data of employee",
+      "webhookId": "3e5f04e9-b66c-4ca6-bc86-4c68590eae9f"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "GetAllSubmit",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -800,
+        520
+      ],
+      "id": "029a24d5-7ea1-414b-8f3c-8a7e4cf7cbff",
+      "name": "Get Submission",
+      "webhookId": "3e5f04e9-b66c-4ca6-bc86-4c68590eae9f"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "generateSchema",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -800,
+        1840
+      ],
+      "id": "b5efc66e-08b6-4af8-8839-0f299b21ec5c",
+      "name": "generate schema",
+      "webhookId": "f515dee6-4eca-4522-a59c-f09b28a8590d"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "gpt-4o-mini"
+        },
+        "options": {
+          "responseFormat": "json_object"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        -420,
+        2060
+      ],
+      "id": "3729f449-7072-43c9-ab3b-761f6d26ee6c",
+      "name": "OpenAI Chat Model3",
+      "credentials": {
+        "openAiApi": {
+          "id": "2pkr5LWfXRcMUb8B",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        360,
+        1840
+      ],
+      "id": "2c78ed27-4c5d-4a2e-a73e-4aec76879a01",
+      "name": "Respond to Webhook24"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=From the following form structure and its description:\n\nHTML: {{ $json.html }}\n\nForm description: {{ $json.description }}\n\nAnalyze the form and generate ONLY a valid JSON object with this structure:\n\n{ \"formSchema\": { ... }, \"uiSchema\": { ... } }\n\nGuidelines:\n\n\"formSchema\" must be a valid JSON Schema Draft-07 object.\n\n\"uiSchema\" must be a valid RJSF UI Schema using proper layout structures (e.g., VerticalLayout, Group, Control).\n\nUse the correct \"scope\" format for RJSF: #/properties/fieldName.\n\nInfer field types and formats from input elements and descriptions (e.g., type=\"date\" → format: \"date\", type=\"email\" → format: \"email\").\n\nIf a field involves file upload or attachment, use format: \"data-url\" and add \"ui:widget\": \"file\" in its control’s options.\n\nGroup logically related fields using Group elements with appropriate labels if the form has sections.\n\nAll required fields mentioned in the description must appear in the \"required\" array of formSchema.\n\nThe root of uiSchema must be a single VerticalLayout element wrapping all groups and controls.\n\nEnsure the JSON output is compatible with RJSF Material Renderers and Material Cells.\n\nReturn ONLY the raw JSON object with formSchema and uiSchema. Do not include markdown, code blocks, or extra explanations.",
+        "hasOutputParser": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.8,
+      "position": [
+        -360,
+        1840
+      ],
+      "id": "ed14d6ca-1380-4b9c-82fa-7f52952da302",
+      "name": "AI Agent1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "14139d57-ca59-4a75-b6c4-747f77733cbd",
+              "name": "html",
+              "value": "={{ $json.body.html }}",
+              "type": "string"
+            },
+            {
+              "id": "32e061a6-c086-45da-b56f-891b541303db",
+              "name": "description",
+              "value": "={{ $json.body.describe }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -580,
+        1840
+      ],
+      "id": "53a73638-2e15-41e6-87b4-60274ec3cd24",
+      "name": "Edit Fields5"
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n  \"formSchema\": {\n    \"$schema\": \"http://json-schema.org/draft-07/schema#\",\n    \"type\": \"object\",\n    \"properties\": {\n      \"employee\": {\n        \"type\": \"string\"\n      },\n      \"contractCode\": {\n        \"type\": \"string\"\n      },\n      \"contractName\": {\n        \"type\": \"string\"\n      },\n      \"department\": {\n        \"type\": \"string\"\n      },\n      \"position\": {\n        \"type\": \"string\"\n      },\n      \"workingMode\": {\n        \"type\": \"string\"\n      },\n      \"level\": {\n        \"type\": \"string\"\n      },\n      \"workingPlace\": {\n        \"type\": \"string\"\n      },\n      \"expiredDate\": {\n        \"type\": \"string\",\n        \"format\": \"date\"\n      },\n      \"workingTime\": {\n        \"type\": \"string\"\n      },\n      \"signingDate\": {\n        \"type\": \"string\",\n        \"format\": \"date\"\n      },\n      \"signer\": {\n        \"type\": \"string\"\n      },\n      \"salaryAllowance\": {\n        \"type\": \"string\"\n      },\n      \"salaryFrom\": {\n        \"type\": \"string\",\n        \"format\": \"date\"\n      },\n      \"salaryMode\": {\n        \"type\": \"string\"\n      },\n      \"salaryAmount\": {\n        \"type\": \"number\"\n      },\n      \"description\": {\n        \"type\": \"string\"\n      },\n      \"attachment\": {\n        \"type\": \"string\",\n        \"format\": \"data-url\"\n      }\n    },\n    \"required\": [\n      \"employee\",\n      \"contractCode\",\n      \"contractName\",\n      \"department\",\n      \"position\",\n      \"level\",\n      \"workingPlace\",\n      \"expiredDate\",\n      \"workingTime\",\n      \"signingDate\",\n      \"signer\"\n    ]\n  },\n  \"uiSchema\": {\n    \"employee\": {\n      \"ui:widget\": \"text\"\n    },\n    \"contractCode\": {\n      \"ui:widget\": \"text\"\n    },\n    \"contractName\": {\n      \"ui:widget\": \"text\"\n    },\n    \"department\": {\n      \"ui:widget\": \"text\"\n    },\n    \"position\": {\n      \"ui:widget\": \"text\"\n    },\n    \"workingMode\": {\n      \"ui:widget\": \"text\"\n    },\n    \"level\": {\n      \"ui:widget\": \"text\"\n    },\n    \"workingPlace\": {\n      \"ui:widget\": \"text\"\n    },\n    \"expiredDate\": {\n      \"ui:widget\": \"date\"\n    },\n    \"workingTime\": {\n      \"ui:widget\": \"text\"\n    },\n    \"signingDate\": {\n      \"ui:widget\": \"date\"\n    },\n    \"signer\": {\n      \"ui:widget\": \"text\"\n    },\n    \"salaryAllowance\": {\n      \"ui:widget\": \"text\"\n    },\n    \"salaryFrom\": {\n      \"ui:widget\": \"date\"\n    },\n    \"salaryMode\": {\n      \"ui:widget\": \"text\"\n    },\n    \"salaryAmount\": {\n      \"ui:widget\": \"number\"\n    },\n    \"description\": {\n      \"ui:widget\": \"textarea\"\n    },\n    \"attachment\": {\n      \"ui:widget\": \"file\"\n    }\n  }\n}\n"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.2,
+      "position": [
+        -180,
+        2060
+      ],
+      "id": "699a9f2a-10d7-4a2a-989a-0901ef97b40b",
+      "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "9bf5d300-ebcc-4a40-ad31-ccc48658baf7",
+              "name": "dataSchema",
+              "value": "={{ $json.output }}",
+              "type": "object"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        80,
+        1840
+      ],
+      "id": "3a4b7a4c-ce96-48f6-a843-3b675dc4b816",
+      "name": "Edit Fields6"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Test workflow’": {
+      "main": [
+        [
+          {
+            "node": "Code7",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook_GET_FlowChart": {
+      "main": [
+        [
+          {
+            "node": "Get Graph",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code2": {
+      "main": [
+        []
+      ]
+    },
+    "X_Retweet": {
+      "main": [
+        [
+          {
+            "node": "Code2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get User Info": {
+      "main": [
+        []
+      ]
+    },
+    "tweet": {
+      "main": [
+        []
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Code5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code5": {
+      "main": [
+        [
+          {
+            "node": "get latest tweet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "get latest tweet": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "reply tweet": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Graph": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "loader1": {
+      "main": [
+        [
+          {
+            "node": "MongoDB1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MongoDB1": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MongoDB": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "loader2": {
+      "main": [
+        [
+          {
+            "node": "MongoDB",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MongoDB3": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "loader3": {
+      "main": [
+        [
+          {
+            "node": "MongoDB3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MongoDB4": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "loader4": {
+      "main": [
+        [
+          {
+            "node": "MongoDB4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MongoDB5": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook7",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "loader5": {
+      "main": [
+        [
+          {
+            "node": "MongoDB5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MongoDB6": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook8",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "loader6": {
+      "main": [
+        [
+          {
+            "node": "MongoDB6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MongoDB7": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook9",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "loader7": {
+      "main": [
+        [
+          {
+            "node": "MongoDB7",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get following": {
+      "main": [
+        [
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get following1": {
+      "main": [
+        [
+          {
+            "node": "get latest tweet1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "get latest tweet1": {
+      "main": [
+        [
+          {
+            "node": "Code3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "X manager agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code3": {
+      "main": [
+        [
+          {
+            "node": "X manager agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set which user to get following": {
+      "main": [
+        [
+          {
+            "node": "Get following1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "tweeting": {
+      "ai_tool": [
+        [
+          {
+            "node": "X manager agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Quoting": {
+      "ai_tool": [
+        [
+          {
+            "node": "X manager agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model2": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "personal X",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "tweeting1": {
+      "ai_tool": [
+        [
+          {
+            "node": "personal X",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Quoting1": {
+      "ai_tool": [
+        [
+          {
+            "node": "personal X",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "personal X": {
+      "main": [
+        [
+          {
+            "node": "Code4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "X manager agent": {
+      "main": [
+        [
+          {
+            "node": "Code6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Postgres Chat Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "X manager agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "X1": {
+      "main": [
+        []
+      ]
+    },
+    "Code7": {
+      "main": [
+        [
+          {
+            "node": "Read/Write Files from Disk",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Save submission",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Save submission": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MongoDB2": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook10",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MongoDB8": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook11",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GetLatestSubmission": {
+      "main": [
+        [
+          {
+            "node": "MongoDB8",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MongoDB9": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook12",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "loader Employment scene": {
+      "main": [
+        [
+          {
+            "node": "MongoDB9",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Save submission1": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields3": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook13",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Delete submission": {
+      "main": [
+        [
+          {
+            "node": "Save submission1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MongoDB10": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook14",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "loader": {
+      "main": [
+        [
+          {
+            "node": "MongoDB10",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Graph1": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get_Flow_Template": {
+      "main": [
+        [
+          {
+            "node": "Get Graph1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Graph2": {
+      "main": [
+        [
+          {
+            "node": "MongoDB11",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Clone flow template": {
+      "main": [
+        [
+          {
+            "node": "Get Graph2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MongoDB11": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook15",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "On Create New Employee Process": {
+      "main": [
+        [
+          {
+            "node": "filter form data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Submit basic info data": {
+      "main": [
+        [
+          {
+            "node": "Get Flow Template",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Graph3": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook16",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update flow graph": {
+      "main": [
+        [
+          {
+            "node": "Get Graph3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Submit contract form data": {
+      "main": [
+        [
+          {
+            "node": "Filter basic info",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Graph4": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook18",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Save Empoyee Record": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Flow Template": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Graph5": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook19",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Save Contract Record": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields2": {
+      "main": [
+        [
+          {
+            "node": "Get Graph4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields4": {
+      "main": [
+        [
+          {
+            "node": "Get Graph5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter Contract info": {
+      "main": [
+        [
+          {
+            "node": "Submit contract form data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "Save Graph to DB",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Graph6": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook20",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Save Graph": {
+      "main": [
+        [
+          {
+            "node": "Code1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code1": {
+      "main": [
+        [
+          {
+            "node": "Get Graph6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Save Graph to DB": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook17",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Submit form": {
+      "main": [
+        [
+          {
+            "node": "Filter Contract info",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter basic info": {
+      "main": [
+        [
+          {
+            "node": "Submit basic info data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Graph7": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook21",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code9": {
+      "main": [
+        [
+          {
+            "node": "Get Graph7",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "save submission 2": {
+      "main": [
+        [
+          {
+            "node": "Code9",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "filter form data": {
+      "main": [
+        [
+          {
+            "node": "Submit form",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "onSumitForm - Broken dont use": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MongoDB12": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook22",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get all employee": {
+      "main": [
+        [
+          {
+            "node": "MongoDB12",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MongoDB13": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook23",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get all graph data of employee": {
+      "main": [
+        [
+          {
+            "node": "MongoDB13",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Submission": {
+      "main": [
+        [
+          {
+            "node": "MongoDB2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model3": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "generate schema": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent1": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields5": {
+      "main": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields6": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook24",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "ec1b464c-e16e-4963-9650-f210f8c58ece",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "60f558f2754ed85e2688a3bdaa286b8e7ee6e02ba567810884cfd3266c594ce4"
+  },
+  "id": "B4OqIurdM6pzeNYE",
+  "tags": []
+}

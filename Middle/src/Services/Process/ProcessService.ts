@@ -74,7 +74,7 @@ export class ProcessService {
     }
 
     async CreateFlowChart(tId: string, c: any): Promise<any> {
-        const url = `http://localhost:5678/webhook-test/InitProcess`;
+        const url = `http://localhost:5678/webhook/InitProcess`;
         const payload = {
             templateId: tId,
             content: c
