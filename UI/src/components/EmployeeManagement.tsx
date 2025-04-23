@@ -19,6 +19,7 @@ import { ConfirmDialog, confirmDialog } from 'primereact/confirmdialog';
 import "./Employment.css";
 import ApprovalGraph from './ApprovalGraph';
 import { TabPanel, TabView } from 'primereact/tabview';
+import TemplateGraph from './GraphTemplate';
 interface EmploymentManagementProps {
   nodeId: string,
   requestId: string,
@@ -63,12 +64,12 @@ const EmployeeUIBootstrap: React.FC<EmploymentManagementProps> = (props: Employm
     // let submission = submissionTable.find((i) => i.data.id == rowData.submissionId);
     return (
       <div className="flex gap-2" style={{ justifyContent: "left", justifyItems: "left" }}>
-        {/* <Button label="Edit" icon="pi pi-pencil" className="p-button-sm p-button-warning" style={{ backgroundColor: "#ffc107", borderRadius: "5px", justifyContent: "left", justifyItems: "left" }} onClick={() => {
+        <Button label="Edit" icon="pi pi-pencil" className="p-button-sm p-button-warning" style={{ backgroundColor: "#ffc107", borderRadius: "5px", justifyContent: "left", justifyItems: "left" }} onClick={() => {
           // setFormData(submission.data.data);
           setflowGraphMode("EDIT");
-          setgrapphData(null);
+          // setgrapphData(null);
           setDialogVisible(true);
-        }} /> */}
+        }} />
         <Button label="Delete" icon="pi pi-trash" className="p-button-sm p-button-danger" style={{ backgroundColor: "#dc3545", borderRadius: "5px", justifyContent: "left", justifyItems: "left", color: "white" }} onClick={() => OpenDeleteDialog(rowData)} />
       </div>
     );
@@ -267,7 +268,7 @@ const EmployeeUIBootstrap: React.FC<EmploymentManagementProps> = (props: Employm
             </select>
           </div>
           <div style={{display:"flex", gap:"5px"}}>
-          <button className="btn btn-theme" data-bs-toggle="modal" data-bs-target="#employeeModal" style={{ backgroundColor: "#1f2c64", color: "white" }} onClick={() => OpenCreateFlowGraphDialog()}>+ Create New Employee</button>
+          <button className="btn btn-theme" data-bs-toggle="modal" data-bs-target="#employeeModal" style={{ backgroundColor: "#1f2c64", color: "white" }} onClick={() => OpenCreateFlowGraphDialog()}>+ ADD EMPLOYEE</button>
           </div>
         </div>
 
@@ -324,12 +325,11 @@ const EmployeeUIBootstrap: React.FC<EmploymentManagementProps> = (props: Employm
         </div> */}
         {
           dialogVisible&&
-          <ApprovalGraph
+          <TemplateGraph
           graphId={props.graphTemplateId}
           requestId={props.requestId}
-          mode={flowGraphMode}
+          mode={"EDIT"}
           graphData={graphData}
-          RefreshPage={RefreshPage}
         />
         }
       </Dialog>

@@ -96,15 +96,36 @@ export class ProcessService {
     }
 
     async getNodeSchema(rqId: string, loader: string): Promise<any> {
-        const url = `http://localhost:5678/webhook/${encodeURIComponent(loader)}`;
-        // const payload = {
-        //     schemaId: Id,
-        // }
+        const url = `http://localhost:5678/webhook/${encodeURIComponent(rqId)}`;
+        const payload = {
+            schemaId: loader,
+        }
         try {
             const response = await firstValueFrom(
-                this.httpService.get(url)
+                this.httpService.post(url, payload)
             );
 
+            console.log("GOTTEN:");
+            console.log(response.data);
+            return response.data;
+        } catch (error: any) {
+            console.error('FetchData error:', error?.response?.data || error.message);
+            throw new HttpException(
+                error?.response?.data || 'External API error',
+                error?.response?.status || 500,
+            );
+        }
+    }
+
+    async triggerFormAction(rqId: string, data: any): Promise<any> {
+        const url = `http://localhost:5678/webhook/${encodeURIComponent(rqId)}`;
+        const payload = {
+            data: data,
+        }
+        try {
+            const response = await firstValueFrom(
+                this.httpService.post(url, payload)
+            );
             console.log("GOTTEN:");
             console.log(response.data);
             return response.data;

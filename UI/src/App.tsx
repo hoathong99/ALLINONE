@@ -8,6 +8,7 @@ import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import Sidebar from './components/SideBar';
 import FormFactory from './components/FormFactory';
 import TemplateGraph from './components/GraphTemplate';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 
 function App() {
@@ -27,14 +28,14 @@ function App() {
           <div style={{width:"100%"}}>
           <Routes>
             <Route path="/employee" element={
-              <EmployeeManagement nodeId="ER-01" requestId='get-template' loader='ER-01' graphTemplateId='graph-001'>
+              <EmployeeManagement nodeId="ER-01" requestId='get-template' loader='ER-01' graphTemplateId='graph-01'>
               </EmployeeManagement>
             } />
             <Route path="/form-factory" element={<FormFactory />} />
             <Route path="/graph-template" element={
               <TemplateGraph
                 requestId='get-template'
-                graphId='graph-001' 
+                graphId='graph-01' 
                 mode={'CREATE'}              >
               </TemplateGraph>
             } />

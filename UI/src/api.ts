@@ -252,6 +252,27 @@ export const SubmitForm = async (data: any, graphId: string): Promise<any> => {
   }
 }
 
+export const TriggerFormAction = async (data: any, loader: string): Promise<any> => {
+  const requestBody: ToGateWayPayload = {
+    type: "FORM_ACTION_TRIGGER",
+    data: {
+      data: data,
+      loader: loader
+    }
+  }
+  try {
+    const respond = await ToGateWay(requestBody);
+    return respond;
+    // console.log(requestBody);
+  } catch (error) {
+    // throw error;
+    console.error("Error fetching schema:", error);
+    return {
+      status: "success?",
+    };
+  }
+}
+
 export const CloneGraph = async (graphId: string): Promise<GraphDataLazyLoad> => {
   const requestBody: ToGateWayPayload = {
     type: "CLONE_GRAPH",

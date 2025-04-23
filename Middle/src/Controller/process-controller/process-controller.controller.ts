@@ -71,7 +71,8 @@ export class ProcessControllerController {
                 try {
                     let data = rq.body.data.data;
                     let parent = rq.body.data.parentId;
-                    const respond = await this.formService.SubmitFormData(data, parent);
+                    let graphId = rq.body.data.graphId
+                    const respond = await this.formService.SubmitFormData(data, parent, graphId);
                     return respond;
                 } catch (error) {
                     return { error: 'Failed to fetch flow chart from external API' };
@@ -134,6 +135,17 @@ export class ProcessControllerController {
                     return { error: 'Failed to fetch flow chart from external API' };
                 }
             }
+
+            case 'FORM_ACTION_TRIGGER':{
+                try {
+                    let data = rq.body.data;
+                    const respond = await this.processService.triggerFormAction(data.loader, data.data);
+                    return respond;
+                } catch (error) {
+                    return { error: 'Failed to fetch flow chart from external API' };
+                }
+            }
+
             default: {
                 return { error: 'UNAVAILABLE TYPE' };
             }

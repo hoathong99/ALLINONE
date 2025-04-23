@@ -32,9 +32,9 @@ export interface GraphData {
 }
 
 //---------------------------------------------->Test
-export interface n8nloader{
-  n8nLoader: string;
-}
+// export interface n8nloader{
+//   n8nLoader: string;
+// }
 
 
 export interface GraphDataLazyLoad {
@@ -46,7 +46,7 @@ export interface GraphDataLazyLoad {
   definition: {
     events: Array<GraphNodeData>;
   };
-  history: n8nloader[];
+  history: Array<string>;
   currentEvent: string;
 }
 
@@ -84,6 +84,7 @@ export interface ToGateWayPayload {
 }
 
 export interface NodeSubmission {
+  _id? : string,
   parentId : string,
   data: {
     parentId?: string
