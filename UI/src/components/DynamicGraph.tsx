@@ -8,7 +8,7 @@ import ReactFlow, {
   Panel
 } from 'reactflow';
 import validator from '@rjsf/validator-ajv8';
-import { fetchManualTriggers,  FetchSubmissionByLoader, HandleCreateFlowGraph, LazyLoadGraph,  LazyLoadNodeSchema,  SubmitForm, TriggerFormAction } from '../api';
+import { fetchManualTriggers,  FetchSubmissionByLoader, HandleCreateFlowGraph, InstanceGraph, LazyLoadGraph,  LazyLoadNodeSchema,  SubmitForm, TriggerFormAction } from '../api';
 import { GraphDataLazyLoad, NodeSubmission, Trigger } from '../types';
 import 'reactflow/dist/style.css';
 import { TabPanel, TabView } from 'primereact/tabview';
@@ -24,6 +24,7 @@ interface ApprovalGraphProps {
   graphId?: string;
   requestId?: string;
   graphData?: any;
+  // status: string;
 }
 
 interface N8nNodeSchema {
@@ -67,6 +68,7 @@ interface PreviewTab {
 }
 
 const DynamicGraph: React.FC<ApprovalGraphProps> = (props : ApprovalGraphProps) => {
+  const [graphStatus, setGraphStatus] = useState<any>();
   const [nodes, setNodes, onNodesChange] = useNodesState<Node>([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>([]);
   const [selectedNode, setSelectedNode] = useState<any>(null);
@@ -82,23 +84,26 @@ const DynamicGraph: React.FC<ApprovalGraphProps> = (props : ApprovalGraphProps) 
   const [showCustomDialog, setShowCustomDialog] = useState(false);
   const [formData, setFormData] = useState<any>();
   const [historyLst, setHistoryLst] = useState<NodeSubmission[]>([]);                                     // store whole graph submission list
-
+  const [isFormStarted, setisFormStarted] = useState<boolean>(false);
   useEffect(() => {
     if (props.graphData) {
       setGraphData(props.graphData);
       RenderFlowGraph(props.graphData);
-    } else if (props.graphId && props.requestId) {
-      LazyLoadGraph(props.graphId, props.requestId).then((data: GraphDataLazyLoad) => {
-        setGraphData(data);
-        RenderFlowGraph(data);
-      });
+      setGraphStatus(props.graphData.status);
+    } else {
+      if (props.graphId && props.requestId) {
+        LazyLoadGraph(props.graphId, props.requestId).then((data: GraphDataLazyLoad) => {
+          setGraphData(data);
+          RenderFlowGraph(data);
+          setGraphStatus(data.status);
+        });
+      }
     }
   }, [props]);
 
   const RenderFlowGraph = (graphData: GraphDataLazyLoad) => {
     if (!graphData || !graphData.definition?.events) return;
   
-    // Group events based on their type or custom logic (here using parentId)
     const levelMap: Record<string, number> = {};
     const inputs = graphData.definition.events.filter(e => !e.triggers?.some(t => t.triggerType === "Approve")); // Top-level inputs
     const review = graphData.definition.events.find(e => e.triggers?.some(t => t.triggerType === "Approve"));
@@ -189,6 +194,22 @@ const DynamicGraph: React.FC<ApprovalGraphProps> = (props : ApprovalGraphProps) 
       });
     }
   };
+
+  useEffect(()=>{
+    if(graphData){
+      console.log(graphData);
+      RenderFlowGraph(graphData);
+      setGraphStatus(graphData.status);
+    }
+  },[graphData])
+
+  useEffect(()=>{
+    if(graphStatus=="start"){
+      setisFormStarted(true);
+    }else{
+      setisFormStarted(false);
+    }
+  },[graphStatus])
 
   useEffect(() => {
     if (selectedNode) {
@@ -295,6 +316,16 @@ const DynamicGraph: React.FC<ApprovalGraphProps> = (props : ApprovalGraphProps) 
     }
   }
 
+  const startProcess = () =>{
+    if(graphData&&graphStatus=="active"){
+      InstanceGraph(graphData.graphId).then((data)=>{
+        if(!data.error){
+          setGraphData(data);
+        }
+      });
+    }
+  }
+
   if (!graphData) {
     return <div className="flex items-center justify-center h-screen">Loading...</div>;
   }
@@ -319,51 +350,54 @@ const DynamicGraph: React.FC<ApprovalGraphProps> = (props : ApprovalGraphProps) 
         <Controls />
         <MiniMap />
         <Panel position="top-left" className="bg-white p-4 rounded-lg shadow-lg" style={{display:"flex", gap:"1rem"}}>
-          <Button label='Start' onClick={() => { console.log("click!") }} className="btn btn-theme" data-bs-toggle="modal" data-bs-target="#employeeModal" style={{ backgroundColor: "#1f2c64", color: "white" }}></Button>
+          {graphStatus&&(<div>{graphStatus}</div>)}
+          {graphData._id??(<div>{graphData._id}</div>)}
+          {graphStatus=="active"&&<Button label='Start' onClick={() => { startProcess() }} className="btn btn-theme" data-bs-toggle="modal" data-bs-target="#employeeModal" style={{ backgroundColor: "#1f2c64", color: "white" }}></Button>}
           <Button label='Cancel' onClick={() => { console.log("click!") }} className="btn btn-theme" data-bs-toggle="modal" data-bs-target="#employeeModal" style={{ backgroundColor: "#1f2c64", color: "white" }}></Button>
           <Button label='Run' onClick={() => { console.log("click!") }} className="btn btn-theme" data-bs-toggle="modal" data-bs-target="#employeeModal" style={{ backgroundColor: "#1f2c64", color: "white" }}></Button>
         </Panel>
       </ReactFlow>
       <Dialog header={selectedNode?.data.label||"Header"} visible={showCustomDialog} style={{ width: '60vw' }} onHide={() => CloseFormDialog()}>
-      <div style={{ display: "flex" }}>
-                <TabView >
-                  <TabPanel header="Form">
-                    <div style={{ marginBottom: "3rem", width: "250%" }}>
-                      <Form
-                        schema={formSchema}
-                        uiSchema={uiSchema}
-                        validator={validator}
-                        formData={formData}
-                        onSubmit={handleFormSubmit}
-                        onChange={(e) => {
-                          const updatedFormData = e.formData;
-                          setFormData(updatedFormData); // assuming you have a useState for formData
-                        }}
-                      />
-                      <div className=" bottom-0 right-0 flex justify-end gap-2 p-4 flex justify-end gap-2">
-                      </div>
-                    </div>
-                  </TabPanel>
-                  <TabPanel header="History">
-                    <div style={{width: "250%"}}>
-                    <Form
-                        schema={formSchema}
-                        uiSchema={uiSchema}
-                        validator={validator}
-                        formData={selectedHistory}
-                        disabled
-                      />
-                    </div>
-                  </TabPanel>
-                  <TabPanel header="Review(s)">
-                    <div style={{width: "250%"}}>
-                      {
-                        PreviewTabs()
-                      }
-                    </div>
-                  </TabPanel>
-                </TabView>
+        <div style={{ display: "flex" }}>
+          <TabView >
+            <TabPanel header="Form">
+              <div style={{ marginBottom: "3rem", width: "250%" }}>
+                <Form
+                  schema={formSchema}
+                  uiSchema={uiSchema}
+                  validator={validator}
+                  formData={formData}
+                  onSubmit={handleFormSubmit}
+                  onChange={(e) => {
+                    const updatedFormData = e.formData;
+                    setFormData(updatedFormData); // assuming you have a useState for formData
+                  }}
+                  disabled={!isFormStarted}
+                />
+                <div className=" bottom-0 right-0 flex justify-end gap-2 p-4 flex justify-end gap-2">
+                </div>
               </div>
+            </TabPanel>
+            <TabPanel header="History">
+              <div style={{ width: "250%" }}>
+                <Form
+                  schema={formSchema}
+                  uiSchema={uiSchema}
+                  validator={validator}
+                  formData={selectedHistory}
+                  disabled
+                />
+              </div>
+            </TabPanel>
+            <TabPanel header="Review(s)">
+              <div style={{ width: "250%" }}>
+                {
+                  PreviewTabs()
+                }
+              </div>
+            </TabPanel>
+          </TabView>
+        </div>
       </Dialog>
     </div>
   );

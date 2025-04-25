@@ -462,4 +462,20 @@ export const LoadInitalTable = async (rqId : string, loader: string): Promise<an
     throw error;
   }
 }
+
+export const InstanceGraph = async (loader: string): Promise<any> =>{
+  const requestBody: ToGateWayPayload = {
+    type: "START_GRAPH",
+    data: {
+      loader: loader
+    }
+  }
+  try {
+    const respond = await ToGateWay(requestBody);
+    return respond.json();
+  } catch (error) {
+    throw error;
+  }
+}
+
 //<------------Test
