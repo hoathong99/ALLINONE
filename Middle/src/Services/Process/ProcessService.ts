@@ -52,7 +52,7 @@ export class ProcessService {
     }
 
     async getFlowChartTemplate(rqId: string, chartId: string): Promise<any> {
-        const url = `http://localhost:5678/webhook/${encodeURIComponent(rqId)}`;
+        const url = `http://localhost:5678/webhook-test/${encodeURIComponent(rqId)}`;
         const payload = {
             graphId: chartId,
         }

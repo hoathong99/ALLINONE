@@ -430,4 +430,19 @@ export const HandleGenerateFormSchema = async (formData : any): Promise<any> =>{
   // return transformedDataForLazyLoad;
 }
 
+export const LoadInitalTable = async (rqId : string, loader: string): Promise<any> =>{
+  const requestBody: ToGateWayPayload = {
+    type: "GET_INITAL_RESOURCE",
+    data: {
+      rqId: rqId,
+      loader: loader
+    }
+  }
+  try {
+    const respond = await ToGateWay(requestBody);
+    return respond.json();
+  } catch (error) {
+    throw error;
+  }
+}
 //<------------Test

@@ -13,16 +13,17 @@ import { GraphDataLazyLoad, NodeSubmission, Trigger } from '../types';
 import 'reactflow/dist/style.css';
 import { TabPanel, TabView } from 'primereact/tabview';
 import { Toast } from 'primereact/toast';
-import { Button } from 'primereact/button';
+// import { Button } from 'primereact/button';
 // import Form from '@rjsf/core';
 import Form from "@rjsf/bootstrap-4";
+import { Dialog } from 'primereact/dialog';
+// import { layoutGrid } from "react-jsonschema-form-layout";
 
 
 interface ApprovalGraphProps {
   graphId: string;
   requestId: string;
   graphData?: any;
-  mode: string;
 }
 
 // const nodeDefaults = {
@@ -36,88 +37,6 @@ interface ApprovalGraphProps {
 //   },
 // };
 
-// const DummyComplicatedGraph : GraphDataLazyLoad = {
-//   "graphId": "graph-complicated",
-//   "domain": "hr",
-//   "status": "active",
-//   "currentEvent": "ER-01",
-//   "history": [],
-//   "definition": {
-//     "events": [
-//       {
-//         "eventId": "ER-01",
-//         "type": "Candidate Profile Submission",
-//         "dataSchema": { "n8nLoader": "ER-01" },
-//         "triggers": [
-//           { "eventId": "ER-02", "triggerType": "Submit" },
-//           { "eventId": "ER-03", "triggerType": "Attach Resume" }
-//         ]
-//       },
-//       {
-//         "eventId": "ER-02",
-//         "type": "HR Review",
-//         "dataSchema": { "n8nLoader": "ER-02" },
-//         "triggers": [
-//           { "eventId": "ER-04", "triggerType": "Approve" },
-//           { "eventId": "ER-05", "triggerType": "Request Changes" }
-//         ]
-//       },
-//       {
-//         "eventId": "ER-03",
-//         "type": "Document Upload",
-//         "dataSchema": { "n8nLoader": "ER-03" },
-//         "triggers": [
-//           { "eventId": "ER-04", "triggerType": "Completed" }
-//         ]
-//       },
-//       {
-//         "eventId": "ER-04",
-//         "type": "Manager Approval",
-//         "dataSchema": { "n8nLoader": "ER-04" },
-//         "triggers": [
-//           { "eventId": "ER-06", "triggerType": "Proceed to Offer" }
-//         ]
-//       },
-//       {
-//         "eventId": "ER-05",
-//         "type": "Candidate Correction",
-//         "dataSchema": { "n8nLoader": "ER-05" },
-//         "triggers": [
-//           { "eventId": "ER-01", "triggerType": "Resubmit" }
-//         ]
-//       },
-//       {
-//         "eventId": "ER-06",
-//         "type": "HR Prepares Offer",
-//         "dataSchema": { "n8nLoader": "ER-06" },
-//         "triggers": [
-//           { "eventId": "ER-07", "triggerType": "Send" }
-//         ]
-//       },
-//       {
-//         "eventId": "ER-07",
-//         "type": "Candidate Receives Offer",
-//         "dataSchema": { "n8nLoader": "ER-07" },
-//         "triggers": [
-//           { "eventId": "ER-08", "triggerType": "Accept" },
-//           { "eventId": "ER-09", "triggerType": "Decline" }
-//         ]
-//       },
-//       {
-//         "eventId": "ER-08",
-//         "type": "Onboarding Starts",
-//         "dataSchema": { "n8nLoader": "ER-08" },
-//         "triggers": []
-//       },
-//       {
-//         "eventId": "ER-09",
-//         "type": "Rejection Feedback",
-//         "dataSchema": { "n8nLoader": "ER-09" },
-//         "triggers": []
-//       }
-//     ]
-//   }
-// };
 
 // const DummySchemaList : N8nNodeSchema[] = [
 //   {
@@ -365,156 +284,365 @@ interface ApprovalGraphProps {
 //   }
 // ];
 
-// const TempoGraphData: GraphDataLazyLoad = {
-//   graphId: "graph-final-review",
-//   domain: "workflow",
-//   status: "active",
-//   currentEvent: "ER-01",
-//   history: ["sub-ER-01-001","sub-ER-02-001","sub-ER-03-001","sub-ER-04-001","sub-ER-04-001","sub-ER-06-001"],
-//   definition: {
-//     events: [
-//       {
-//         eventId: "ER-01",
-//         type: "Personal Info Input",
-//         dataSchema: { n8nLoader: "ER-01" },
-//         triggers: [{ eventId: "ER-05", triggerType: "Submit" }]
-//       },
-//       {
-//         eventId: "ER-02",
-//         type: "Work Experience Input",
-//         dataSchema: { n8nLoader: "ER-02" },
-//         triggers: [{ eventId: "ER-05", triggerType: "Submit" }]
-//       },
-//       {
-//         eventId: "ER-03",
-//         type: "Document Upload",
-//         dataSchema: { n8nLoader: "ER-03" },
-//         triggers: [{ eventId: "ER-05", triggerType: "Submit" }]
-//       },
-//       {
-//         eventId: "ER-04",
-//         type: "Background Check",
-//         dataSchema: { n8nLoader: "ER-04" },
-//         triggers: [{ eventId: "ER-05", triggerType: "Submit" }]
-//       },
-//       {
-//         eventId: "ER-05",
-//         type: "Review Inputs",
-//         dataSchema: { n8nLoader: "ER-05" },
-//         triggers: [{ eventId: "ER-06", triggerType: "Approve" }]
-//       },
-//       {
-//         eventId: "ER-06",
-//         type: "Final Review",
-//         dataSchema: { n8nLoader: "ER-06" },
-//         triggers: []
-//       }
-//     ]
-//   }
-// };
+const TempoGraphData: GraphDataLazyLoad = {
+  graphId: "graph-02",
+  domain: "workflow",
+  status: "active",
+  currentEvent: "",
+  history: [],
+  definition: {
+    events: [
+      {
+        eventId: "ER-07",
+        type: "Info Input",
+        dataSchema: "ER-07",
+        triggers: [{ eventId: "ER-08", triggerType: "Submit" }]
+      },
+      {
+        eventId: "ER-08",
+        type: "Review",
+        dataSchema: "ER-08",
+        triggers: [{ eventId: "ER-09", triggerType: "Approve" }]
+      },
+      {
+        eventId: "ER-09",
+        type: "Final Approve",
+        dataSchema: "ER-09" ,
+        triggers: []
+      }
+    ]
+  }
+};
 
-// const TempoSchemaList: N8nNodeSchema[] = [
-//   {
-//     schemaId: "ER-01",
-//     preview: [],
-//     formSchema: {
-//       title: "Basic Info",
-//       type: "object",
-//       properties: {
-//         fullName: { type: "string", title: "Full Name" },
-//         dateOfBirth: { type: "string", format: "date", title: "Date of Birth" }
-//       },
-//       required: ["fullName"]
-//     },
-//     uiSchema: {
-//       fullName: { "ui:placeholder": "Enter full name" },
-//       dateOfBirth: { "ui:widget": "alt-date" }
-//     }
-//   },
-//   {
-//     schemaId: "ER-02",
-//     preview: [],
-//     formSchema: {
-//       title: "Contract Info",
-//       type: "object",
-//       properties: {
-//         startDate: { type: "string", format: "date", title: "Start Date" },
-//         salary: { type: "number", title: "Salary" }
-//       },
-//       required: ["startDate"]
-//     },
-//     uiSchema: {
-//       startDate: { "ui:widget": "alt-date" },
-//       salary: { "ui:widget": "updown" }
-//     }
-//   },
-//   {
-//     schemaId: "ER-03",
-//     preview: [],
-//     formSchema: {
-//       title: "Insurance Info",
-//       type: "object",
-//       properties: {
-//         provider: { type: "string", title: "Insurance Provider" },
-//         policyNumber: { type: "string", title: "Policy Number" }
-//       },
-//       required: ["provider"]
-//     },
-//     uiSchema: {
-//       provider: { "ui:placeholder": "Enter provider" },
-//       policyNumber: { "ui:placeholder": "Enter policy number" }
-//     }
-//   },
-//   {
-//     schemaId: "ER-04",
-//     preview: [],
-//     formSchema: {
-//       title: "Health Info",
-//       type: "object",
-//       properties: {
-//         reportFile: { type: "string", title: "Health Report (.pdf)" }
-//       },
-//       required: ["reportFile"]
-//     },
-//     uiSchema: {
-//       reportFile: { "ui:widget": "file" }
-//     }
-//   },
-//   {
-//     schemaId: "ER-05",
-//     preview: ["ER-01", "ER-02", "ER-03"],
-//     formSchema: {
-//       title: "Review Info",
-//       type: "object",
-//       properties: {
-//         reviewerNote: { type: "string", title: "Reviewer Note" }
-//       },
-//       required: []
-//     },
-//     uiSchema: {
-//       reviewerNote: { "ui:widget": "textarea", "ui:placeholder": "Write your notes here" }
-//     }
-//   },
-//   {
-//     schemaId: "ER-06",
-//     preview: ["ER-01", "ER-02", "ER-03", "ER-04", "ER-05"],
-//     formSchema: {
-//       title: "Final Decision",
-//       type: "object",
-//       properties: {
-//         decision: {
-//           type: "string",
-//           enum: ["Approved", "Rejected"],
-//           title: "Final Decision"
-//         }
-//       },
-//       required: ["decision"]
-//     },
-//     uiSchema: {
-//       decision: { "ui:widget": "radio" }
-//     }
-//   }
-// ];
+const TempoSchemaList: N8nNodeSchema[] = [
+  {
+    schemaId: "ER-07",
+    preview: [],
+    formSchema: {
+      "type": "object",
+      "properties": {
+        "personalInfo": {
+          "type": "object",
+          "title": "Sơ yếu lý lịch",
+          "properties": {
+            "employeeCode": { "type": "string", "title": "Mã nhân sự" },
+            "timekeepingCode": { "type": "string", "title": "Mã chấm công" },
+            "fullName": { "type": "string", "title": "Họ tên" },
+            "gender": { "type": "string", "title": "Giới tính", "enum": ["Nam", "Nữ", "Khác"] },
+            "birthDate": { "type": "string", "format": "date", "title": "Ngày sinh" },
+            "militaryService": { "type": "string", "title": "Nghĩa vụ quân sự", "enum": ["Đã đi", "Chưa đi"] },
+            "birthPlace": { "type": "string", "title": "Nơi sinh" },
+            "hometown": { "type": "string", "title": "Nguyên quán" },
+            "nationality": { "type": "string", "title": "Quốc tịch" },
+            "ethnicity": { "type": "string", "title": "Dân tộc" },
+            "religion": { "type": "string", "title": "Tôn giáo", "enum": ["Không", "Có"] },
+            "maritalStatus": { "type": "string", "title": "Tình trạng hôn nhân", "enum": ["Độc thân", "Đã kết hôn"] },
+            "personalTaxCode": { "type": "string", "title": "MST cá nhân" },
+            "contractSignDate": { "type": "string", "format": "date", "title": "Ngày ký HĐLĐ chính thức" },
+            "workStartDate": { "type": "string", "format": "date", "title": "Ngày vào" },
+            "manager": { "type": "string", "title": "Người QL trực tiếp" },
+            "laborType": { "type": "string", "title": "Loại lao động", "enum": ["In-house", "Outsource"] }
+          }
+        },
+        "contractInfo": {
+          "type": "object",
+          "title": "Hợp đồng",
+          "properties": {
+            "contractCode": { "type": "string", "title": "Mã hợp đồng" },
+            "contractType": { "type": "string", "title": "Loại hợp đồng" },
+            "department": { "type": "string", "title": "Phòng ban" },
+            "position": { "type": "string", "title": "Chức vụ" },
+            "jobTitle": { "type": "string", "title": "Vị trí" },
+            "rank": { "type": "string", "title": "Cấp bậc", "enum": ["Fresher", "Junior", "Senior"] },
+            "workingForm": { "type": "string", "title": "Hình thức làm việc", "enum": ["Full-time", "Part-time"] },
+            "workplace": { "type": "string", "title": "Nơi làm việc" },
+            "effectiveFrom": { "type": "string", "format": "date", "title": "Hiệu lực từ ngày" },
+            "effectiveTo": { "type": "string", "format": "date", "title": "Hiệu lực đến ngày" },
+            "signDate": { "type": "string", "format": "date", "title": "Ngày ký" },
+            "signer": { "type": "string", "title": "Người ký" },
+            "signature": { "type": "boolean", "title": "Ký số" },
+            "salaryStartDate": { "type": "string", "format": "date", "title": "Từ ngày" },
+            "salary": { "type": "string", "title": "Tiền lương" },
+            "salaryAmount": { "type": "number", "title": "Số tiền" },
+            "salaryNote": { "type": "string", "title": "Ghi chú" },
+            "allowanceType": { "type": "string", "title": "Loại phụ cấp" },
+            "allowanceNote": { "type": "string", "title": "Ghi chú" }
+          }
+        },
+        "insuranceInfo": {
+          "type": "object",
+          "title": "Bảo hiểm",
+          "properties": {
+            "socialInsuranceNumber": { "type": "string", "title": "Số sổ BHXH" },
+            "insuranceStatus": { "type": "string", "title": "Trạng thái sổ", "enum": ["Mới", "Đã cấp", "Chưa cấp"] },
+            "contributingEntity": { "type": "string", "title": "Pháp nhân đóng" },
+            "healthInsuranceNumber": { "type": "string", "title": "Số thẻ BHYT" },
+            "hospital": { "type": "string", "title": "ĐK khám chữa bệnh" },
+            "provinceCode": { "type": "string", "title": "Mã tỉnh cấp" }
+          }
+        },
+        "healthInfo": {
+          "type": "object",
+          "title": "Sức khỏe",
+          "properties": {
+            "medicalFile": {
+              "type": "string",
+              "format": "data-url",
+              "title": "Tệp khám sức khỏe định kỳ"
+            }
+          }
+        }
+      }
+    },
+    uiSchema: {
+      "type": "Categorization",
+      "elements": [
+        {
+          "type": "Category",
+          "label": "Sơ yếu lý lịch",
+          "elements": [
+            {
+              "type": "Group",
+              "label": "Thông tin cá nhân",
+              "elements": [
+                {
+                  "type": "HorizontalLayout",
+                  "elements": [
+                    { "type": "Control", "scope": "#/properties/personalInfo/properties/employeeCode" },
+                    { "type": "Control", "scope": "#/properties/personalInfo/properties/timekeepingCode" }
+                  ]
+                },
+                {
+                  "type": "Control",
+                  "scope": "#/properties/personalInfo/properties/fullName"
+                },
+                {
+                  "type": "HorizontalLayout",
+                  "elements": [
+                    { "type": "Control", "scope": "#/properties/personalInfo/properties/gender" },
+                    { "type": "Control", "scope": "#/properties/personalInfo/properties/birthDate" }
+                  ]
+                },
+                {
+                  "type": "Control",
+                  "scope": "#/properties/personalInfo/properties/militaryService"
+                },
+                {
+                  "type": "HorizontalLayout",
+                  "elements": [
+                    { "type": "Control", "scope": "#/properties/personalInfo/properties/birthPlace" },
+                    { "type": "Control", "scope": "#/properties/personalInfo/properties/hometown" }
+                  ]
+                },
+                {
+                  "type": "HorizontalLayout",
+                  "elements": [
+                    { "type": "Control", "scope": "#/properties/personalInfo/properties/nationality" },
+                    { "type": "Control", "scope": "#/properties/personalInfo/properties/ethnicity" }
+                  ]
+                },
+                {
+                  "type": "HorizontalLayout",
+                  "elements": [
+                    { "type": "Control", "scope": "#/properties/personalInfo/properties/religion" },
+                    { "type": "Control", "scope": "#/properties/personalInfo/properties/maritalStatus" }
+                  ]
+                },
+                {
+                  "type": "HorizontalLayout",
+                  "elements": [
+                    { "type": "Control", "scope": "#/properties/personalInfo/properties/personalTaxCode" },
+                    { "type": "Control", "scope": "#/properties/personalInfo/properties/contractSignDate" }
+                  ]
+                },
+                {
+                  "type": "HorizontalLayout",
+                  "elements": [
+                    { "type": "Control", "scope": "#/properties/personalInfo/properties/workStartDate" },
+                    { "type": "Control", "scope": "#/properties/personalInfo/properties/manager" }
+                  ]
+                },
+                {
+                  "type": "Control",
+                  "scope": "#/properties/personalInfo/properties/laborType"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "Category",
+          "label": "Hợp đồng",
+          "elements": [
+            {
+              "type": "Group",
+              "label": "Thông tin hợp đồng",
+              "elements": [
+                {
+                  "type": "HorizontalLayout",
+                  "elements": [
+                    { "type": "Control", "scope": "#/properties/contractInfo/properties/contractCode" },
+                    { "type": "Control", "scope": "#/properties/contractInfo/properties/contractType" }
+                  ]
+                },
+                {
+                  "type": "HorizontalLayout",
+                  "elements": [
+                    { "type": "Control", "scope": "#/properties/contractInfo/properties/department" },
+                    { "type": "Control", "scope": "#/properties/contractInfo/properties/position" }
+                  ]
+                },
+                {
+                  "type": "HorizontalLayout",
+                  "elements": [
+                    { "type": "Control", "scope": "#/properties/contractInfo/properties/jobTitle" },
+                    { "type": "Control", "scope": "#/properties/contractInfo/properties/rank" }
+                  ]
+                },
+                {
+                  "type": "HorizontalLayout",
+                  "elements": [
+                    { "type": "Control", "scope": "#/properties/contractInfo/properties/workingForm" },
+                    { "type": "Control", "scope": "#/properties/contractInfo/properties/workplace" }
+                  ]
+                },
+                {
+                  "type": "HorizontalLayout",
+                  "elements": [
+                    { "type": "Control", "scope": "#/properties/contractInfo/properties/effectiveFrom" },
+                    { "type": "Control", "scope": "#/properties/contractInfo/properties/effectiveTo" }
+                  ]
+                },
+                {
+                  "type": "HorizontalLayout",
+                  "elements": [
+                    { "type": "Control", "scope": "#/properties/contractInfo/properties/signDate" },
+                    { "type": "Control", "scope": "#/properties/contractInfo/properties/signer" }
+                  ]
+                },
+                {
+                  "type": "Control",
+                  "scope": "#/properties/contractInfo/properties/signature"
+                },
+                {
+                  "type": "Group",
+                  "label": "Lương & phụ cấp",
+                  "elements": [
+                    {
+                      "type": "HorizontalLayout",
+                      "elements": [
+                        { "type": "Control", "scope": "#/properties/contractInfo/properties/salaryStartDate" },
+                        { "type": "Control", "scope": "#/properties/contractInfo/properties/salary" }
+                      ]
+                    },
+                    {
+                      "type": "HorizontalLayout",
+                      "elements": [
+                        { "type": "Control", "scope": "#/properties/contractInfo/properties/salaryAmount" },
+                        { "type": "Control", "scope": "#/properties/contractInfo/properties/salaryNote" }
+                      ]
+                    },
+                    {
+                      "type": "HorizontalLayout",
+                      "elements": [
+                        { "type": "Control", "scope": "#/properties/contractInfo/properties/allowanceType" },
+                        { "type": "Control", "scope": "#/properties/contractInfo/properties/allowanceNote" }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "Category",
+          "label": "Bảo hiểm",
+          "elements": [
+            {
+              "type": "Group",
+              "label": "Thông tin bảo hiểm",
+              "elements": [
+                {
+                  "type": "HorizontalLayout",
+                  "elements": [
+                    { "type": "Control", "scope": "#/properties/insuranceInfo/properties/socialInsuranceNumber" },
+                    { "type": "Control", "scope": "#/properties/insuranceInfo/properties/insuranceStatus" }
+                  ]
+                },
+                {
+                  "type": "Control",
+                  "scope": "#/properties/insuranceInfo/properties/contributingEntity"
+                },
+                {
+                  "type": "HorizontalLayout",
+                  "elements": [
+                    { "type": "Control", "scope": "#/properties/insuranceInfo/properties/healthInsuranceNumber" },
+                    { "type": "Control", "scope": "#/properties/insuranceInfo/properties/hospital" }
+                  ]
+                },
+                {
+                  "type": "Control",
+                  "scope": "#/properties/insuranceInfo/properties/provinceCode"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "Category",
+          "label": "Sức khỏe",
+          "elements": [
+            {
+              "type": "Group",
+              "label": "Khám sức khỏe định kỳ",
+              "elements": [
+                {
+                  "type": "Control",
+                  "scope": "#/properties/healthInfo/properties/medicalFile"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    schemaId: "ER-08",
+    preview: ["ER-07"],
+    formSchema: {
+      title: "Contract Info",
+      type: "object",
+      properties: {
+        startDate: { type: "string", format: "date", title: "Start Date" },
+        salary: { type: "number", title: "Salary" }
+      },
+      required: ["startDate"]
+    },
+    uiSchema: {
+      startDate: { "ui:widget": "alt-date" },
+      salary: { "ui:widget": "updown" }
+    }
+  },
+  {
+    schemaId: "ER-09",
+    preview: ["ER-07","ER-08"],
+    formSchema: {
+      title: "Insurance Info",
+      type: "object",
+      properties: {
+        provider: { type: "string", title: "Insurance Provider" },
+        policyNumber: { type: "string", title: "Policy Number" }
+      },
+      required: ["provider"]
+    },
+    uiSchema: {
+      provider: { "ui:placeholder": "Enter provider" },
+      policyNumber: { "ui:placeholder": "Enter policy number" }
+    }
+  },
+];
 
 // const TempoHistoryLst: NodeSubmission[] = [
 //   {
@@ -594,92 +722,6 @@ interface ApprovalGraphProps {
 //   }
 // ];
 
-const dummyFormSchemaV2 = {
-  "title": "Thông tin cá nhân",
-  "type": "object",
-  "properties": {
-    "employeeCode": { "type": "string", "title": "Mã nhân sự", "readOnly": true },
-    "fullName": { "type": "string", "title": "Họ tên" },
-    "gender": {
-      "type": "string",
-      "title": "Giới tính",
-      "enum": ["Nam", "Nữ"]
-    },
-    "placeOfBirth": { "type": "string", "title": "Nơi sinh" },
-    "nationality": { "type": "string", "title": "Quốc tịch" },
-    "ethnicity": { "type": "string", "title": "Dân tộc" },
-    "taxId": { "type": "string", "title": "MST cá nhân" },
-    "contractSignDate": { "type": "string", "format": "date", "title": "Ngày ký HĐLĐ chính thức" },
-    "employmentType": {
-      "type": "string",
-      "title": "Loại lao động",
-      "enum": ["In-house", "CTV", "Vendor"]
-    },
-    "attendanceCode": { "type": "string", "title": "Mã chấm công" },
-    "dateOfBirth": { "type": "string", "format": "date", "title": "Ngày sinh" },
-    "militaryService": {
-      "type": "string",
-      "title": "Nghĩa vụ quân sự",
-      "enum": ["Đã đi", "Không phải đi", "Chưa đi"]
-    },
-    "hometown": { "type": "string", "title": "Nguyên quán" },
-    "maritalStatus": {
-      "type": "string",
-      "title": "Tình trạng hôn nhân",
-      "enum": ["Độc thân", "Kết hôn", "Ly hôn"]
-    },
-    "religion": {
-      "type": "string",
-      "title": "Tôn giáo",
-      "enum": ["Không", "Thiên Chúa", "Phật Giáo"]
-    },
-    "onboardDate": { "type": "string", "format": "date", "title": "Ngày vào" },
-    "directManager": { "type": "string", "title": "Người QL trực tiếp" }
-  },
-  "required": ["fullName", "gender", "dateOfBirth", "employmentType"]
-};
-
-const dummyuiSchemaV2 = {
-  "ui:field": "layout",
-  "ui:layout": [
-    [
-      { employeeId: { classNames: "col-md-6" } },
-      { timekeepingCode: { classNames: "col-md-6" } }
-    ],
-    [
-      { fullName: { classNames: "col-md-6" } },
-      { dateOfBirth: { "ui:widget": "alt-date", classNames: "col-md-6" } }
-    ],
-    [
-      { gender: { "ui:widget": "radio", classNames: "col-md-6" } },
-      { militaryService: { "ui:widget": "radio", classNames: "col-md-6" } }
-    ],
-    [
-      { placeOfBirth: { "ui:placeholder": "Gợi ý khi nhập", classNames: "col-md-6" } },
-      { originalAddress: { "ui:placeholder": "Gợi ý khi nhập", classNames: "col-md-6" } }
-    ],
-    [
-      { nationality: { "ui:placeholder": "Gợi ý khi nhập", classNames: "col-md-6" } },
-      { religion: { "ui:widget": "select", classNames: "col-md-6" } }
-    ],
-    [
-      { ethnicity: { "ui:widget": "select", classNames: "col-md-6" } },
-      { maritalStatus: { "ui:widget": "radio", classNames: "col-md-6" } }
-    ],
-    [
-      { personalTaxCode: { classNames: "col-md-6" } },
-      { manager: { "ui:placeholder": "Gợi ý khi nhập", classNames: "col-md-6" } }
-    ],
-    [
-      { officialContractDate: { "ui:widget": "alt-date", classNames: "col-md-6" } },
-      { startDate: { "ui:widget": "alt-date", classNames: "col-md-6" } }
-    ],
-    [
-      { employmentType: { "ui:widget": "radio", classNames: "col-md-6" } }
-    ]
-  ]
-};
-
 
 interface N8nNodeSchema {
   schemaId: string;
@@ -736,7 +778,6 @@ const TemplateGraph: React.FC<ApprovalGraphProps> = (props : ApprovalGraphProps)
   const [previewData, setPreviewData] = useState<PreviewTab[]>([]);
   const [showCustomDialog, setShowCustomDialog] = useState(false);
   const [formData, setFormData] = useState<any>();
-  const [componentState, setComponentState] = useState<string>(props.mode);                               // determine if graph is in CREATE mode or 
   const [historyLst, setHistoryLst] = useState<NodeSubmission[]>([]);                                     // store whole graph submission list
 
   useEffect(() => {
@@ -853,7 +894,7 @@ const TemplateGraph: React.FC<ApprovalGraphProps> = (props : ApprovalGraphProps)
       console.log(selectedNode);
       console.log("historyLst", historyLst);
       setPreviewData([]);
-      LazyLoadNodeSchema(selectedNode.data.event.dataSchema.n8nLoader, "GetSchemaByID").then((data: any) => {
+      LazyLoadNodeSchema(selectedNode.data.event.dataSchema, "GetSchemaByID").then((data: any) => {
         if (data[0]) {
           setSchema(data[0]);
           setUiSchema(data[0].uiSchema);
@@ -963,35 +1004,42 @@ const TemplateGraph: React.FC<ApprovalGraphProps> = (props : ApprovalGraphProps)
       timestamp: new Date().toISOString(),
     };
     console.log("submitData",submitData);
-    switch(componentState){
-      case"CREATE":{
-        if(graphData){
-          showToast("creating flow graph....");
-          HandleCreateFlowGraph(graphData.graphId, submitData).then((data)=> {
-            console.log(data);
-            setComponentState("EDIT");
-            setGraphData(data);
-            RenderFlowGraph(data);
-          });
-          CloseFormDialog();
-        }
-        break;
-      }
-      case"EDIT":{
-        SubmitForm(submitData, props.graphId);
-        showToast("sending...");
-        if(Schema){
-          if(Schema.toN8nLoader){
-            TriggerFormAction(submitData, Schema.toN8nLoader).then((data) => console.log("action response",data));
-          }
-        }
-        break;
-      }
-      default:{
-        showToast("Dialog mode not found!")
-        break;
+    SubmitForm(submitData, props.graphId);
+    showToast("sending...");
+    if (Schema) {
+      if (Schema.toN8nLoader) {
+        TriggerFormAction(submitData, Schema.toN8nLoader).then((data) => console.log("action response", data));
       }
     }
+    // switch(componentState){
+      // case"CREATE":{
+      //   if(graphData){
+      //     showToast("creating flow graph....");
+      //     HandleCreateFlowGraph(graphData.graphId, submitData).then((data)=> {
+      //       console.log(data);
+      //       setComponentState("EDIT");
+      //       setGraphData(data);
+      //       RenderFlowGraph(data);
+      //     });
+      //     CloseFormDialog();
+      //   }
+      //   break;
+      // }
+      // case"CREATE":{
+      //   SubmitForm(submitData, props.graphId);
+      //   showToast("sending...");
+      //   if(Schema){
+      //     if(Schema.toN8nLoader){
+      //       TriggerFormAction(submitData, Schema.toN8nLoader).then((data) => console.log("action response",data));
+      //     }
+      //   }
+      //   break;
+      // }
+      // default:{
+      //   showToast("Dialog mode not found!")
+      //   break;
+      // }
+    // }
   }
 
   if (!graphData) {
@@ -999,7 +1047,8 @@ const TemplateGraph: React.FC<ApprovalGraphProps> = (props : ApprovalGraphProps)
   }
 
   return (
-    <div className="h-screen relative">
+    // <div className="h-screen relative">
+      <div style={{height:"100%"}}>
       <div className="card flex justify-content-center">
         <Toast ref={toast} />
       </div>
@@ -1009,36 +1058,23 @@ const TemplateGraph: React.FC<ApprovalGraphProps> = (props : ApprovalGraphProps)
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
         onNodeClick={OnClickNode}
-        fitView
+        fitView={true}
         minZoom={0.5}
         maxZoom={1.5}
-        defaultViewport={{ x: 0, y: 0, zoom: 1 }}
+        defaultViewport={{ x: 0, y: 0, zoom: 0.5 }}
       >
         <Background color="#aaa" gap={16} />
         <Controls />
         <MiniMap />
-        <Panel position="top-left" className="bg-white p-4 rounded-lg shadow-lg">
+        {/* <Panel position="top-left" className="bg-white p-4 rounded-lg shadow-lg">
           <h2 className="text-lg font-semibold mb-2">Approval Workflow</h2>
           <p className="text-sm text-gray-600">Current Event: {graphData.currentEvent}</p>
           <div>MODE:{componentState}</div>
           <Button label='Create' onClick={() => { OnClickNode({}, nodes[0]) }} className="btn btn-theme" data-bs-toggle="modal" data-bs-target="#employeeModal" style={{ backgroundColor: "#1f2c64", color: "white" }}></Button>
-        </Panel>
+        </Panel> */}
       </ReactFlow>
-
-      {showCustomDialog &&
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 min-h-[400px]">
-          <div className="bg-white rounded-lg shadow-xl w-1/2 max-h-[80vh] overflow-y-auto">
-            <div className="p-6">
-              <div className="flex justify-between items-center mb-4">
-                <h3 className="text-xl font-bold">{selectedNode.data.label}</h3>
-                <button
-                  onClick={() => CloseFormDialog()}
-                  className="text-gray-500 hover:text-gray-700"
-                >
-                  ✕
-                </button>
-              </div>
-              <div style={{ display: "flex" }}>
+      <Dialog header={selectedNode?.data.label||"Header"} visible={showCustomDialog} style={{ width: '60vw' }} onHide={() => CloseFormDialog()}>
+      <div style={{ display: "flex" }}>
                 <TabView >
                   <TabPanel header="Form">
                     <div style={{ marginBottom: "3rem", width: "250%" }}>
@@ -1047,6 +1083,7 @@ const TemplateGraph: React.FC<ApprovalGraphProps> = (props : ApprovalGraphProps)
                         uiSchema={uiSchema}
                         validator={validator}
                         formData={formData}
+                        // fields={{ layout: layoutGrid }}
                         onSubmit={handleFormSubmit}
                         onChange={(e) => {
                           const updatedFormData = e.formData;
@@ -1077,10 +1114,7 @@ const TemplateGraph: React.FC<ApprovalGraphProps> = (props : ApprovalGraphProps)
                   </TabPanel>
                 </TabView>
               </div>
-            </div>
-          </div>
-        </div>
-      }
+      </Dialog>
     </div>
   );
 };

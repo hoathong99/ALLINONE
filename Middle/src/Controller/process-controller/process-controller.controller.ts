@@ -146,6 +146,16 @@ export class ProcessControllerController {
                 }
             }
 
+            case 'GET_INITAL_RESOURCE':{
+                try {
+                    let data = rq.body.data;
+                    const respond = await this.formService.GetAllEmployee(data.loader);
+                    return respond;
+                } catch (error) {
+                    return { error: 'Failed to fetch flow chart from external API' };
+                }
+            }
+
             default: {
                 return { error: 'UNAVAILABLE TYPE' };
             }

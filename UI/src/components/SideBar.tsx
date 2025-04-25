@@ -29,7 +29,7 @@ function Sidebar() {
               <li><Link to="/employee" className="nav-link text-white">Employee</Link></li>
               <li><Link to="/form-factory" className="nav-link text-white">Form Factory</Link></li>
               <li><Link to="/graph-template" className="nav-link text-white">Form Template</Link></li>
-              <li><Link to="/department" className="nav-link text-white">Department</Link></li>
+              <li><Link to="/component-template" className="nav-link text-white">component template</Link></li>
               <li><Link to="/contract" className="nav-link text-white">Contract</Link></li>
               <li><Link to="/recuitment" className="nav-link text-white">Recuitment</Link></li>
               <li><Link to="attendance" className="nav-link text-white">Attendance</Link></li>

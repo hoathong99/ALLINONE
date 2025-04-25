@@ -1,11 +1,7 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import { JsonForms } from '@jsonforms/react';
-import { materialCells, materialRenderers } from "@jsonforms/material-renderers";
 import { HandleGenerateFormSchema } from "../api";
 import { TabPanel, TabView } from "primereact/tabview";
-import { withJsonFormsControlProps } from '@jsonforms/react';
-import { ControlProps } from '@jsonforms/core';
 import { Input, FormHelperText } from '@mui/material';
 import { ChangeEvent } from 'react';
 import Form from '@rjsf/core';
@@ -283,56 +279,6 @@ const FormFactory: React.FC = () => {
     <div style={{ width: "100%", padding: "2rem", maxHeight: "100%", overflowY: "auto" }}>
       <h2 style={{ fontSize: "calc(1.325rem + .9vw)", fontWeight: "500" }}>Form Factory</h2>
       <div className="MainContent" style={{ display: "flex", gap: "2rem", height: "calc(100vh - 120px)" }}>
-        {/* Left Panel */}
-        {/* <div
-          style={{
-            flex: 1,
-            display: "flex",
-            flexDirection: "column",
-            background: "#f8f9fa",
-            padding: "1rem",
-            borderRadius: "8px"
-          }}
-        >
-          <form onSubmit={handleSubmit(onGenerateSchema)} style={{ display: "flex", flexDirection: "column", flex: 1 }}>
-            <div style={{ display: "flex", gap: "1rem", marginBottom: "1rem" }}>
-              <input
-                {...register("id")}
-                type="text"
-                placeholder="ID (ex: hr-01)"
-                className="form-control"
-                required
-              />
-              <input
-                {...register("type")}
-                type="text"
-                placeholder="Type (ex: HR Fills in candidate info)"
-                className="form-control"
-                required
-              />
-            </div>
-
-            <label style={{ fontWeight: 500 }}>HTML</label>
-            <textarea
-              {...register("html")}
-              className="form-control mb-3"
-              placeholder="Enter HTML here"
-              style={{ flex: 1, minHeight: 120, resize: "vertical", overflowY: "auto" }}
-              required
-            />
-            <label style={{ fontWeight: 500 }}>Description</label>
-            <textarea
-              {...register("description")}
-              className="form-control mb-3"
-              placeholder="Enter description here"
-              style={{ flex: 1, minHeight: 120, resize: "vertical", overflowY: "auto" }}
-              required
-            />
-            <button type="submit" className="btn btn-primary w-100 mt-auto">
-              Generate Schema
-            </button>
-          </form>
-        </div> */}
         <TabView style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
           <TabPanel header="Form Input" style={{ flex: 1 }}>
             <form onSubmit={handleSubmit(onGenerateSchema)} style={{ display: "flex", flexDirection: "column", height: '100%' }}>
@@ -433,14 +379,6 @@ const FormFactory: React.FC = () => {
                     <div>Generating schema...</div>
                   </div>
                 ) : schema && formSchema && uiSchema ? (
-                  // <JsonForms
-                  //   schema={formSchema}
-                  //   uischema={uiSchema}
-                  //   renderers={materialRenderers}
-                  //   cells={materialCells}
-                  //   data={formPreviewData}
-                  //   onChange={({ data }) => setFormPreviewData(data)}
-                  // />
                     <Form
                       schema={formSchema}
                       uiSchema={uiSchema}

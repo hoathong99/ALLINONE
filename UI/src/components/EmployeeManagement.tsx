@@ -1,23 +1,15 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import 'bootstrap/dist/js/bootstrap.bundle.min.js';
-import logo from '../assets/twendee_logo.png';
+import React, { useEffect, useRef, useState } from 'react';
+// import 'bootstrap/dist/css/bootstrap.min.css';
+// import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import { Dialog } from 'primereact/dialog';
-// import { JSONSchema7 } from 'json-schema';
-import { JsonForms } from '@jsonforms/react';
-import {
-  materialRenderers,
-  materialCells
-} from '@jsonforms/material-renderers'; // or choose a different renderer
 import { Button } from 'primereact/button';
-import { CloneGraph, DeleteSubmission, FetchEmployee, FetchGraphTable, FetchSubmission, LazyLoadNodeSchema, SubmitForm } from '../api';
-import { GraphNodeData } from '../types';
+import {  DeleteSubmission, FetchEmployee, FetchGraphTable, FetchSubmission, LazyLoadNodeSchema, SubmitForm } from '../api';
+import { GraphNodeData, ScreenSetting } from '../types';
 import { Toast } from 'primereact/toast';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
-import { ConfirmDialog, confirmDialog } from 'primereact/confirmdialog';
+import { ConfirmDialog } from 'primereact/confirmdialog';
 import "./Employment.css";
-import ApprovalGraph from './ApprovalGraph';
 import { TabPanel, TabView } from 'primereact/tabview';
 import TemplateGraph from './GraphTemplate';
 interface EmploymentManagementProps {
@@ -25,18 +17,24 @@ interface EmploymentManagementProps {
   requestId: string,
   loader: string,
   graphTemplateId: string,
+  bigGraphLoader? : string,
+  smallGraphLoader?: string,
+  setting?: ScreenSetting
 };
 
 interface EmployeeTableItem {
   id: string,
   employeeCode: string,
   fullName: string,
+  birthDate: string,
+  gender : string,
+  hometown: string,
+  workStartDate: string,
   department: string,
-  role: string,
-  status: string,
-  submissionId: string
+  manager: string,
+  laborType: string,
+  status:string
 }
-
 
 const EmployeeUIBootstrap: React.FC<EmploymentManagementProps> = (props: EmploymentManagementProps) => {
   const [dialogVisible, setDialogVisible] = useState(false);
@@ -53,6 +51,7 @@ const EmployeeUIBootstrap: React.FC<EmploymentManagementProps> = (props: Employm
   const toast = useRef<Toast>(null);
   const [graphData, setgraphData] = useState<any>(null);
   const [graphTable, setgraphTable] = useState<any>([]);
+  const [tableGraphDialogSetting, setTableGraphDialog] = useState<any>();
 
   const statusGroup = (rowData: EmployeeTableItem) => (
     <span className={`px-2 py-1 text-white text-sm rounded font-bold ${rowData.status === 'Active' ? 'bg-green-600' : 'bg-gray-500'}`}>
@@ -91,7 +90,6 @@ const EmployeeUIBootstrap: React.FC<EmploymentManagementProps> = (props: Employm
   }
 
   const OpenCreateFlowGraphDialog = () => {
-    setflowGraphMode("CREATE");
     setgraphData(null);
     setDialogVisible(true);
   }
@@ -136,15 +134,18 @@ const EmployeeUIBootstrap: React.FC<EmploymentManagementProps> = (props: Employm
     FetchEmployee("loader...").then((data) => {
       setSubmissionTable(data);
       let employees: EmployeeTableItem[] = data.map((item: any) => {
-        const basic = item.basicInfo.basicInfo;
         return {
-          id: item._id ? item._id : "undefined",
-          employeeCode: basic?.employeeCode ? basic?.employeeCode : "undefined",
-          fullName: basic?.fullName ? basic?.fullName : "undefined",
-          department: basic?.department ? basic?.department : "undefined",
-          role: basic?.role ? basic?.role : "undefined",
-          status: item.status ? item.status : "unavaible",
-          submissionId: basic?.submissionId ? basic?.submissionId : "undefined",
+          id: item.id,
+          employeeCode: item.basicInfo.employeeCode,
+          fullName: item.basicInfo.fullName,
+          birthDate: item.basicInfo.birthDate,
+          gender : item.basicInfo.gender,
+          hometown: item.basicInfo.hometown,
+          workStartDate: item.basicInfo.workStartDate,
+          department: item.basicInfo.department,
+          manager: item.basicInfo.manager,
+          laborType: item.basicInfo.laborType,
+          status:item.status
         }
       })
       setEmployeeTable(employees);
@@ -222,37 +223,9 @@ const EmployeeUIBootstrap: React.FC<EmploymentManagementProps> = (props: Employm
       <div className="card flex justify-content-center">
         <Toast ref={toast} />
       </div>
-      {/* Sidebar */}
-      {/* <div className="d-flex flex-column flex-shrink-0 p-3 text-white" style={{ width: 250, height: '100vh', backgroundColor: '#1f2c64' }}>
-        <img src={logo} alt="Twendee Logo" style={{ height: 50 }} className="mb-4" />
-        <hr />
-        <ul className="nav nav-pills flex-column mb-auto">
-          <li className="nav-item">
-            <a className="nav-link text-white d-flex justify-content-between align-items-center" data-bs-toggle="collapse" href="#hrSubmenu" role="button" aria-expanded="false" aria-controls="hrSubmenu">
-              <button
-                className="nav-link text-white d-flex justify-content-between align-items-center btn btn-link p-0 text-start"
-              >
-                <span><i className="fas fa-users me-2"></i>HR</span>
-                <i className="fas fa-chevron-down"></i>
-              </button>
-            </a>
-
-            <div className="collapse" id="hrSubmenu">
-              <ul>
-                <li><a href="#" className="nav-link text-white">Employee</a></li>
-                <li><a href="#" className="nav-link text-white">Insurance</a></li>
-                <li><a href="#" className="nav-link text-white">Attendance</a></li>
-                <li><a href="#" className="nav-link text-white">Meeting Room</a></li>
-              </ul>
-            </div>
-          </li>
-        </ul>
-      </div> */}
-
       {/* Main Content */}
       <div style={{width:"100%", padding:"2rem"}}>
         <h2 style={{ fontSize: "calc(1.325rem + .9vw)", fontWeight: "500" }}>Employee Management</h2>
-
         <div className="d-flex justify-content-between align-items-center my-3">
           <div className="d-flex gap-2">
             <input type="text" className="form-control" placeholder="Search employees..." />
@@ -271,22 +244,38 @@ const EmployeeUIBootstrap: React.FC<EmploymentManagementProps> = (props: Employm
           <button className="btn btn-theme" data-bs-toggle="modal" data-bs-target="#employeeModal" style={{ backgroundColor: "#1f2c64", color: "white" }} onClick={() => OpenCreateFlowGraphDialog()}>+ ADD EMPLOYEE</button>
           </div>
         </div>
-
         <div className="card shadow-sm">
           <TabView >
             <TabPanel header="Employee">
               <div className="card-body">
-                <DataTable value={employeeTable} paginator rows={10} className="p-datatable-sm">
+                {/* <DataTable value={employeeTable} paginator rows={10} className="p-datatable-sm">
                   <Column field="employeeCode" header="#" style={{ width: '5%' }} />
                   <Column field="fullName" header="Full Name" />
                   <Column field="department" header="Department" />
                   <Column field="role" header="Role" />
                   <Column header="Status" body={statusGroup} />
                   <Column header="Actions" body={actionGroup} style={{ width: '20%' }} />
+                </DataTable> */}
+                <DataTable value={employeeTable} paginator rows={10} className="p-datatable-sm">
+                  <Column field="employeeCode" header="Mã nhân sự" headerStyle={{ width: '7em' }}/>
+                  <Column field="fullName" header="Họ tên" />
+                  <Column field="birthDate" header="Ngày sinh" />
+                  <Column field="gender" header="Giới tính" />
+                  <Column field="hometown" header="Nguyên quán" />
+                  <Column field="workStartDate" header="Ngày vào" />
+                  <Column field="department" header="Phòng ban" />
+                  <Column field="manager" header="Người QL trực tiếp" />
+                  <Column field="laborType" header="Loại lao động" />
+                  <Column field="status" header="trạng thái" body={statusGroup}/>
+                  <Column
+                    header="Hành động"
+                    body={actionGroup}
+                    style={{ textAlign: 'center', width: '20%' }}
+                  />
                 </DataTable>
               </div>
             </TabPanel>
-            <TabPanel header="Process">
+            {/* <TabPanel header="Process">
               <DataTable value={graphTable} paginator rows={10} className="p-datatable-sm">
                 <Column field="_id" header="#" style={{ width: '5%' }} />
                 <Column field="graphId" header="Role" />
@@ -294,44 +283,16 @@ const EmployeeUIBootstrap: React.FC<EmploymentManagementProps> = (props: Employm
                 <Column header="Status" body={statusGroup} />
                 <Column header="Actions" body={actionGroupTable2} style={{ width: '20%' }} />
               </DataTable>
-            </TabPanel>
+            </TabPanel> */}
           </TabView>
         </div>
       </div>
-      <Dialog header={DialogWindowHeader} visible={dialogVisible} style={{ width: '90vw' }} onHide={() => { if (!dialogVisible) return; setDialogVisible(false); }}>
-        {/* <div style={{ marginBottom: "3rem" }}>
-          <JsonForms
-            schema={formSchema}
-            uischema={uiSchema}
-            data={formData}
-            renderers={materialRenderers}
-            cells={materialCells}
-            onChange={({ data, errors }) => {
-              setFormData(data); // save form data into state
-            }}
-          />
-        </div>
-        <div className="absolute bottom-0 right-0 flex justify-end gap-2 p-4 flex justify-end gap-2">
-          <Button
-            label="Cancel"
-            className="bg-gray-400 border-none text-white px-4 py-2 rounded"
-            onClick={() => setDialogVisible(false)}
-          />
-          <Button
-            label="Save"
-            className="bg-blue-900 border-none text-white px-4 py-2 rounded"
-            onClick={() => handleFormSubmit()}
-          />
-        </div> */}
-        {
-          dialogVisible&&
+      <Dialog header={DialogWindowHeader} visible={dialogVisible} style={{ width: '90vw', height:"90vh" }} onHide={() => { if (!dialogVisible) return; setDialogVisible(false); }}>
           <TemplateGraph
           graphId={props.graphTemplateId}
           requestId={props.requestId}
-          mode={"EDIT"}
           graphData={graphData}
         />
-        }
       </Dialog>
       <ConfirmDialog />
       <Dialog
