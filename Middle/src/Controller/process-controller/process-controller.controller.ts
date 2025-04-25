@@ -72,7 +72,7 @@ export class ProcessControllerController {
                     let data = rq.body.data.data;
                     let parent = rq.body.data.parentId;
                     let graphId = rq.body.data.graphId
-                    const respond = await this.formService.SubmitFormData(data, parent, graphId);
+                    const respond = await this.formService.SubmitFormData(data, parent, graphId, rq.user);
                     return respond;
                 } catch (error) {
                     return { error: 'Failed to fetch flow chart from external API' };
@@ -135,17 +135,15 @@ export class ProcessControllerController {
                     return { error: 'Failed to fetch flow chart from external API' };
                 }
             }
-
             case 'FORM_ACTION_TRIGGER':{
                 try {
                     let data = rq.body.data;
-                    const respond = await this.processService.triggerFormAction(data.loader, data.data);
+                    const respond = await this.processService.triggerFormAction(data.loader, data.data, rq.user);
                     return respond;
                 } catch (error) {
                     return { error: 'Failed to fetch flow chart from external API' };
                 }
             }
-
             case 'GET_INITAL_RESOURCE':{
                 try {
                     let data = rq.body.data;
@@ -155,7 +153,16 @@ export class ProcessControllerController {
                     return { error: 'Failed to fetch flow chart from external API' };
                 }
             }
-
+            case 'GET_ROW_GRAPH_DATA':{
+                try {
+                    console.log(rq);
+                    let data = rq.body.data;
+                    const respond = await this.processService.getRowGraphData(data.rqId, data.loader, data.data, rq.user);
+                    return respond;
+                } catch (error) {
+                    return { error: 'Failed to fetch flow chart from external API' };
+                }
+            }
             default: {
                 return { error: 'UNAVAILABLE TYPE' };
             }

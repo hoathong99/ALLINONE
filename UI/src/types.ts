@@ -39,6 +39,8 @@ export interface GraphData {
 export interface GraphDataLazyLoad {
   _id?: string;
   id?: string;
+  target?: string;
+  author?: string;
   graphId: string;
   domain: string;
   status: string;
@@ -52,22 +54,27 @@ export interface GraphDataLazyLoad {
 export interface GraphNodeData {
   eventId: string;
   type: string;
-  dataSchema: any
+  previews?: Array<string>;
+  toN8nLoader?: string;
+  dataSchema: any;
+  actorRole?:string;
+  customAuthorized?: [];
+  filedBy?: string;
   triggers: Array<{
     eventId: string;
     triggerType: string;
   }>;
 }
 
-export interface GraphNode {
-  eventId: string;
-  type: string;
-  dataSchema: Record<string, unknown>;
-  triggers: Array<{
-    eventId: string;
-    triggerType: string;
-  }>;
-}
+// export interface GraphNode {
+//   eventId: string;
+//   type: string;
+//   dataSchema: Record<string, unknown>;
+//   triggers: Array<{
+//     eventId: string;
+//     triggerType: string;
+//   }>;
+// }
 
 export interface ToGateWayPayload {
   type:string,
@@ -114,8 +121,8 @@ export const dummyScreenSetting: ScreenSetting = {
     {
       name: "Create New",
       type: "button",
-      requestId: "'get-template'",
-      toN8nLoader: "graph-02"
+      requestId: "get-template",
+      toN8nLoader: "quy_trinh_mau_nv_01"
     },
     {
       name: "Export",
@@ -127,18 +134,20 @@ export const dummyScreenSetting: ScreenSetting = {
     {
       name: "Edit",
       type: "button",
-      requestId: "editRequest"
+      requestId: "get-graph-edit-with-data",
+      toN8nLoader: "graph-02-Edit-Mode"
     },
     {
       name: "Delete",
       type: "button",
-      requestId: "deleteRequest"
+      requestId: "deleteRequest",
+      toN8nLoader: "graph-02-delete"
     }
   ],
   tableResourceLoader: "loadTableData",
   tableSchema: {
     row: ["employeeCode", "Name", "LaborType", "Status"],
-    rowAttribute: ["_id", "fullName", "laborType", "status"]
+    rowAttribute: ["employeeCode", "fullName", "laborType", "status"]
   },
   requestId: "loadScreenData",
   n8nLoader: "mainScreenLoader",

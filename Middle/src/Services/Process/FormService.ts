@@ -7,18 +7,22 @@ import { firstValueFrom, retry } from 'rxjs';
 export class FormService {
     constructor(private readonly httpService: HttpService) { }
 
-    async SubmitFormData(data: any, parentId: string, graphId: string): Promise<any> {
-        console.log("---------------------------SubmitFormData----------------------------------")
+    async SubmitFormData(data: any, parentId: string, graphId: string, sender: any): Promise<any> {
         const url = `http://localhost:5678/webhook/saveSubmission`;
         const payload = {
             parentId: parentId,
             data: data,
             graphId: graphId
         }
-        console.log(payload);
+        const header = {
+            headers: {
+              'x-user-id': sender?.name,
+              'Content-Type': 'application/json'
+            }
+          }
         try {
             const response = await firstValueFrom(
-                this.httpService.post(url, payload)
+                this.httpService.post(url, payload,header)
             );
             return response.data;
             

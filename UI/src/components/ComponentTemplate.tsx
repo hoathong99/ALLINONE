@@ -1,16 +1,15 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Dialog } from 'primereact/dialog';
 import { Button } from 'primereact/button';
-import { LazyLoadGraphTemplate, LoadInitalTable } from '../api';
+import { LazyLoadGraphTemplate, LazyLoadRowGraphData, LoadInitalTable } from '../api';
 import { ScreenSetting } from '../types';
 import { Toast } from 'primereact/toast';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
-import { ConfirmDialog } from 'primereact/confirmdialog';
+// import { ConfirmDialog } from 'primereact/confirmdialog';
 import "./Employment.css";
 import { TabPanel, TabView } from 'primereact/tabview';
 import DynamicGraph from './DynamicGraph';
-
 interface props {
   setting: ScreenSetting
 }
@@ -349,7 +348,7 @@ function TemplateComponent (props: props) {
   const [dialogVisible, setDialogVisible] = useState(false);
   const [graphData, setGraphData] = useState<any>();
   const [tableData, setTableData] = useState<any>();
-  const [selectedRowData, setSelectedRowData] = useState<any>();
+  // const [selectedRowData, setSelectedRowData] = useState<any>();
   const toast = useRef<Toast>(null);
   
   useEffect(() => {
@@ -387,8 +386,9 @@ function TemplateComponent (props: props) {
 
   const OnClickTableAction = async (data?: any, n8nLoader?:string, requestId?: string) =>{
     if(data&&n8nLoader&&requestId){
-      LazyLoadGraphTemplate(n8nLoader,requestId).then((data) => setGraphData(data));
-      setSelectedRowData(data);
+      console.log("row data", data);
+      LazyLoadRowGraphData(requestId, n8nLoader, data).then((data) => setGraphData(data));
+      // setSelectedRowData(data);
       OpenDialog();
     }
   }
@@ -454,12 +454,10 @@ function TemplateComponent (props: props) {
       <div className="card flex justify-content-center">
         <Toast ref={toast} />
       </div>
-      {/* Main Content */}
       <div style={{width:"100%", padding:"2rem"}}>
         <h2 style={{ fontSize: "calc(1.325rem + .9vw)", fontWeight: "500" }}>{setting.screenHeader}</h2>
         <div className="d-flex justify-content-between align-items-center my-3">
           <div style={{display:"flex", gap:"5px"}}>
-          {/* <button className="btn btn-theme" data-bs-toggle="modal" data-bs-target="#employeeModal" style={{ backgroundColor: "#1f2c64", color: "white" }} onClick={() => {}}>+ ADD EMPLOYEE</button> */}
           {setting.tableActions&&(HeaderActions())}
           </div>
         </div>

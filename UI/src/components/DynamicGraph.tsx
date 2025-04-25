@@ -17,7 +17,7 @@ import { Toast } from 'primereact/toast';
 // import Form from '@rjsf/core';
 import Form from "@rjsf/bootstrap-4";
 import { Dialog } from 'primereact/dialog';
-// import { layoutGrid } from "react-jsonschema-form-layout";
+import { Button } from 'primereact/button';
 
 
 interface ApprovalGraphProps {
@@ -77,7 +77,7 @@ const DynamicGraph: React.FC<ApprovalGraphProps> = (props : ApprovalGraphProps) 
   const [selectedHistory, setSelectedHistory] = useState<NodeSubmission>();
   const [formSchema, setFormSchema] = useState<any>({});
   const [uiSchema, setUiSchema] = useState<any>({});
-  const [Schema, setSchema] = useState<N8nNodeSchema | null>(null);
+  // const [Schema, setSchema] = useState<N8nNodeSchema | null>(null);
   const [previewData, setPreviewData] = useState<PreviewTab[]>([]);
   const [showCustomDialog, setShowCustomDialog] = useState(false);
   const [formData, setFormData] = useState<any>();
@@ -137,6 +137,8 @@ const DynamicGraph: React.FC<ApprovalGraphProps> = (props : ApprovalGraphProps) 
     const newNodes = graphData.definition.events.map((event) => ({
       id: event.eventId,
       type: 'default',
+      previews: event.previews,
+      toN8nLoader: event.toN8nLoader,
       data: {
         label: event.type,
         event,
@@ -190,12 +192,10 @@ const DynamicGraph: React.FC<ApprovalGraphProps> = (props : ApprovalGraphProps) 
 
   useEffect(() => {
     if (selectedNode) {
-      console.log(selectedNode);
-      console.log("historyLst", historyLst);
       setPreviewData([]);
       LazyLoadNodeSchema(selectedNode.data.event.dataSchema, "GetSchemaByID").then((data: any) => {
         if (data[0]) {
-          setSchema(data[0]);
+          // setSchema(data[0]);
           setUiSchema(data[0].uiSchema);
           setFormSchema(data[0].formSchema);
           let history = FindHistoryByEventId(data[0].schemaId);
@@ -203,10 +203,11 @@ const DynamicGraph: React.FC<ApprovalGraphProps> = (props : ApprovalGraphProps) 
             setSelectedHistory(history.data.data);
             setFormData(history.data.data);
           }
-          if (data[0].preview) {
-            data[0].preview.forEach((element: string) => {
-              LazyLoadNodeSchema(element, "GetSchemaByID").then((data?: any) => {
-                if (data[0]) {
+          if (selectedNode.previews) {
+            selectedNode.previews.forEach((element: string) => {
+              let node = graphData?.definition.events.find((item) => item.eventId == element);
+              LazyLoadNodeSchema(node?.dataSchema, "GetSchemaByID").then((data?: any) => {
+                if (selectedNode) {
                   setPreviewData(pre => [...pre,
                   {
                     id: data[0].schemaId,
@@ -221,16 +222,8 @@ const DynamicGraph: React.FC<ApprovalGraphProps> = (props : ApprovalGraphProps) 
           }
         }
       });
-
-      // setFormSchema(dummyFormSchemaV2);
-      // setUiSchema(dummyuiSchemaV2);
     }
   }, [selectedNode, selectedEvent])
-
-  // async function HandleLoadNodeSchema (n8nLoader : string) {                  /// tempo fixed data
-  //   return TempoSchemaList.find((i) => i.schemaId == n8nLoader);
-  // }
-
   const FindHistoryByEventId = (eventId: string) => {
     let result = historyLst.find((i) => i.parentId == eventId);
     return result;
@@ -266,7 +259,7 @@ const DynamicGraph: React.FC<ApprovalGraphProps> = (props : ApprovalGraphProps) 
 
   const CloseFormDialog = () => {
     setShowCustomDialog(false);
-    setSchema(null);
+    // setSchema(null);
     setFormSchema({});
     setUiSchema({});
     setSelectedHistory(undefined);
@@ -282,21 +275,23 @@ const DynamicGraph: React.FC<ApprovalGraphProps> = (props : ApprovalGraphProps) 
   };
 
   const handleFormSubmit = () => {
-    console.log("schema", Schema);
+    // console.log("schema", Schema);
     let submitData = {
       parentId: selectedNode.id,
+      parentGraph: graphData?._id,
       id: `${props.requestId}-${Date.now()}`,
       type: selectedNode?.type,
       data: {formData},
       timestamp: new Date().toISOString(),
     };
     console.log("submitData",submitData);
-    // SubmitForm(submitData, props.graphId);
+    if(graphData)
+    {
+      SubmitForm(submitData, graphData.graphId);
+    }
     showToast("sending...");
-    if (Schema) {
-      if (Schema.toN8nLoader) {
-        TriggerFormAction(submitData, Schema.toN8nLoader).then((data) => console.log("action response", data));
-      }
+    if (selectedNode.toN8nLoader) {
+      TriggerFormAction(submitData, selectedNode.toN8nLoader).then((data) => console.log("action response", data));
     }
   }
 
@@ -323,12 +318,11 @@ const DynamicGraph: React.FC<ApprovalGraphProps> = (props : ApprovalGraphProps) 
         <Background color="#aaa" gap={16} />
         <Controls />
         <MiniMap />
-        {/* <Panel position="top-left" className="bg-white p-4 rounded-lg shadow-lg">
-          <h2 className="text-lg font-semibold mb-2">Approval Workflow</h2>
-          <p className="text-sm text-gray-600">Current Event: {graphData.currentEvent}</p>
-          <div>MODE:{componentState}</div>
-          <Button label='Create' onClick={() => { OnClickNode({}, nodes[0]) }} className="btn btn-theme" data-bs-toggle="modal" data-bs-target="#employeeModal" style={{ backgroundColor: "#1f2c64", color: "white" }}></Button>
-        </Panel> */}
+        <Panel position="top-left" className="bg-white p-4 rounded-lg shadow-lg" style={{display:"flex", gap:"1rem"}}>
+          <Button label='Start' onClick={() => { console.log("click!") }} className="btn btn-theme" data-bs-toggle="modal" data-bs-target="#employeeModal" style={{ backgroundColor: "#1f2c64", color: "white" }}></Button>
+          <Button label='Cancel' onClick={() => { console.log("click!") }} className="btn btn-theme" data-bs-toggle="modal" data-bs-target="#employeeModal" style={{ backgroundColor: "#1f2c64", color: "white" }}></Button>
+          <Button label='Run' onClick={() => { console.log("click!") }} className="btn btn-theme" data-bs-toggle="modal" data-bs-target="#employeeModal" style={{ backgroundColor: "#1f2c64", color: "white" }}></Button>
+        </Panel>
       </ReactFlow>
       <Dialog header={selectedNode?.data.label||"Header"} visible={showCustomDialog} style={{ width: '60vw' }} onHide={() => CloseFormDialog()}>
       <div style={{ display: "flex" }}>

@@ -1,5 +1,5 @@
-import { mockData, transformedDataForLazyLoad, transformedHistoryData, transformedSchemaData } from './dto/data';
-import { GraphData, GraphDataLazyLoad, GraphNode, GraphNodeData, NodeHistory, NodeSubmission, ToGateWayPayload, Trigger } from './types';
+// import { mockData, transformedDataForLazyLoad, transformedHistoryData, transformedSchemaData } from './dto/data';
+import { GraphData, GraphDataLazyLoad, GraphNodeData, NodeSubmission, ToGateWayPayload, Trigger } from './types';
 
 // Mock API functions
 export const fetchGraph = async (graphId: string, requestId: string): Promise<GraphData> => {
@@ -125,21 +125,21 @@ export const submitEvent = async (graphId: string, event: Record<string, unknown
 //--------->Test
 const STORAGE_KEY = "superduperSecret";
 
-export const FetchData = async (graphId: string, requestId: string): Promise<GraphData> => {     // call n8n directly to get graph data
-  const requestBody = {
-    type: "GET_GRAPH",
-    data: {
-      grId: graphId,
-      rqId: requestId
-    }
-  }
-  try {
-    const respond = await ToGateWay(requestBody);
-    return respond.json();
-  } catch (error) {
-    throw error;
-  }
-}
+// export const FetchData = async (graphId: string, requestId: string): Promise<GraphData> => {     // call n8n directly to get graph data
+//   const requestBody = {
+//     type: "GET_GRAPH",
+//     data: {
+//       grId: graphId,
+//       rqId: requestId
+//     }
+//   }
+//   try {
+//     const respond = await ToGateWay(requestBody);
+//     return respond.json();
+//   } catch (error) {
+//     throw error;
+//   }
+// }
 
 export const LazyLoadGraph = async (graphId: string, requestId: string): Promise<GraphDataLazyLoad> => {
   const requestBody: ToGateWayPayload = {
@@ -175,6 +175,23 @@ export const LazyLoadGraphTemplate = async (graphId: string, requestId: string):
   }
   // tempo for lazy load implement
   // return transformedDataForLazyLoad;
+}
+
+export const LazyLoadRowGraphData = async (requestId: string, loader: string, data: any): Promise<GraphDataLazyLoad> => {
+  const requestBody: ToGateWayPayload = {
+    type: "GET_ROW_GRAPH_DATA",
+    data: {
+      loader: loader,
+      rqId: requestId,
+      data: data,
+    }
+  }
+  try {
+    const respond = await ToGateWay(requestBody);
+    return respond.json();
+  } catch (error) {
+    throw error;
+  }
 }
 
 export const LazyLoadNodeSchema = async (loaderId: string, requestId: string): Promise<any> => {

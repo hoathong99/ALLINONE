@@ -7,6 +7,8 @@ import { firstValueFrom } from 'rxjs';
 export class ProcessService {
     constructor(private readonly httpService: HttpService) { }
 
+    static currentUser = {};
+
     async getFlowChart(rqId: string, chartId: string): Promise<any> {
         const url = `http://localhost:5678/webhook/${encodeURIComponent(rqId)}`;
         const payload = {
@@ -17,8 +19,8 @@ export class ProcessService {
                 this.httpService.post(url, payload)
             );
 
-            console.log("GOTTEN:");
-            console.log(response.data);
+            // console.log("GOTTEN:");
+            // console.log(response.data);
             return response.data;
         } catch (error: any) {
             console.error('FetchData error:', error?.response?.data || error.message);
@@ -39,8 +41,8 @@ export class ProcessService {
                 this.httpService.post(url, payload)
             );
 
-            console.log("GOTTEN:");
-            console.log(response.data);
+            // console.log("GOTTEN:");
+            // console.log(response.data);
             return response.data;
         } catch (error: any) {
             console.error('FetchData error:', error?.response?.data || error.message);
@@ -52,7 +54,7 @@ export class ProcessService {
     }
 
     async getFlowChartTemplate(rqId: string, chartId: string): Promise<any> {
-        const url = `http://localhost:5678/webhook-test/${encodeURIComponent(rqId)}`;
+        const url = `http://localhost:5678/webhook/${encodeURIComponent(rqId)}`;
         const payload = {
             graphId: chartId,
         }
@@ -61,8 +63,8 @@ export class ProcessService {
                 this.httpService.post(url, payload)
             );
 
-            console.log("GOTTEN:");
-            console.log(response.data);
+            // console.log("GOTTEN:");
+            // console.log(response.data);
             return response.data;
         } catch (error: any) {
             console.error('FetchData error:', error?.response?.data || error.message);
@@ -83,8 +85,8 @@ export class ProcessService {
             const response = await firstValueFrom(
                 this.httpService.post(url, payload)
             );
-            console.log("GOTTEN:");
-            console.log(response.data);
+            // console.log("GOTTEN:");
+            // console.log(response.data);
             return response.data;
         } catch (error: any) {
             console.error('FetchData error:', error?.response?.data || error.message);
@@ -105,8 +107,8 @@ export class ProcessService {
                 this.httpService.post(url, payload)
             );
 
-            console.log("GOTTEN:");
-            console.log(response.data);
+            // console.log("GOTTEN:");
+            // console.log(response.data);
             return response.data;
         } catch (error: any) {
             console.error('FetchData error:', error?.response?.data || error.message);
@@ -117,17 +119,51 @@ export class ProcessService {
         }
     }
 
-    async triggerFormAction(rqId: string, data: any): Promise<any> {
+    async triggerFormAction(rqId: string, data: any, sender: any): Promise<any> {
         const url = `http://localhost:5678/webhook/${encodeURIComponent(rqId)}`;
         const payload = {
             data: data,
         }
+        const header = {
+            headers: {
+              'x-user-id': sender.name,
+              'Content-Type': 'application/json'
+            }
+          }
         try {
             const response = await firstValueFrom(
-                this.httpService.post(url, payload)
+                this.httpService.post(url, payload, header)
             );
-            console.log("GOTTEN:");
-            console.log(response.data);
+            // console.log("GOTTEN:");
+            // console.log(response.data);
+            return response.data;
+        } catch (error: any) {
+            console.error('FetchData error:', error?.response?.data || error.message);
+            throw new HttpException(
+                error?.response?.data || 'External API error',
+                error?.response?.status || 500,
+            );
+        }
+    }
+
+    async getRowGraphData(rqId: string, loader: string, data: any, sender: any): Promise<any> {
+        const url = `http://localhost:5678/webhook/${encodeURIComponent(rqId)}`;
+        const payload = {
+            loader: loader,
+            data: data,
+        }
+        const header = {
+            headers: {
+              'x-user-id': sender.name,
+              'Content-Type': 'application/json'
+            }
+          }
+        try {
+            const response = await firstValueFrom(
+                this.httpService.post(url, payload, header)
+            );
+            // console.log("GOTTEN:");
+            // console.log(response.data);
             return response.data;
         } catch (error: any) {
             console.error('FetchData error:', error?.response?.data || error.message);
