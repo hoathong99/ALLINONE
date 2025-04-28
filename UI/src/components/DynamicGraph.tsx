@@ -407,15 +407,15 @@ const DynamicGraph: React.FC<ApprovalGraphProps> = (props : ApprovalGraphProps) 
           boxShadow: '0 10px 15px rgba(0,0,0,0.1)',
           height:"95%"
         }}>
-          <div style={{ height: "100%" }}>
-            <div style={{ display: "flex", gap: "1rem" }}>
-              {graphStatus && (<div>{graphStatus}</div>)}
+          <div style={{ height: "100%", overflowY:"auto" }}>
+            <div style={{ display: "block", gap: "1rem" }}>
               {graphData._id ?? (<div>{graphData._id}</div>)}
+              {graphStatus && (<div>STATUS:{graphStatus}</div>)}
               {graphStatus == "active" && <Button label='Start' onClick={() => { startProcess() }} className="btn btn-theme" data-bs-toggle="modal" data-bs-target="#employeeModal" style={{ backgroundColor: "#1f2c64", color: "white" }}></Button>}
               {graphStatus == "start" && <Button label='Cancel' onClick={() => { console.log("click!") }} className="btn btn-theme" data-bs-toggle="modal" data-bs-target="#employeeModal" style={{ backgroundColor: "#1f2c64", color: "white" }}></Button>}
               {graphStatus == "start" && <Button label='Run' onClick={() => { ActiveWorkFlow() }} className="btn btn-theme" data-bs-toggle="modal" data-bs-target="#employeeModal" style={{ backgroundColor: "#1f2c64", color: "white" }}></Button>}
             </div>
-            <div style={{height:"100%", overflowY: "auto"}}>
+            <div>
               {props.attachmentData && (
                 <DynamicForm data={props.attachmentData} />
               )}
