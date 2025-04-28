@@ -107,13 +107,27 @@ interface TableSchema {
   rowAttribute: Array<string>                     // row data to display
 }
 export interface ScreenSetting {
-  headerActions : Array<CustomButton>;        // render list of big header buttons
-  tableActions: Array<CustomButton>;          // render list of small action buttons in table row
+  headerActions : Array<CustomButton>;              // render list of big header buttons
+  tableActions: Array<CustomButton>;                // render list of small action buttons in table row
   tableResourceLoader: string;                      // loader to get all table resource, should return a list after fetch
   tableSchema: TableSchema;                         // determine how table is rendered
   requestId: string;                                // determine which n8n loader to trigger for inital resource
   n8nLoader: string;                                // for n8n to determine which to return
   screenHeader: string;
+}
+
+export interface TableSetting {
+  header: string;
+  requestId: string;                                // n8n webhook to get table resource, should return a list after fetch
+  n8nLoader: string;                                // identity for n8n webhook to determine which to return
+  tableActions: Array<CustomButton>;                // render list of small action buttons in a table row
+  tableSchema: TableSchema;                         // determine how table is rendered
+}
+
+export interface ScreenSettingV2 {
+  screenHeader: string;                             // page main header
+  headerActions : Array<CustomButton>;              // render list of big header buttons
+  tables: Array<TableSetting>;
 }
 
 export const dummyScreenSetting: ScreenSetting = {
@@ -144,14 +158,119 @@ export const dummyScreenSetting: ScreenSetting = {
       toN8nLoader: "graph-02-delete"
     }
   ],
-  tableResourceLoader: "loadTableData",
+  tableResourceLoader: "LoadEmployeeTable",
   tableSchema: {
     row: ["employeeCode", "Name", "LaborType", "Status"],
     rowAttribute: ["employeeCode", "fullName", "laborType", "status"]
   },
-  requestId: "loadScreenData",
+  requestId: "LoadEmployeeTable",
   n8nLoader: "mainScreenLoader",
   screenHeader: "User Management"
+};
+
+export const dummyScreenSettingV2: ScreenSettingV2 = {
+  headerActions: [
+    {
+      name: "Create New",
+      type: "new_process",
+      requestId: "get-template",
+      toN8nLoader: "quy_trinh_mau_nv_01"
+    },
+    {
+      name: "Export",
+      type: "link",
+      link: "/export-data"
+    }
+  ],
+  screenHeader: "Employee Management",
+  tables: [
+    {
+      header: "Employee",
+      requestId: "LoadEmployeeTable",
+      n8nLoader: "what_ever_it_it_Not_needed_in_this_case_any_way",
+      tableActions: [
+        {
+          name: "Edit",
+          type: "new_process",
+          requestId: "get-template",
+          toN8nLoader: "graph-02-Edit-Mode"
+        },
+        {
+          name: "Delete",
+          type: "new_process",
+          requestId: "deleteRequest",
+          toN8nLoader: "graph-02-delete"
+        }
+      ],
+      tableSchema: {
+        row: ["employeeCode", "Name", "LaborType", "Status"],
+        rowAttribute: ["employeeCode", "fullName", "laborType", "status"]
+      }
+    },
+    {
+      header: "Employee Create Process",
+      requestId: "LoadEmployeeCreateProcess",
+      n8nLoader: "what_ever_it_it_Not_needed_in_this_case_any_way",
+      tableActions: [
+        {
+          name: "Open",
+          type: "open_process",
+          requestId: "getGraphDataById",
+          toN8nLoader: "graph-02-Edit-Mode"
+        }
+      ],
+      tableSchema: {
+        row: ["ID", "Target", "Issuer", "Status"],
+        rowAttribute: ["_id", "target", "author", "status"]
+      }
+    },
+    {
+      header: "Employee Edit Process",
+      requestId: "loadScreenData",
+      n8nLoader: "mainScreenLoader",
+      tableActions: [
+        {
+          name: "Edit",
+          type: "new_process",
+          requestId: "get-graph-edit-with-data",
+          toN8nLoader: "graph-02-Edit-Mode"
+        },
+        {
+          name: "Delete",
+          type: "new_process",
+          requestId: "deleteRequest",
+          toN8nLoader: "graph-02-delete"
+        }
+      ],
+      tableSchema: {
+        row: ["employeeCode", "Name", "LaborType", "Status"],
+        rowAttribute: ["employeeCode", "fullName", "laborType", "status"]
+      }
+    },
+    {
+      header: "Employee Delete Process",
+      requestId: "loadScreenData",
+      n8nLoader: "mainScreenLoader",
+      tableActions: [
+        {
+          name: "Edit",
+          type: "new_process",
+          requestId: "get-graph-edit-with-data",
+          toN8nLoader: "graph-02-Edit-Mode"
+        },
+        {
+          name: "Delete",
+          type: "new_process",
+          requestId: "deleteRequest",
+          toN8nLoader: "graph-02-delete"
+        }
+      ],
+      tableSchema: {
+        row: ["employeeCode", "Name", "LaborType", "Status"],
+        rowAttribute: ["employeeCode", "fullName", "laborType", "status"]
+      }
+    }
+  ]
 };
 
 //<----------------------------------Test

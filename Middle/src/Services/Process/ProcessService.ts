@@ -199,5 +199,31 @@ export class ProcessService {
             );
         }
     }
+
+    async requestData(rqId: string, loader: string, sender?: any, data?: any){
+        const url = `http://localhost:5678/webhook/${encodeURIComponent(rqId)}`;
+        const payload = {
+            loader: loader,
+            data: data
+        }
+        const header = {
+            headers: {
+              'x-user-id': sender.employeeCode,
+              'Content-Type': 'application/json'
+            }
+          }
+        try {
+            const response = await firstValueFrom(
+                this.httpService.post(url, payload, header)
+            );
+            return response.data;
+        } catch (error: any) {
+            console.error('FetchData error:', error?.response?.data || error.message);
+            throw new HttpException(
+                error?.response?.data || 'External API error',
+                error?.response?.status || 500,
+            );
+        }
+    }
 }
 

@@ -144,13 +144,14 @@ export class ProcessControllerController {
                     return { error: 'Failed to fetch flow chart from external API' };
                 }
             }
-            case 'GET_INITAL_RESOURCE':{
+            case 'GET_RESOURCE':{
                 try {
                     let data = rq.body.data;
-                    const respond = await this.formService.GetAllEmployee(data.loader);
+                    let sender = rq.user;
+                    const respond = await this.processService.requestData(data.rqId, data.loader, sender, data.data);
                     return respond;
                 } catch (error) {
-                    return { error: 'Failed to fetch flow chart from external API' };
+                    return { error: 'Failed to fetch Data from external API' };
                 }
             }
             case 'GET_ROW_GRAPH_DATA':{

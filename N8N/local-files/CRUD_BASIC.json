@@ -347,7 +347,7 @@
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.1,
       "position": [
-        520,
+        500,
         940
       ],
       "id": "f16a7e45-02c4-4d5c-ab14-badd50cef771",
@@ -357,7 +357,7 @@
       "parameters": {
         "operation": "insert",
         "collection": "Employee",
-        "fields": "status, basicInfo",
+        "fields": "status, employeeCode, timekeepingCode, fullName, gender, birthDate, militaryService, birthPlace, hometown, nationality, ethnicity, religion, maritalStatus, personalTaxCode, contractSignDate, workStartDate, manager, laborType, contractCode, contractType, department, position, jobTitle, rank, workingForm, workplace, effectiveFrom, effectiveTo, signDate, signer, signature, salaryStartDate, salary, salaryAmount, salaryNote, allowanceType, allowanceNote, socialInsuranceNumber, insuranceStatus, contributingEntity, healthInsuranceNumber, hospital, provinceCode, medicalFile",
         "options": {}
       },
       "type": "n8n-nodes-base.mongoDb",
@@ -374,25 +374,6 @@
           "name": "MongoDB account"
         }
       }
-    },
-    {
-      "parameters": {
-        "httpMethod": "POST",
-        "path": "CreateEmployee",
-        "responseMode": "responseNode",
-        "options": {
-          "allowedOrigins": "*"
-        }
-      },
-      "type": "n8n-nodes-base.webhook",
-      "typeVersion": 2,
-      "position": [
-        -120,
-        940
-      ],
-      "id": "df766400-7330-4683-a088-6de8f7023792",
-      "name": "Save Empoyee Record",
-      "webhookId": "fcc4549f-5f81-462e-b57d-52c64b3204e7"
     },
     {
       "parameters": {
@@ -451,35 +432,6 @@
       "id": "4369b531-a82a-439d-a3b9-97da5ebf8815",
       "name": "Save Contract Record",
       "webhookId": "fcc4549f-5f81-462e-b57d-52c64b3204e7"
-    },
-    {
-      "parameters": {
-        "assignments": {
-          "assignments": [
-            {
-              "id": "476e7efa-a56d-45b4-add1-cf479c4c323f",
-              "name": "status",
-              "value": "=pending",
-              "type": "string"
-            },
-            {
-              "id": "5263e07e-fc2e-4a3b-994f-555823bb14fa",
-              "name": "basicInfo",
-              "value": "={{ $json.body }}",
-              "type": "object"
-            }
-          ]
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.set",
-      "typeVersion": 3.4,
-      "position": [
-        100,
-        940
-      ],
-      "id": "90ef5081-46a9-4448-b4f9-e2b1c94808d4",
-      "name": "Edit Fields2"
     },
     {
       "parameters": {
@@ -596,7 +548,7 @@
       "parameters": {
         "operation": "insert",
         "collection": "Submission",
-        "fields": "parentId, data, timestamp",
+        "fields": "parentId, data",
         "options": {}
       },
       "type": "n8n-nodes-base.mongoDb",
@@ -629,79 +581,6 @@
     },
     {
       "parameters": {
-        "httpMethod": "POST",
-        "path": "savesubmit",
-        "responseMode": "responseNode",
-        "options": {
-          "allowedOrigins": "*"
-        }
-      },
-      "type": "n8n-nodes-base.webhook",
-      "typeVersion": 2,
-      "position": [
-        -120,
-        460
-      ],
-      "id": "e5ce8c94-2ca8-446e-86f4-a7f92853e27c",
-      "name": "save submission 2",
-      "webhookId": "fcc4549f-5f81-462e-b57d-52c64b3204e7"
-    },
-    {
-      "parameters": {
-        "operation": "aggregate",
-        "collection": "Employee",
-        "query": "[\n  {\n    \"$match\": {}\n  }\n]"
-      },
-      "type": "n8n-nodes-base.mongoDb",
-      "typeVersion": 1.1,
-      "position": [
-        1040,
-        1100
-      ],
-      "id": "f3caca63-6e50-4805-9e74-fba12724d385",
-      "name": "MongoDB12",
-      "credentials": {
-        "mongoDb": {
-          "id": "uZBJYKWIUnsdVQVp",
-          "name": "MongoDB account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "respondWith": "allIncomingItems",
-        "options": {
-          "responseCode": 200
-        }
-      },
-      "type": "n8n-nodes-base.respondToWebhook",
-      "typeVersion": 1.1,
-      "position": [
-        1260,
-        1100
-      ],
-      "id": "3ac70615-8ebe-45fa-9ef3-448c71ab43f3",
-      "name": "Respond to Webhook22"
-    },
-    {
-      "parameters": {
-        "httpMethod": "POST",
-        "path": "GetAllEmployee",
-        "responseMode": "responseNode",
-        "options": {}
-      },
-      "type": "n8n-nodes-base.webhook",
-      "typeVersion": 2,
-      "position": [
-        820,
-        1100
-      ],
-      "id": "24948371-4ab8-40c6-9408-57f3574d536c",
-      "name": "Get all employee",
-      "webhookId": "3e5f04e9-b66c-4ca6-bc86-4c68590eae9f"
-    },
-    {
-      "parameters": {
         "operation": "aggregate",
         "collection": "GraphData",
         "query": "[\n  {\n    \"$match\": {}\n  }\n]"
@@ -709,8 +588,8 @@
       "type": "n8n-nodes-base.mongoDb",
       "typeVersion": 1.1,
       "position": [
-        1040,
-        940
+        80,
+        2020
       ],
       "id": "f52658d9-d258-4610-aef1-0d5a324e4de0",
       "name": "MongoDB13",
@@ -731,8 +610,8 @@
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.1,
       "position": [
-        1260,
-        940
+        300,
+        2020
       ],
       "id": "6edc38fb-624e-4ffe-8bcc-ad97a7a2aa42",
       "name": "Respond to Webhook23"
@@ -805,7 +684,7 @@
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.1,
       "position": [
-        1040,
+        1060,
         1460
       ],
       "id": "855b487d-d9c3-4988-bc80-a407df555786",
@@ -864,7 +743,7 @@
       "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
       "typeVersion": 1.2,
       "position": [
-        540,
+        500,
         1680
       ],
       "id": "6c309331-1e97-42e4-8d04-b884d94ddb49",
@@ -903,8 +782,8 @@
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2,
       "position": [
-        820,
-        940
+        -140,
+        2020
       ],
       "id": "118e0f28-32c2-4d70-ba08-4a3bf5756051",
       "name": "Get all graph data",
@@ -967,10 +846,8 @@
     {
       "parameters": {
         "collection": "Schema",
-        "options": {
-          "projection": ""
-        },
-        "query": "={\n    \"data.id\": \"{{ $json.body.data }}\"\n} "
+        "options": {},
+        "query": "={\n \"schemaId\": \"{{ $json.body.schemaId }}\"\n} "
       },
       "type": "n8n-nodes-base.mongoDb",
       "typeVersion": 1.1,
@@ -1031,33 +908,11 @@
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.1,
       "position": [
-        2240,
-        760
+        1220,
+        1840
       ],
       "id": "de9f2708-b453-4e47-854f-16fca7d28243",
       "name": "Respond to Webhook25"
-    },
-    {
-      "parameters": {
-        "operation": "insert",
-        "collection": "Submission",
-        "fields": "parentId, data, timestamp",
-        "options": {}
-      },
-      "type": "n8n-nodes-base.mongoDb",
-      "typeVersion": 1.1,
-      "position": [
-        1200,
-        760
-      ],
-      "id": "72abbcb4-ba90-486e-b9e2-ee14782b3299",
-      "name": "Get Graph",
-      "credentials": {
-        "mongoDb": {
-          "id": "uZBJYKWIUnsdVQVp",
-          "name": "MongoDB account"
-        }
-      }
     },
     {
       "parameters": {
@@ -1066,8 +921,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        1000,
-        760
+        80,
+        1840
       ],
       "id": "c2c14838-1bc7-4620-a27d-f0acad14f7a4",
       "name": "Code"
@@ -1084,8 +939,8 @@
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2,
       "position": [
-        820,
-        760
+        -140,
+        1840
       ],
       "id": "b7382f25-36ec-47fc-8174-cf428482c569",
       "name": "save submission And update GraphData",
@@ -1111,9 +966,7 @@
     {
       "parameters": {
         "collection": "GraphData",
-        "options": {
-          "projection": "{\n  \"_id\":0\n}"
-        },
+        "options": {},
         "query": "={\n  \"graphId\": \"{{ $json.body.graphId }}\"\n}"
       },
       "type": "n8n-nodes-base.mongoDb",
@@ -1159,7 +1012,7 @@
           "parameters": [
             {
               "name": "graphId",
-              "value": "={{ $input.first().graphId }}"
+              "value": "={{ $('Code').item.json.graphId }}"
             }
           ]
         },
@@ -1168,8 +1021,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        1420,
-        760
+        540,
+        1840
       ],
       "id": "45b536fd-70ce-4168-98ac-5525b7f66940",
       "name": "Request GraphData"
@@ -1179,13 +1032,14 @@
         "operation": "update",
         "collection": "GraphData",
         "updateKey": "graphId",
+        "fields": "history",
         "options": {}
       },
       "type": "n8n-nodes-base.mongoDb",
       "typeVersion": 1.1,
       "position": [
-        1900,
-        760
+        1000,
+        1840
       ],
       "id": "1b8ba0a8-da1c-4d11-886b-3a56123cf613",
       "name": "MongoDB1",
@@ -1195,6 +1049,92 @@
           "name": "MongoDB account"
         }
       }
+    },
+    {
+      "parameters": {
+        "jsCode": "let graphData = $input.first().json;\ngraphData.history.push($('save submission').first().json.data.id)\nreturn graphData;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        760,
+        1840
+      ],
+      "id": "e442e00f-fa76-44b3-9ff7-9d6a53d4b889",
+      "name": "Code2"
+    },
+    {
+      "parameters": {
+        "operation": "insert",
+        "collection": "Submission",
+        "fields": "parentId, data",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.mongoDb",
+      "typeVersion": 1.1,
+      "position": [
+        300,
+        1840
+      ],
+      "id": "72abbcb4-ba90-486e-b9e2-ee14782b3299",
+      "name": "save submission",
+      "credentials": {
+        "mongoDb": {
+          "id": "uZBJYKWIUnsdVQVp",
+          "name": "MongoDB account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "let result = {\n  \"status\": \"pending\",\n  \"employeeCode\": $input.first().json.body.basicInfo.json.employeeCode ?? null,\n  \"timekeepingCode\": $input.first().json.body.basicInfo.json.timekeepingCode ?? null,\n  \"fullName\": $input.first().json.body.basicInfo.json.fullName ?? null,\n  \"gender\": $input.first().json.body.basicInfo.json.gender ?? null,\n  \"birthDate\": $input.first().json.body.basicInfo.json.birthDate ?? null,\n  \"militaryService\": $input.first().json.body.basicInfo.json.militaryService ?? null,\n  \"birthPlace\": $input.first().json.body.basicInfo.json.birthPlace ?? null,\n  \"hometown\": $input.first().json.body.basicInfo.json.hometown ?? null,\n  \"nationality\": $input.first().json.body.basicInfo.json.nationality ?? null,\n  \"ethnicity\": $input.first().json.body.basicInfo.json.ethnicity ?? null,\n  \"religion\": $input.first().json.body.basicInfo.json.religion ?? null,\n  \"maritalStatus\": $input.first().json.body.basicInfo.json.maritalStatus ?? null,\n  \"personalTaxCode\": $input.first().json.body.basicInfo.json.personalTaxCode ?? null,\n  \"contractSignDate\": $input.first().json.body.basicInfo.json.contractSignDate ?? null,\n  \"workStartDate\": $input.first().json.body.basicInfo.json.workStartDate ?? null,\n  \"manager\": $input.first().json.body.basicInfo.json.manager ?? null,\n  \"laborType\": $input.first().json.body.basicInfo.json.laborType ?? null,\n  \"contractCode\": $input.first().json.body.basicInfo.json.contractCode ?? null,\n  \"contractType\": $input.first().json.body.basicInfo.json.contractType ?? null,\n  \"department\": $input.first().json.body.basicInfo.json.department ?? null,\n  \"position\": $input.first().json.body.basicInfo.json.position ?? null,\n  \"jobTitle\": $input.first().json.body.basicInfo.json.jobTitle ?? null,\n  \"rank\": $input.first().json.body.basicInfo.json.rank ?? null,\n  \"workingForm\": $input.first().json.body.basicInfo.json.workingForm ?? null,\n  \"workplace\": $input.first().json.body.basicInfo.json.workplace ?? null,\n  \"effectiveFrom\": $input.first().json.body.basicInfo.json.effectiveFrom ?? null,\n  \"effectiveTo\": $input.first().json.body.basicInfo.json.effectiveTo ?? null,\n  \"signDate\": $input.first().json.body.basicInfo.json.signDate ?? null,\n  \"signer\": $input.first().json.body.basicInfo.json.signer ?? null,\n  \"signature\": $input.first().json.body.basicInfo.json.signature ?? null,\n  \"salaryStartDate\": $input.first().json.body.basicInfo.json.salaryStartDate ?? null,\n  \"salary\": $input.first().json.body.basicInfo.json.salary ?? null,\n  \"salaryAmount\": $input.first().json.body.basicInfo.json.salaryAmount ?? null,\n  \"salaryNote\": $input.first().json.body.basicInfo.json.salaryNote ?? null,\n  \"allowanceType\": $input.first().json.body.basicInfo.json.allowanceType ?? null,\n  \"allowanceNote\": $input.first().json.body.basicInfo.json.allowanceNote ?? null,\n  \"socialInsuranceNumber\": $input.first().json.body.basicInfo.json.socialInsuranceNumber ?? null,\n  \"insuranceStatus\": $input.first().json.body.basicInfo.json.insuranceStatus ?? null,\n  \"contributingEntity\": $input.first().json.body.basicInfo.json.contributingEntity ?? null,\n  \"healthInsuranceNumber\": $input.first().json.body.basicInfo.json.healthInsuranceNumber ?? null,\n  \"hospital\": $input.first().json.body.basicInfo.json.hospital ?? null,\n  \"provinceCode\": $input.first().json.body.basicInfo.json.provinceCode ?? null,\n  \"medicalFile\": $input.first().json.body.basicInfo.json.medicalFile ?? null\n}\n\nreturn result"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        100,
+        940
+      ],
+      "id": "e61965c2-89f2-4cd0-8e71-75bcb1c020b6",
+      "name": "Code3"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "CreateEmployee",
+        "responseMode": "responseNode",
+        "options": {
+          "allowedOrigins": "*"
+        }
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -120,
+        940
+      ],
+      "id": "df766400-7330-4683-a088-6de8f7023792",
+      "name": "Save New Empoyee Record",
+      "webhookId": "fcc4549f-5f81-462e-b57d-52c64b3204e7"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "savesubmit",
+        "responseMode": "responseNode",
+        "options": {
+          "allowedOrigins": "*"
+        }
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -120,
+        460
+      ],
+      "id": "e5ce8c94-2ca8-446e-86f4-a7f92853e27c",
+      "name": "save submission 2",
+      "webhookId": "fcc4549f-5f81-462e-b57d-52c64b3204e7"
     }
   ],
   "pinData": {},
@@ -1331,17 +1271,6 @@
         ]
       ]
     },
-    "Save Empoyee Record": {
-      "main": [
-        [
-          {
-            "node": "Edit Fields2",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
     "Get Graph5": {
       "main": [
         [
@@ -1358,17 +1287,6 @@
         [
           {
             "node": "Edit Fields4",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Edit Fields2": {
-      "main": [
-        [
-          {
-            "node": "Get Graph4",
             "type": "main",
             "index": 0
           }
@@ -1435,39 +1353,6 @@
         [
           {
             "node": "Get Graph7",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "save submission 2": {
-      "main": [
-        [
-          {
-            "node": "Code9",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "MongoDB12": {
-      "main": [
-        [
-          {
-            "node": "Respond to Webhook22",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Get all employee": {
-      "main": [
-        [
-          {
-            "node": "MongoDB12",
             "type": "main",
             "index": 0
           }
@@ -1617,22 +1502,11 @@
         ]
       ]
     },
-    "Get Graph": {
-      "main": [
-        [
-          {
-            "node": "Request GraphData",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
     "Code": {
       "main": [
         [
           {
-            "node": "Get Graph",
+            "node": "save submission",
             "type": "main",
             "index": 0
           }
@@ -1676,7 +1550,7 @@
       "main": [
         [
           {
-            "node": "MongoDB1",
+            "node": "Code2",
             "type": "main",
             "index": 0
           }
@@ -1693,13 +1567,68 @@
           }
         ]
       ]
+    },
+    "Code2": {
+      "main": [
+        [
+          {
+            "node": "MongoDB1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "save submission": {
+      "main": [
+        [
+          {
+            "node": "Request GraphData",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code3": {
+      "main": [
+        [
+          {
+            "node": "Get Graph4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Save New Empoyee Record": {
+      "main": [
+        [
+          {
+            "node": "Code3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "save submission 2": {
+      "main": [
+        [
+          {
+            "node": "Code9",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "active": true,
   "settings": {
     "executionOrder": "v1"
   },
-  "versionId": "55580446-40c0-4eb1-8a97-17f30435075b",
+  "versionId": "4df4a98f-1efe-44c3-a7fc-1e6df2120f9a",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "60f558f2754ed85e2688a3bdaa286b8e7ee6e02ba567810884cfd3266c594ce4"

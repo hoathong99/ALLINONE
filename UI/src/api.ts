@@ -447,12 +447,13 @@ export const HandleGenerateFormSchema = async (formData : any): Promise<any> =>{
   // return transformedDataForLazyLoad;
 }
 
-export const LoadInitalTable = async (rqId : string, loader: string): Promise<any> =>{
+export const LoadResource = async (rqId : string, loader: string, data?: any): Promise<any> =>{
   const requestBody: ToGateWayPayload = {
-    type: "GET_INITAL_RESOURCE",
+    type: "GET_RESOURCE",
     data: {
       rqId: rqId,
-      loader: loader
+      loader: loader,
+      data: data
     }
   }
   try {
@@ -463,11 +464,12 @@ export const LoadInitalTable = async (rqId : string, loader: string): Promise<an
   }
 }
 
-export const InstanceGraph = async (loader: string): Promise<any> =>{
+export const InstanceGraph = async (loader: string, attachmentData?: any): Promise<any> =>{
   const requestBody: ToGateWayPayload = {
     type: "START_GRAPH",
     data: {
-      loader: loader
+      loader: loader,
+      data: attachmentData
     }
   }
   try {
@@ -475,6 +477,61 @@ export const InstanceGraph = async (loader: string): Promise<any> =>{
     return respond.json();
   } catch (error) {
     throw error;
+  }
+}
+
+export const ActiveWorkFlow = async ( loader?: string, API_key?: string): Promise<any> => {
+  loader = "MnEdJpWMpxRRt4xh";
+  API_key = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIzMTdiNGE5NS1kOTk1LTQyYjUtYTFhZS0zZmE2OWZhODc3MjciLCJpc3MiOiJuOG4iLCJhdWQiOiJwdWJsaWMtYXBpIiwiaWF0IjoxNzQ1ODM0ODg0fQ.agYgwOSQQ7yNYtlUYVWWm8Yij4a2VTM1XCQHPjML0fI";
+  const url = `https://your-n8n-instance/api/v1/workflows/${loader}`;
+  const apiKey = API_key; // Replace with your actual API key
+
+  try {
+    const response = await fetch(url, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${apiKey}`,
+      },
+      body: JSON.stringify({
+        active: true, // Toggle the workflow state
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to update workflow status');
+    }
+
+    const data = await response.json();
+  } catch (err) {
+    throw (err);
+  }
+}
+
+export const DeactiveWorkFlow = async ( loader: string, API_key: string): Promise<any> => {
+
+  const url = `https://your-n8n-instance/api/v1/workflows/${loader}`;
+  const apiKey = API_key; // Replace with your actual API key
+
+  try {
+    const response = await fetch(url, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${apiKey}`,
+      },
+      body: JSON.stringify({
+        active: false, // Toggle the workflow state
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to update workflow status');
+    }
+
+    const data = await response.json();
+  } catch (err) {
+    throw (err);
   }
 }
 

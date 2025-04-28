@@ -10,7 +10,7 @@ import FormFactory from './components/FormFactory';
 import TemplateGraph from './components/GraphTemplate';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import TemplateComponent from './components/ComponentTemplate';
-import { dummyScreenSetting } from './types';
+import { dummyScreenSetting, dummyScreenSettingV2 } from './types';
 
 
 function App() {
@@ -33,7 +33,7 @@ function App() {
              >
               </TemplateGraph>
             } />
-            <Route path="/component-template" element={<TemplateComponent setting={dummyScreenSetting} />} />
+            <Route path="/component-template" element={<TemplateComponent setting={dummyScreenSettingV2} />} />
           </Routes>
           </div>
         </div>
