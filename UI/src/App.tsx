@@ -11,6 +11,7 @@ import TemplateGraph from './components/GraphTemplate';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import TemplateComponent from './components/ComponentTemplate';
 import { dummyScreenSetting, dummyScreenSettingV2 } from './types';
+import TemplateComponentGenerator from './components/ComponentTemplateGenerator';
 
 
 function App() {
@@ -34,6 +35,7 @@ function App() {
               </TemplateGraph>
             } />
             <Route path="/component-template" element={<TemplateComponent setting={dummyScreenSettingV2} />} />
+            <Route path="/component-template-generator" element={<TemplateComponentGenerator/>} />
           </Routes>
           </div>
         </div>

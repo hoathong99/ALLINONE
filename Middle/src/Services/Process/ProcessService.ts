@@ -7,6 +7,9 @@ import { firstValueFrom } from 'rxjs';
 export class ProcessService {
     constructor(private readonly httpService: HttpService) { }
 
+    private readonly n8nBaseUrl = 'http://localhost:5678'; // Replace with your n8n instance
+    private readonly apiKey = 'your-n8n-api-key'; // Replace with your actual API key
+
     static currentUser = {};
 
     async getFlowChart(rqId: string, chartId: string): Promise<any> {
@@ -225,5 +228,50 @@ export class ProcessService {
             );
         }
     }
+
+    async activateWorkflow(workflowId: string, sender: any): Promise<any> {
+        const url = `${this.n8nBaseUrl}/rest/workflows/${workflowId}/activate`;
+        try {
+          const response = await firstValueFrom(
+            this.httpService.post(url, null, {
+              headers: { Authorization: `Bearer ${this.apiKey}` },
+            }),
+          );
+          return {
+            success: true,
+            data: response.data,
+            status: response.status,
+          };
+        } catch (error) {
+          return {
+            success: false,
+            message: error?.response?.data || 'Activation failed',
+            status: error?.response?.status || 500,
+          };
+        }
+      }
+
+      async deactivateWorkflow(workflowId: string, sender: any): Promise<any> {
+        const url = `${this.n8nBaseUrl}/rest/workflows/${workflowId}/deactivate`;
+    
+        try {
+          const response = await firstValueFrom(
+            this.httpService.post(url, null, {
+              headers: { Authorization: `Bearer ${this.apiKey}` },
+            }),
+          );
+          return {
+            success: true,
+            data: response.data,
+            status: response.status,
+          };
+        } catch (error) {
+          return {
+            success: false,
+            message: error?.response?.data || 'Deactivation failed',
+            status: error?.response?.status || 500,
+          };
+        }
+      }
 }
 

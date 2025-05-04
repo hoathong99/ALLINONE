@@ -30,7 +30,7 @@ function Sidebar() {
               <li><Link to="/form-factory" className="nav-link text-white">Form Factory</Link></li>
               <li><Link to="/graph-template" className="nav-link text-white">Form Template</Link></li>
               <li><Link to="/component-template" className="nav-link text-white">component template</Link></li>
-              <li><Link to="/contract" className="nav-link text-white">Contract</Link></li>
+              <li><Link to="/component-template-generator" className="nav-link text-white">Generate page</Link></li>
               <li><Link to="/recuitment" className="nav-link text-white">Recuitment</Link></li>
               <li><Link to="attendance" className="nav-link text-white">Attendance</Link></li>
               <li><Link to="/leave" className="nav-link text-white">Leave</Link></li>

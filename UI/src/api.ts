@@ -480,59 +480,36 @@ export const InstanceGraph = async (loader: string, attachmentData?: any): Promi
   }
 }
 
-export const ActiveWorkFlow = async ( loader?: string, API_key?: string): Promise<any> => {
-  loader = "MnEdJpWMpxRRt4xh";
-  API_key = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIzMTdiNGE5NS1kOTk1LTQyYjUtYTFhZS0zZmE2OWZhODc3MjciLCJpc3MiOiJuOG4iLCJhdWQiOiJwdWJsaWMtYXBpIiwiaWF0IjoxNzQ1ODM0ODg0fQ.agYgwOSQQ7yNYtlUYVWWm8Yij4a2VTM1XCQHPjML0fI";
-  const url = `https://your-n8n-instance/api/v1/workflows/${loader}`;
-  const apiKey = API_key; // Replace with your actual API key
-
-  try {
-    const response = await fetch(url, {
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${apiKey}`,
-      },
-      body: JSON.stringify({
-        active: true, // Toggle the workflow state
-      }),
-    });
-
-    if (!response.ok) {
-      throw new Error('Failed to update workflow status');
+export const ActivateGraph = async (loader: string): Promise<any> =>{
+  const requestBody: ToGateWayPayload = {
+    type: "ACTIVATE_GRAPH",
+    data: {
+      loader: loader
     }
-
-    const data = await response.json();
-  } catch (err) {
-    throw (err);
+  }
+  try {
+    const respond = await ToGateWay(requestBody);
+    return respond.json();
+  } catch (error) {
+    throw error;
   }
 }
 
-export const DeactiveWorkFlow = async ( loader: string, API_key: string): Promise<any> => {
-
-  const url = `https://your-n8n-instance/api/v1/workflows/${loader}`;
-  const apiKey = API_key; // Replace with your actual API key
-
-  try {
-    const response = await fetch(url, {
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${apiKey}`,
-      },
-      body: JSON.stringify({
-        active: false, // Toggle the workflow state
-      }),
-    });
-
-    if (!response.ok) {
-      throw new Error('Failed to update workflow status');
+export const DeactivateGraph = async (loader: string): Promise<any> =>{
+  const requestBody: ToGateWayPayload = {
+    type: "DEACTIVATE_GRAPH",
+    data: {
+      loader: loader
     }
-
-    const data = await response.json();
-  } catch (err) {
-    throw (err);
+  }
+  try {
+    const respond = await ToGateWay(requestBody);
+    return respond.json();
+  } catch (error) {
+    throw error;
   }
 }
+
+
 
 //<------------Test

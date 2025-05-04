@@ -32,9 +32,6 @@ export interface GraphData {
 }
 
 //---------------------------------------------->Test
-// export interface n8nloader{
-//   n8nLoader: string;
-// }
 
 export interface GraphDataLazyLoad {
   _id?: string;
@@ -58,6 +55,7 @@ export interface GraphNodeData {
   toN8nLoader?: string;
   dataSchema: any;
   actorRole?:string;
+  status?: string;
   customAuthorized?: [];
   filedBy?: string;
   triggers: Array<{
@@ -65,16 +63,6 @@ export interface GraphNodeData {
     triggerType: string;
   }>;
 }
-
-// export interface GraphNode {
-//   eventId: string;
-//   type: string;
-//   dataSchema: Record<string, unknown>;
-//   triggers: Array<{
-//     eventId: string;
-//     triggerType: string;
-//   }>;
-// }
 
 export interface ToGateWayPayload {
   type:string,
@@ -94,7 +82,7 @@ export interface NodeSubmission {
   timestamp?:string
 }
 
-interface CustomButton {
+export interface CustomButton {
   name: string;
   requestId?: string;
   toN8nLoader?: string;
@@ -105,15 +93,6 @@ interface CustomButton {
 interface TableSchema {
   row: Array<string>;                             // row header
   rowAttribute: Array<string>                     // row data to display
-}
-export interface ScreenSetting {
-  headerActions : Array<CustomButton>;              // render list of big header buttons
-  tableActions: Array<CustomButton>;                // render list of small action buttons in table row
-  tableResourceLoader: string;                      // loader to get all table resource, should return a list after fetch
-  tableSchema: TableSchema;                         // determine how table is rendered
-  requestId: string;                                // determine which n8n loader to trigger for inital resource
-  n8nLoader: string;                                // for n8n to determine which to return
-  screenHeader: string;
 }
 
 export interface TableSetting {
@@ -129,44 +108,6 @@ export interface ScreenSettingV2 {
   headerActions : Array<CustomButton>;              // render list of big header buttons
   tables: Array<TableSetting>;
 }
-
-export const dummyScreenSetting: ScreenSetting = {
-  headerActions: [
-    {
-      name: "Create New",
-      type: "button",
-      requestId: "get-template",
-      toN8nLoader: "quy_trinh_mau_nv_01"
-    },
-    {
-      name: "Export",
-      type: "link",
-      link: "/export-data"
-    }
-  ],
-  tableActions: [
-    {
-      name: "Edit",
-      type: "button",
-      requestId: "get-graph-edit-with-data",
-      toN8nLoader: "graph-02-Edit-Mode"
-    },
-    {
-      name: "Delete",
-      type: "button",
-      requestId: "deleteRequest",
-      toN8nLoader: "graph-02-delete"
-    }
-  ],
-  tableResourceLoader: "LoadEmployeeTable",
-  tableSchema: {
-    row: ["employeeCode", "Name", "LaborType", "Status"],
-    rowAttribute: ["employeeCode", "fullName", "laborType", "status"]
-  },
-  requestId: "LoadEmployeeTable",
-  n8nLoader: "mainScreenLoader",
-  screenHeader: "User Management"
-};
 
 export const dummyScreenSettingV2: ScreenSettingV2 = {
   headerActions: [

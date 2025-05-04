@@ -1,8 +1,8 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Dialog } from 'primereact/dialog';
 import { Button } from 'primereact/button';
-import { LazyLoadGraphTemplate, LazyLoadRowGraphData, LoadResource } from '../api';
-import { ScreenSetting, ScreenSettingV2, TableSetting } from '../types';
+import { LazyLoadGraphTemplate,  LoadResource } from '../api';
+import {ScreenSettingV2, TableSetting } from '../types';
 import { Toast } from 'primereact/toast';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
@@ -211,18 +211,6 @@ function TemplateComponent (props: props) {
           </div>
         </div>
         <div className="card shadow-sm">
-          {/* <TabView >
-            <TabPanel header="Employee">
-              <div className="card-body">
-                {loading ? (
-                  <p>Loading table data...</p> // or show spinner
-                ) : (
-                  // Table(tableData, setting.tableSchema.row, setting.tableSchema.rowAttribute)
-                  <div>placeHolder</div>
-                )}
-              </div>
-            </TabPanel>
-          </TabView> */}
           {props.setting.tables&&(
             Tabs(props.setting.tables)
           )}

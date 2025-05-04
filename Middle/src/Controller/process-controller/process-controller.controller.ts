@@ -175,6 +175,28 @@ export class ProcessControllerController {
                     return { error: 'Failed to fetch flow chart from external API' };
                 }
             }
+            case 'ACTIVATE_GRAPH':{
+                try {
+                    console.log(rq);
+                    let data = rq.body.data;
+                    let user = rq.user;
+                    const respond = await this.processService.activateWorkflow(data.loader, user);
+                    return respond;
+                } catch (error) {
+                    return { error: 'Failed to fetch flow chart from external API' };
+                }
+            }
+            case 'DEACTIVATE_GRAPH':{
+                try {
+                    console.log(rq);
+                    let data = rq.body.data;
+                    let user = rq.user;
+                    const respond = await this.processService.deactivateWorkflow(data.loader, user);
+                    return respond;
+                } catch (error) {
+                    return { error: 'Failed to fetch flow chart from external API' };
+                }
+            }
             default: {
                 return { error: 'UNAVAILABLE TYPE' };
             }

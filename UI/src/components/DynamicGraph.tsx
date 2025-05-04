@@ -8,7 +8,7 @@ import ReactFlow, {
   Panel
 } from 'reactflow';
 import validator from '@rjsf/validator-ajv8';
-import { ActiveWorkFlow, fetchManualTriggers,  FetchSubmissionByLoader, HandleCreateFlowGraph, InstanceGraph, LazyLoadGraph,  LazyLoadNodeSchema,  SubmitForm, TriggerFormAction } from '../api';
+import { ActivateGraph, DeactivateGraph, fetchManualTriggers,  FetchSubmissionByLoader, HandleCreateFlowGraph, InstanceGraph, LazyLoadGraph,  LazyLoadNodeSchema,  SubmitForm, TriggerFormAction } from '../api';
 import { GraphDataLazyLoad, NodeSubmission, Trigger } from '../types';
 import 'reactflow/dist/style.css';
 import { TabPanel, TabView } from 'primereact/tabview';
@@ -358,7 +358,7 @@ const DynamicGraph: React.FC<ApprovalGraphProps> = (props : ApprovalGraphProps) 
   }
 
   const runWorkFlow = async () =>{
-    ActiveWorkFlow().then((data) => {
+    ActivateGraph("asdasd").then((data) => {
       if(!data.error){
         showToast("WorkFlow Activated");
       }else{
@@ -368,7 +368,7 @@ const DynamicGraph: React.FC<ApprovalGraphProps> = (props : ApprovalGraphProps) 
   }
 
   const stopWorkFlow = () => {
-    ActiveWorkFlow().then((data) => {
+    DeactivateGraph("asd").then((data) => {
       if(!data.error){
         showToast("WorkFlow Deactivated");
       }else{
@@ -413,7 +413,7 @@ const DynamicGraph: React.FC<ApprovalGraphProps> = (props : ApprovalGraphProps) 
               {graphStatus && (<div>STATUS:{graphStatus}</div>)}
               {graphStatus == "active" && <Button label='Start' onClick={() => { startProcess() }} className="btn btn-theme" data-bs-toggle="modal" data-bs-target="#employeeModal" style={{ backgroundColor: "#1f2c64", color: "white" }}></Button>}
               {graphStatus == "start" && <Button label='Cancel' onClick={() => { console.log("click!") }} className="btn btn-theme" data-bs-toggle="modal" data-bs-target="#employeeModal" style={{ backgroundColor: "#1f2c64", color: "white" }}></Button>}
-              {graphStatus == "start" && <Button label='Run' onClick={() => { ActiveWorkFlow() }} className="btn btn-theme" data-bs-toggle="modal" data-bs-target="#employeeModal" style={{ backgroundColor: "#1f2c64", color: "white" }}></Button>}
+              {graphStatus == "start" && <Button label='Run' onClick={() => { }} className="btn btn-theme" data-bs-toggle="modal" data-bs-target="#employeeModal" style={{ backgroundColor: "#1f2c64", color: "white" }}></Button>}
             </div>
             <div>
               {props.attachmentData && (
