@@ -1,0 +1,347 @@
+// Enums for dropdown fields
+enum Gender {
+  MALE
+  FEMALE
+  OTHER
+}
+
+enum MilitaryServiceStatus {
+  COMPLETED
+  NOT_COMPLETED
+  EXEMPT
+}
+
+enum MaritalStatus {
+  SINGLE
+  MARRIED
+  DIVORCED
+}
+
+enum LaborType {
+  IN_HOUSE
+  FREELANCE
+  VENDOR
+}
+
+enum PassportType {
+  ORDINARY
+  OFFICIAL
+  DIPLOMATIC
+}
+
+enum ContractType {
+  ONE_YEAR
+  PROBATION
+  INDEFINITE
+  UNDER_TWELVE_MONTHS
+  THREE_YEARS
+  FREELANCE
+  APPRENTICESHIP
+}
+
+enum WorkType {
+  FULL_TIME
+  PART_TIME
+  FREELANCE
+}
+
+enum AllowanceType {
+  TRAVEL
+  LUNCH
+}
+
+enum InsuranceBookStatus {
+  ACTIVE
+  INACTIVE
+  PENDING
+}
+
+enum InsuranceEntity {
+  COMPANY_A
+  COMPANY_B
+  COMPANY_C // Adjust based on actual entities
+}
+
+enum MedicalRegistration {
+  HOSPITAL_A
+  HOSPITAL_B
+  CLINIC_C // Adjust based on actual options
+}
+
+enum InsuranceContributionType {
+  MANDATORY
+  VOLUNTARY
+}
+
+enum InsuranceReason {
+  NEW_HIRE
+  TERMINATION
+  ADJUSTMENT
+}
+
+enum BenefitType {
+  MATERNITY
+  SICKNESS
+  RETIREMENT
+  OTHER
+}
+
+// Models
+model Employee {
+  id                     Int                 @id @default(autoincrement())
+  attendanceCode         String?             @unique
+  fullName               String
+  dateOfBirth            DateTime
+  gender                 Gender
+  militaryServiceStatus  MilitaryServiceStatus
+  placeOfBirth           String
+  nativePlace            String
+  nationality            String
+  maritalStatus          MaritalStatus
+  ethnicGroup            String
+  religion               String
+  personalTaxCode        String?             @unique
+  hireDate               DateTime            @default(now())
+  officialContractDate   DateTime?
+  directManagerId        Int?                @map("direct_manager_id")
+  directManager          Employee?           @relation("DirectManager", fields: [directManagerId], references: [id])
+  managedEmployees        Employee[]          @relation("DirectManager")
+  laborType              LaborType
+  identity               Identity?
+  bankInfo               BankInfo?
+  contactInfo            ContactInfo?
+  dependents             Dependent[]
+  educationHistory        EducationHistory[]
+  workExperience         WorkExperience[]
+  certificates           Certificate[]
+  profilePicture         String?             // URL or path to profile picture
+  contracts              Contract[]
+  insurance              Insurance?
+  healthRecords          HealthRecord[]
+  onboarding             Onboarding?
+  attachments            Attachment[]
+}
+
+model Identity {
+  id                     Int                 @id @default(autoincrement())
+  employeeId             Int                 @unique
+  employee               Employee            @relation(fields: [employeeId], references: [id])
+  idNumber               String              @unique
+  idIssueDate            DateTime
+  idIssuePlace           String
+  idFrontImage           String?             // URL or path to front image
+  idBackImage            String?             // URL or path to back image
+  passportType           PassportType?
+  passportNumber         String?             @unique
+  passportIssueDate      DateTime?
+  passportExpiryDate     DateTime?
+  passportIssuePlace     String?
+  passportImage          String?             // URL or path to passport image
+}
+
+model BankInfo {
+  id                     Int                 @id @default(autoincrement())
+  employeeId             Int                 @unique
+  employee               Employee            @relation(fields: [employeeId], references: [id])
+  accountNumber          String              @unique
+  accountHolder          String
+  bankName               String
+  branch                 String
+}
+
+model ContactInfo {
+  id                     Int                 @id @default(autoincrement())
+  employeeId             Int                 @unique
+  employee               Employee            @relation(fields: [employeeId], references: [id])
+  phone                  String
+  email                  String              @unique
+  permanentAddress       String
+  currentAddress         String
+}
+
+model Dependent {
+  id                     Int                 @id @default(autoincrement())
+  employeeId             Int
+  employee               Employee            @relation(fields: [employeeId], references: [id])
+  relationship           String
+  fullName               String
+  dateOfBirth            DateTime
+  phone                  String?
+  idNumber               String?             @unique
+  idIssueDate            DateTime?
+  idIssuePlace           String?
+  isDependent            Boolean
+  dependentFrom          DateTime?
+  dependentTo            DateTime?
+  taxCode                String?             @unique
+  note                   String?
+}
+
+model EducationHistory {
+  id                     Int                 @id @default(autoincrement())
+  employeeId             Int
+  employee               Employee            @relation(fields: [employeeId], references: [id])
+  startDate              DateTime
+  endDate                DateTime
+  trainingType           String
+  major                  String
+  degree                 String
+  institution            String
+}
+
+model WorkExperience {
+  id                     Int                 @id @default(autoincrement())
+  employeeId             Int
+  employee               Employee            @relation(fields: [employeeId], references: [id])
+  startMonth             DateTime
+  endMonth               DateTime?
+  company                String
+  position               String
+  referencePerson        String?
+  referencePhone         String?
+  jobDescription         String?
+}
+
+model Certificate {
+  id                     Int                 @id @default(autoincrement())
+  employeeId             Int
+  employee               Employee            @relation(fields: [employeeId], references: [id])
+  certificateNumber      String
+  issuingAuthority       String
+  certificateType        String
+  version                String?
+  issueNumber            String?
+  validFrom              DateTime
+  validTo                DateTime?
+  attachment             String?             // URL or path to certificate file
+}
+
+model Contract {
+  id                     Int                 @id @default(autoincrement())
+  employeeId             Int
+  employee               Employee            @relation(fields: [employeeId], references: [id])
+  contractCode           String              @unique
+  contractType           ContractType
+  department             String
+  position               String
+  title                  String
+  level                  String              // e.g., Fresher, Junior, Mid, Senior
+  workplace              String
+  workType               WorkType
+  effectiveFrom          DateTime
+  effectiveTo            DateTime?
+  signedDate             DateTime
+  signedBy               String
+  digitalSignature       Boolean             @default(false)
+  salaries               Salary[]
+}
+
+model Salary {
+  id                     Int                 @id @default(autoincrement())
+  contractId             Int
+  contract               Contract            @relation(fields: [contractId], references: [id])
+  effectiveFrom          DateTime
+  note                   String?
+  baseSalary             Float
+  allowances             Allowance[]
+}
+
+model Allowance {
+  id                     Int                 @id @default(autoincrement())
+  salaryId               Int
+  salary                 Salary              @relation(fields: [salaryId], references: [id])
+  allowanceType          AllowanceType
+  amount                 Float
+  note                   String?
+}
+
+model Insurance {
+  id                     Int                 @id @default(autoincrement())
+  employeeId             Int                 @unique
+  employee               Employee            @relation(fields: [employeeId], references: [id])
+  insuranceBookNumber    String              @unique
+  bookStatus             InsuranceBookStatus
+  payingEntity           InsuranceEntity
+  healthInsuranceNumber  String?             @unique
+  provinceCode           String?
+  medicalRegistration    MedicalRegistration?
+  increaseRecords        InsuranceIncrease[]
+  decreaseRecords        InsuranceDecrease[]
+  contributionHistory    InsuranceContribution[]
+  benefitHistory         InsuranceBenefit[]
+}
+
+model InsuranceIncrease {
+  id                     Int                 @id @default(autoincrement())
+  insuranceId            Int
+  insurance              Insurance           @relation(fields: [insuranceId], references: [id])
+  profileCompletionDate  DateTime?
+  medicalCardReceivedDate DateTime?
+  medicalCardReturnedDate DateTime?
+}
+
+model InsuranceDecrease {
+  id                     Int                 @id @default(autoincrement())
+  insuranceId            Int
+  insurance              Insurance           @relation(fields: [insuranceId], references: [id])
+  bookReceivedDate       DateTime?
+  profileCompletionDate  DateTime?
+  bookClosedDate         DateTime?
+  bookReturnedDate       DateTime?
+}
+
+model InsuranceContribution {
+  id                     Int                 @id @default(autoincrement())
+  insuranceId            Int
+  insurance              Insurance           @relation(fields: [insuranceId], references: [id])
+  startMonth             DateTime
+  contributionType       InsuranceContributionType
+  reason                 InsuranceReason
+  payingEntity           InsuranceEntity
+  contributionAmount     Float
+  companyContribution    Float
+  employeeContribution   Float
+  note                   String?
+}
+
+model InsuranceBenefit {
+  id                     Int                 @id @default(autoincrement())
+  insuranceId            Int
+  insurance              Insurance           @relation(fields: [insuranceId], references: [id])
+  benefitType            BenefitType
+  profileReceivedDate    DateTime?
+  procedureCompletedDate DateTime?
+  paymentReceivedDate    DateTime?
+  benefitPaidDate        DateTime?
+  amount                 Float
+  note                   String?
+}
+
+model HealthRecord {
+  id                     Int                 @id @default(autoincrement())
+  employeeId             Int
+  employee               Employee            @relation(fields: [employeeId], references: [id])
+  filePath               String              // URL or path to health record file
+  uploadDate             DateTime            @default(now())
+}
+
+model Onboarding {
+  id                     Int                 @id @default(autoincrement())
+  employeeId             Int                 @unique
+  employee               Employee            @relation(fields: [employeeId], references: [id])
+  resume                 String?             // URL or path to resume file
+  healthCertificate      String?             // URL or path to health certificate
+  idDocument             String?             // URL or path to ID document
+  householdRegistration  String?             // URL or path to household registration
+  birthCertificate       String?             // URL or path to birth certificate
+  cv                     String?             // URL or path to CV
+}
+
+model Attachment {
+  id                     Int                 @id @default(autoincrement())
+  employeeId             Int
+  employee               Employee            @relation(fields: [employeeId], references: [id])
+  filePath               String              // URL or path to attachment
+  uploadDate             DateTime            @default(now())
+  description            String?
+}

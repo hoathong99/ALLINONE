@@ -71,7 +71,7 @@ export class ProcessControllerController {
                 try {
                     let data = rq.body.data.data;
                     let parent = rq.body.data.parentId;
-                    let graphId = rq.body.data.graphId
+                    let graphId = rq.body.data.graphId;
                     const respond = await this.formService.SubmitFormData(data, parent, graphId, rq.user);
                     return respond;
                 } catch (error) {

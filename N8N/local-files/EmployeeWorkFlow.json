@@ -1,10 +1,10 @@
 {
-  "name": "EmployeeWorkFlow",
+  "name": "EmployeeWorkFlowV2",
   "nodes": [
     {
       "parameters": {
         "httpMethod": "POST",
-        "path": "InitProcess",
+        "path": "83VrlS5PimArUFa7/CreateNewEmployeeProcess",
         "responseMode": "responseNode",
         "options": {
           "allowedOrigins": "*"
@@ -16,9 +16,9 @@
         -200,
         -80
       ],
-      "id": "fba251c6-73af-4b0a-925c-e82677e71de5",
+      "id": "35aaa7a7-df05-41fc-b2ee-e39596d7fe7c",
       "name": "On Create New Employee Process",
-      "webhookId": "7f9761a6-cd5e-4117-b3f6-ab2b94288e2e"
+      "webhookId": "65da2478-4ed9-40b3-b99b-54a926290ede"
     },
     {
       "parameters": {
@@ -41,7 +41,7 @@
         1400,
         -80
       ],
-      "id": "62da0995-fa14-436f-aafa-20dbfb0b2298",
+      "id": "6baff190-b925-404c-8373-ecb0ff07afd4",
       "name": "Submit basic info data"
     },
     {
@@ -59,7 +59,7 @@
         900,
         -80
       ],
-      "id": "1177d22f-437e-4ff1-bba0-9ae19ca0addc",
+      "id": "8a7d2295-34ce-4bac-bdde-60553bdc2a91",
       "name": "Submit contract form data"
     },
     {
@@ -72,7 +72,7 @@
         2220,
         -80
       ],
-      "id": "f527fc59-ce36-42ad-9ae8-c1af57ef80e6",
+      "id": "d01d6ee7-759b-4a71-af38-061e8790e876",
       "name": "Respond to Webhook17"
     },
     {
@@ -96,7 +96,7 @@
         1620,
         -80
       ],
-      "id": "93f4b878-0ea8-4111-8464-e689131836ee",
+      "id": "c886174e-9945-4eae-a64f-6f48f923819a",
       "name": "Get Flow Template"
     },
     {
@@ -109,7 +109,7 @@
         620,
         -80
       ],
-      "id": "02358547-08d7-44c7-8607-1e47477edc0f",
+      "id": "5c610e54-4146-4315-940d-5aac1d719bbc",
       "name": "Filter Contract info"
     },
     {
@@ -122,7 +122,7 @@
         1820,
         -80
       ],
-      "id": "8559eb7d-894f-4eb5-ad38-0d369121e491",
+      "id": "bbcad17f-4169-4f00-ae88-87480184339e",
       "name": "Code"
     },
     {
@@ -140,7 +140,7 @@
         2020,
         -80
       ],
-      "id": "95c24745-639c-46d4-8997-c94a34b21f9e",
+      "id": "029c87a9-441f-4fba-b2dc-5caa9a30143c",
       "name": "Save Graph to DB"
     },
     {
@@ -158,7 +158,7 @@
         360,
         -80
       ],
-      "id": "9ecb9297-0dee-4b88-bc98-2e8e0d9b0aa8",
+      "id": "ca33f44a-eaed-4b36-9df7-a42a37c60d4f",
       "name": "Submit form"
     },
     {
@@ -171,7 +171,7 @@
         1160,
         -80
       ],
-      "id": "3bb42060-814d-495b-ba4b-fd1825db743e",
+      "id": "5eebc315-4b81-4830-b42f-fe0e1e09bad9",
       "name": "Filter basic info"
     },
     {
@@ -184,37 +184,20 @@
         80,
         -80
       ],
-      "id": "e3e1933e-6afb-4e7f-ad14-6c63745f1137",
+      "id": "c811b15d-c069-4f05-b925-f69c95c7ee3e",
       "name": "filter form data"
     },
     {
       "parameters": {
-        "httpMethod": "POST",
-        "path": "ER-01-action",
-        "responseMode": "responseNode",
-        "options": {}
-      },
-      "type": "n8n-nodes-base.webhook",
-      "typeVersion": 2,
-      "position": [
-        -240,
-        680
-      ],
-      "id": "4bf38362-591a-4367-a1f5-f706a6053138",
-      "name": "ER-01-action",
-      "webhookId": "68555590-8904-4f4d-b0f6-fc5346c9476f"
-    },
-    {
-      "parameters": {
-        "jsCode": "\nreturn $input.first().json.body.data.data.formData"
+        "jsCode": "return $input.first().json"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        0,
-        680
+        2320,
+        840
       ],
-      "id": "8dd84076-1e90-449e-bddf-2c0acdd47d76",
+      "id": "3e8d26ec-3512-43c9-ae17-846d78b5f359",
       "name": "Filter basic info1"
     },
     {
@@ -235,10 +218,10 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        240,
-        680
+        2660,
+        840
       ],
-      "id": "edeef3fb-687c-4fca-98cf-3aa77c5298ae",
+      "id": "5c66dfb7-01ac-4e2a-83f7-c86fcdf9ab79",
       "name": "save basic employee"
     },
     {
@@ -248,78 +231,11 @@
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.1,
       "position": [
-        780,
-        680
+        2980,
+        840
       ],
-      "id": "46eb96ed-2db5-4231-964f-47b79f33ee55",
+      "id": "b93dc58d-22f6-4b27-aa61-978a8049daf8",
       "name": "Respond to Webhook"
-    },
-    {
-      "parameters": {
-        "options": {}
-      },
-      "type": "n8n-nodes-base.respondToWebhook",
-      "typeVersion": 1.1,
-      "position": [
-        780,
-        860
-      ],
-      "id": "168bb32a-e8e0-4153-836c-d288f955ea8c",
-      "name": "Respond to Webhook1"
-    },
-    {
-      "parameters": {
-        "httpMethod": "POST",
-        "path": "ER-07-action",
-        "responseMode": "responseNode",
-        "options": {}
-      },
-      "type": "n8n-nodes-base.webhook",
-      "typeVersion": 2,
-      "position": [
-        -240,
-        860
-      ],
-      "id": "b32c6b88-4b78-4015-ae40-5114af789ed7",
-      "name": "ER-05-action",
-      "webhookId": "68555590-8904-4f4d-b0f6-fc5346c9476f"
-    },
-    {
-      "parameters": {
-        "jsCode": "let data = $input.first().json.body.data.data.formData\nreturn {\n    employeeCode: data.personalInfo.employeeCode,\n    fullName: data.personalInfo.fullName,\n    birthDate: data.personalInfo.birthDate,\n    gender: data.personalInfo.gender,\n    hometown: data.personalInfo.hometown,\n    workStartDate: data.personalInfo.workStartDate,\n    department: data.contractInfo.department,\n    manager: data.personalInfo.manager,\n    laborType: data.personalInfo.laborType,\n  };"
-      },
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [
-        0,
-        860
-      ],
-      "id": "f5ff14e9-950d-4e4c-b8ba-54c05a86cea4",
-      "name": "Filter basic info2"
-    },
-    {
-      "parameters": {
-        "method": "POST",
-        "url": "http://127.0.0.1:5678/webhook-test/CreateEmployee",
-        "sendBody": true,
-        "bodyParameters": {
-          "parameters": [
-            {
-              "name": "basicInfo",
-              "value": "={{$input.first()}}"
-            }
-          ]
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.2,
-      "position": [
-        240,
-        860
-      ],
-      "id": "3ffc9880-05a8-4b47-9078-c686606ee463",
-      "name": "save basic employee1"
     },
     {
       "parameters": {
@@ -331,13 +247,13 @@
         1820,
         -300
       ],
-      "id": "bf1f06ec-1a1a-4993-94ee-ea7ca5b9e5ec",
+      "id": "048abce2-8c9f-48b5-89d0-2041ee61e47e",
       "name": "Respond to Webhook2"
     },
     {
       "parameters": {
         "httpMethod": "POST",
-        "path": "get-graph-edit-with-data",
+        "path": "83VrlS5PimArUFa7/GetGraphEditWithData",
         "responseMode": "responseNode",
         "options": {}
       },
@@ -347,9 +263,9 @@
         -200,
         -320
       ],
-      "id": "8c49dd65-43bd-4fea-8d10-5fd5ada88f2a",
+      "id": "1cd4a0d3-09e8-404b-8e3f-37de16ad0deb",
       "name": "get-graph-edit-with-data",
-      "webhookId": "47b6cee5-c81a-46b9-ae97-4bc6cbb8efef"
+      "webhookId": "fc078907-790e-48aa-9777-86b5693d528b"
     },
     {
       "parameters": {
@@ -363,7 +279,7 @@
         80,
         -320
       ],
-      "id": "7170230d-09c6-4a6e-86e1-b456fdbd8699",
+      "id": "8745d5e9-bf32-4fa7-994f-1b29ce26df9a",
       "name": "Query graphData",
       "alwaysOutputData": true,
       "credentials": {
@@ -403,7 +319,7 @@
         360,
         -320
       ],
-      "id": "05f758c4-be75-4488-af6c-254575e34a91",
+      "id": "97d3b845-1460-4bd1-9771-aea8e793f183",
       "name": "No record"
     },
     {
@@ -427,7 +343,7 @@
         780,
         -680
       ],
-      "id": "766fb8c8-31ff-4efb-b011-181a8e03f424",
+      "id": "5f69bd7f-e3a7-4259-bbd2-10348b1f1c49",
       "name": "Clone graph template"
     },
     {
@@ -440,7 +356,7 @@
         1040,
         -680
       ],
-      "id": "d0a6582a-7ef2-43e4-ae60-ce2810d11b16",
+      "id": "7f4a8a67-86cd-43d4-83f6-c9b3572a84f6",
       "name": "set graphData"
     },
     {
@@ -456,7 +372,7 @@
         1260,
         -680
       ],
-      "id": "744e285b-2244-4bdc-a17f-de949c6a56eb",
+      "id": "9bdc4821-ea6e-46a9-aaa2-049bb6e26968",
       "name": "MongoDB",
       "credentials": {
         "mongoDb": {
@@ -475,92 +391,8 @@
         1060,
         -300
       ],
-      "id": "bf830c60-5a03-4589-a78e-7390e16ca48d",
+      "id": "9d63e31c-83b3-4cfe-840a-c99e072aa145",
       "name": "set graphData1"
-    },
-    {
-      "parameters": {
-        "options": {}
-      },
-      "type": "n8n-nodes-base.respondToWebhook",
-      "typeVersion": 1.1,
-      "position": [
-        780,
-        1080
-      ],
-      "id": "52ae01cb-92bd-4852-8b1d-8fc21c082a0f",
-      "name": "Respond to Webhook3"
-    },
-    {
-      "parameters": {
-        "jsCode": "let data = $input.first().json.body.data.data.formData\nreturn {\n    employeeCode: data.personalInfo?.employeeCode,\n    fullName: data.personalInfo?.fullName,\n    birthDate: data.personalInfo?.birthDate,\n    gender: data.personalInfo?.gender,\n    hometown: data.personalInfo?.hometown,\n    workStartDate: data.personalInfo?.workStartDate,\n    department: data.contractInfo?.department,\n    manager: data.personalInfo?.manager,\n    laborType: data.personalInfo?.laborType,\n  };"
-      },
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [
-        0,
-        1080
-      ],
-      "id": "687717af-e5f6-4ef6-9e08-e62e806fbe38",
-      "name": "Filter basic info3"
-    },
-    {
-      "parameters": {
-        "httpMethod": "POST",
-        "path": "HR-01-action",
-        "responseMode": "responseNode",
-        "options": {}
-      },
-      "type": "n8n-nodes-base.webhook",
-      "typeVersion": 2,
-      "position": [
-        -240,
-        1080
-      ],
-      "id": "67cfbe27-2b3e-41ac-a4dd-e5480d227187",
-      "name": "HR-01-action",
-      "webhookId": "68555590-8904-4f4d-b0f6-fc5346c9476f"
-    },
-    {
-      "parameters": {
-        "method": "POST",
-        "url": "http://127.0.0.1:5678/webhook/CreateEmployee",
-        "sendBody": true,
-        "bodyParameters": {
-          "parameters": [
-            {
-              "name": "basicInfo",
-              "value": "={{$input.first()}}"
-            }
-          ]
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.2,
-      "position": [
-        240,
-        1080
-      ],
-      "id": "d0fe67c5-0ab3-4cef-b802-cdc11eabde44",
-      "name": "Save employee to DB"
-    },
-    {
-      "parameters": {
-        "httpMethod": "POST",
-        "path": "instance-graph",
-        "responseMode": "responseNode",
-        "options": {}
-      },
-      "type": "n8n-nodes-base.webhook",
-      "typeVersion": 2,
-      "position": [
-        -200,
-        180
-      ],
-      "id": "2d3fecb0-ed03-451e-aa16-b5db5089912a",
-      "name": "instance-graph",
-      "webhookId": "d5e2e183-f018-4c65-abcd-999b0e50e32f"
     },
     {
       "parameters": {
@@ -583,12 +415,12 @@
         80,
         180
       ],
-      "id": "6c6b9533-95c9-4e99-897b-c4c634f5d438",
+      "id": "c47f5ea4-3a70-464b-9770-2a3090e787d7",
       "name": "Clone graph template1"
     },
     {
       "parameters": {
-        "jsCode": "let sender = $('instance-graph').first().json.headers['x-user-id'];\nlet graphData = {\n  \"graphId\": $input.first().json.graphId,\n  \"domain\": $input.first().json.domain,\n  \"status\": \"start\",\n  \"target\": null,\n  \"author\": sender,\n  \"currentEvent\": \"\",\n  \"history\": [],\n  \"definition\": $input.first().json.definition,\n  \"createAt\": new Date()\n}\n\nreturn graphData;"
+        "jsCode": "let sender = $('OnInstanceGraph').first().json.headers['x-user-id'];\nlet graphData = {\n  \"graphId\": $input.first().json.graphId,\n  \"domain\": $input.first().json.domain,\n  \"status\": \"start\",\n  \"target\": null,\n  \"author\": sender,\n  \"currentEvent\": \"\",\n  \"history\": [],\n  \"definition\": $input.first().json.definition,\n  \"createAt\": new Date()\n}\n\nreturn graphData;"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -596,7 +428,7 @@
         360,
         180
       ],
-      "id": "388534de-72c5-4010-8705-910be4ad5e50",
+      "id": "9d844311-f59d-4a76-a179-97b33fd910e5",
       "name": "set graphData2"
     },
     {
@@ -612,7 +444,7 @@
         620,
         180
       ],
-      "id": "e680f860-a2cd-4933-ab4d-1164c616f252",
+      "id": "6eb4bede-2a0b-4643-9120-0b36e9d06348",
       "name": "MongoDB1",
       "credentials": {
         "mongoDb": {
@@ -631,7 +463,7 @@
         880,
         180
       ],
-      "id": "01421540-2cbb-4982-b604-b8ec394cb675",
+      "id": "f7072f93-ca58-4591-8b6a-9f2727f692ac",
       "name": "Respond to Webhook4"
     },
     {
@@ -643,10 +475,10 @@
       "type": "n8n-nodes-base.mongoDb",
       "typeVersion": 1.1,
       "position": [
-        20,
+        80,
         380
       ],
-      "id": "bfefd3d5-2991-4f7a-a550-ebc0bdfa450a",
+      "id": "6431ec94-a02e-4c6e-8a0f-bdb4b6046b36",
       "name": "MongoDB12",
       "credentials": {
         "mongoDb": {
@@ -665,16 +497,16 @@
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.1,
       "position": [
-        240,
+        380,
         380
       ],
-      "id": "166c1b5c-28cd-4f2b-945f-dea6d1f72b3d",
+      "id": "af7fd723-68a9-4be8-9039-c637645f8087",
       "name": "Respond to Webhook22"
     },
     {
       "parameters": {
         "httpMethod": "POST",
-        "path": "GetAllEmployee",
+        "path": "83VrlS5PimArUFa7/LoadEmployeeTable",
         "responseMode": "responseNode",
         "options": {}
       },
@@ -684,9 +516,750 @@
         -200,
         380
       ],
-      "id": "80f19f2a-d6db-461f-9a63-5ee74b7f75bb",
-      "name": "Get all employee",
+      "id": "e54025e4-04de-44ac-9dcc-d6dc023e80e1",
+      "name": "LoadEmployeeTable",
+      "webhookId": "1724eed9-2bab-486b-85e7-3b15891ee22d"
+    },
+    {
+      "parameters": {
+        "collection": "GraphData",
+        "options": {},
+        "query": "={\n  \"author\":\"{{ $json.headers['x-user-id'] }}\"\n} "
+      },
+      "type": "n8n-nodes-base.mongoDb",
+      "typeVersion": 1.1,
+      "position": [
+        80,
+        560
+      ],
+      "id": "16538806-7dd1-423c-a469-238ceebc9366",
+      "name": "MongoDB13",
+      "credentials": {
+        "mongoDb": {
+          "id": "uZBJYKWIUnsdVQVp",
+          "name": "MongoDB account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "allIncomingItems",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        380,
+        560
+      ],
+      "id": "ba268211-0902-46d7-95db-73c937b2c00a",
+      "name": "Respond to Webhook23"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "83VrlS5PimArUFa7/LoadEmployeeCreateProcess",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -200,
+        560
+      ],
+      "id": "6bea61eb-eebc-4422-a686-b64e109cd783",
+      "name": "LoadEmployeeCreateProcess",
+      "webhookId": "53c31bed-e788-47c0-a12d-6f3d815dbaa8"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "83VrlS5PimArUFa7/InstanceGraph",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -200,
+        180
+      ],
+      "id": "64c5977e-0336-468f-b0e5-8c44cde2bf51",
+      "name": "OnInstanceGraph",
+      "webhookId": "2b790f93-ef99-4c02-87dd-89511f3ece3e"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "HR-01A-action",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -240,
+        1500
+      ],
+      "id": "9d282339-377b-48d8-9570-4a32a5fa7ffb",
+      "name": "HR-01A-action",
+      "webhookId": "2b269259-e811-46c6-b8c7-ae4e22d48a08"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "HR-01B-action",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -240,
+        1680
+      ],
+      "id": "475f3edd-08ad-4f7e-abc4-d8bcc6127fe1",
+      "name": "HR-01B-action",
+      "webhookId": "2b269259-e811-46c6-b8c7-ae4e22d48a08"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "HR-01C-action",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -240,
+        1860
+      ],
+      "id": "8a698e07-f85c-4a81-959e-dcfefc61e2ea",
+      "name": "HR-01C-action",
+      "webhookId": "2b269259-e811-46c6-b8c7-ae4e22d48a08"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "HR-01D-action",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -240,
+        2020
+      ],
+      "id": "262a2143-8caf-4d81-b970-61ac8ebb98c2",
+      "name": "HR-01D-action",
+      "webhookId": "2b269259-e811-46c6-b8c7-ae4e22d48a08"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://127.0.0.1:5678/webhook/getGraphDataBy_Id",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "graphId",
+              "value": "={{ $json.body.data.parentGraph }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        100,
+        1500
+      ],
+      "id": "d35e8c6f-f613-46ea-81ac-c4d23cf40f98",
+      "name": "Request GraphData"
+    },
+    {
+      "parameters": {
+        "jsCode": "let graphData = $input.first().json;\nlet index = graphData.definition.events.findIndex((item) => item.eventId == $('HR-01A-action').first().json.body.data.parentId);\ngraphData.definition.events[index].status = \"done\";\nreturn graphData;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        360,
+        1500
+      ],
+      "id": "02ab6592-8bbe-46b8-923b-da0c1d404f10",
+      "name": "Code2"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "collection": "GraphData",
+        "updateKey": "graphId",
+        "fields": "history, definition",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.mongoDb",
+      "typeVersion": 1.1,
+      "position": [
+        640,
+        1500
+      ],
+      "id": "3c266005-e514-4764-82e5-ef2e18e19452",
+      "name": "MongoDB2",
+      "credentials": {
+        "mongoDb": {
+          "id": "uZBJYKWIUnsdVQVp",
+          "name": "MongoDB account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "collection": "GraphData",
+        "options": {},
+        "query": "={\n  \"_id\": \"{{ $json.body.graphId }}\"\n}"
+      },
+      "type": "n8n-nodes-base.mongoDb",
+      "typeVersion": 1.1,
+      "position": [
+        1840,
+        580
+      ],
+      "id": "f7cf718f-da0d-44de-8fcd-522887869177",
+      "name": "Get Graph3",
+      "credentials": {
+        "mongoDb": {
+          "id": "uZBJYKWIUnsdVQVp",
+          "name": "MongoDB account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{$json}}",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        2060,
+        580
+      ],
+      "id": "c27c25f4-09e8-42d0-b236-ffe65e145e32",
+      "name": "Respond to Webhook5"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "getGraphDataBy_Id",
+        "responseMode": "responseNode",
+        "options": {
+          "allowedOrigins": "*"
+        }
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        1620,
+        580
+      ],
+      "id": "0f123480-70f4-408a-8a88-3deb1ae82c80",
+      "name": "GetGraphDataBy_Id",
+      "webhookId": "fcc4549f-5f81-462e-b57d-52c64b3204e7"
+    },
+    {
+      "parameters": {
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        900,
+        1500
+      ],
+      "id": "b00261c7-3f29-4fd9-be3d-011be1bd26b3",
+      "name": "Respond to Webhook6"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://127.0.0.1:5678/webhook/getGraphDataBy_Id",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "graphId",
+              "value": "={{ $json.body.data.parentGraph }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        100,
+        1680
+      ],
+      "id": "e84c43d2-3c7f-40cc-888d-b9885ca9bc7f",
+      "name": "Request GraphData1"
+    },
+    {
+      "parameters": {
+        "jsCode": "let graphData = $input.first().json;\nlet index = graphData.definition.events.findIndex((item) => item.eventId == $('HR-01B-action').first().json.body.data.parentId);\ngraphData.definition.events[index].status = \"done\";\nreturn graphData;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        360,
+        1680
+      ],
+      "id": "46f95ab1-0649-4f1e-9179-ac5022734692",
+      "name": "Code3"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "collection": "GraphData",
+        "updateKey": "graphId",
+        "fields": "history, definition",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.mongoDb",
+      "typeVersion": 1.1,
+      "position": [
+        640,
+        1680
+      ],
+      "id": "44d37d04-116b-477a-b42a-6e305fb97168",
+      "name": "MongoDB3",
+      "credentials": {
+        "mongoDb": {
+          "id": "uZBJYKWIUnsdVQVp",
+          "name": "MongoDB account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        900,
+        1680
+      ],
+      "id": "83dddbc3-0d45-4ffb-a4f0-889d6ed77a39",
+      "name": "Respond to Webhook7"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://127.0.0.1:5678/webhook/getGraphDataBy_Id",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "graphId",
+              "value": "={{ $json.body.data.parentGraph }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        100,
+        1860
+      ],
+      "id": "a67b920a-ce69-480b-91f2-74b7e7fe9409",
+      "name": "Request GraphData2"
+    },
+    {
+      "parameters": {
+        "jsCode": "let graphData = $input.first().json;\nlet index = graphData.definition.events.findIndex((item) => item.eventId == $('HR-01C-action').first().json.body.data.parentId);\ngraphData.definition.events[index].status = \"done\";\nreturn graphData;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        360,
+        1860
+      ],
+      "id": "4ef3e9e0-6963-4297-834e-4186c77ff2c3",
+      "name": "Code4"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "collection": "GraphData",
+        "updateKey": "graphId",
+        "fields": "history, definition",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.mongoDb",
+      "typeVersion": 1.1,
+      "position": [
+        640,
+        1860
+      ],
+      "id": "55eaae0a-1e59-4c98-bdad-875e048b6e7b",
+      "name": "MongoDB4",
+      "credentials": {
+        "mongoDb": {
+          "id": "uZBJYKWIUnsdVQVp",
+          "name": "MongoDB account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        900,
+        1860
+      ],
+      "id": "62da0f3d-60a3-4642-bb5f-0d7491bb2c59",
+      "name": "Respond to Webhook8"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://127.0.0.1:5678/webhook/getGraphDataBy_Id",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "graphId",
+              "value": "={{ $json.body.data.parentGraph }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        100,
+        2020
+      ],
+      "id": "7df9d4c2-f8dd-4e9c-bb44-dd08c4acccb9",
+      "name": "Request GraphData3"
+    },
+    {
+      "parameters": {
+        "jsCode": "let graphData = $input.first().json;\nlet index = graphData.definition.events.findIndex((item) => item.eventId == $('HR-01D-action').first().json.body.data.parentId);\ngraphData.definition.events[index].status = \"done\";\nreturn graphData;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        360,
+        2020
+      ],
+      "id": "66a1b3f0-1167-4bb5-8e92-8f7c130772af",
+      "name": "Code5"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "collection": "GraphData",
+        "updateKey": "graphId",
+        "fields": "history, definition",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.mongoDb",
+      "typeVersion": 1.1,
+      "position": [
+        640,
+        2020
+      ],
+      "id": "ba5151bb-8ced-4254-8a93-182e1424cbda",
+      "name": "MongoDB5",
+      "credentials": {
+        "mongoDb": {
+          "id": "uZBJYKWIUnsdVQVp",
+          "name": "MongoDB account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        900,
+        2020
+      ],
+      "id": "c35f7020-a2f3-45e9-8aad-10754cd78ebc",
+      "name": "Respond to Webhook9"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "HR-02-action",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -240,
+        860
+      ],
+      "id": "e7bad97e-a8ad-45b0-a3fb-62fcbc04bd15",
+      "name": "HR-02-action",
+      "webhookId": "785284fe-39d3-414f-a38c-fc719288ca48"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "f22a84d0-fce9-4a27-bb36-31028814e67f",
+              "leftValue": "={{ $json.body.data.data.Decision }}",
+              "rightValue": "approve",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -20,
+        860
+      ],
+      "id": "a38f71dd-8e1c-48f9-ae14-0595564896bf",
+      "name": "Is Approve"
+    },
+    {
+      "parameters": {
+        "respondWith": "noData",
+        "options": {
+          "responseCode": 418
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        300,
+        1080
+      ],
+      "id": "6c822ee0-cec6-4fa9-b02b-f8f77b71419f",
+      "name": "Respond to Webhook1"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://127.0.0.1:5678/webhook/getGraphDataBy_Id",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "graphId",
+              "value": "={{ $json.body.data.parentGraph }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        300,
+        840
+      ],
+      "id": "5865335b-1468-41fc-8163-e866f1131084",
+      "name": "Request GraphData4"
+    },
+    {
+      "parameters": {
+        "jsCode": "let graphData = $input.first().json;\nlet index = graphData.definition.events.findIndex((item) => item.eventId == $('HR-02-action').first().json.body.data.parentId);\ngraphData.definition.events[index].status = \"done\";\nreturn graphData;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        540,
+        840
+      ],
+      "id": "d597ec13-fc49-482a-b7bd-4f6d1a5e32bd",
+      "name": "Code6"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "collection": "GraphData",
+        "updateKey": "graphId",
+        "fields": "history, definition",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.mongoDb",
+      "typeVersion": 1.1,
+      "position": [
+        760,
+        840
+      ],
+      "id": "a6b044e2-af83-4dd6-a51f-0a1076b3dc81",
+      "name": "MongoDB6",
+      "credentials": {
+        "mongoDb": {
+          "id": "uZBJYKWIUnsdVQVp",
+          "name": "MongoDB account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "GetSubmitBy_Loader",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        1620,
+        400
+      ],
+      "id": "abedb057-7a72-4acc-a6e4-7953dce28e93",
+      "name": "Get Submission By Loader",
       "webhookId": "3e5f04e9-b66c-4ca6-bc86-4c68590eae9f"
+    },
+    {
+      "parameters": {
+        "collection": "Submission",
+        "options": {},
+        "query": "={\n    \"data.id\": \"{{ $json.body.data }}\"\n} "
+      },
+      "type": "n8n-nodes-base.mongoDb",
+      "typeVersion": 1.1,
+      "position": [
+        1840,
+        400
+      ],
+      "id": "38a33915-4295-4a1a-893b-2b05688ed30a",
+      "name": "MongoDB7",
+      "credentials": {
+        "mongoDb": {
+          "id": "uZBJYKWIUnsdVQVp",
+          "name": "MongoDB account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "allIncomingItems",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        2060,
+        400
+      ],
+      "id": "37aa8994-08b6-4163-8693-0d182659994a",
+      "name": "Respond to Webhook3"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "history",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        1040,
+        840
+      ],
+      "id": "4a143842-5be0-41cf-beab-febb110011d1",
+      "name": "Split Out"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        1360,
+        840
+      ],
+      "id": "bf9f67cf-66a4-4f42-87ea-3e47b394c735",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://127.0.0.1:5678/webhook/GetSubmitBy_Loader",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "data",
+              "value": "={{ $json.history }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1940,
+        1100
+      ],
+      "id": "67ddbe03-7ca8-40fa-b9f0-68c97a0bb195",
+      "name": "Get submission history"
+    },
+    {
+      "parameters": {
+        "jsCode": "let sortedByTimeStamp = $input.all().sort((a, b) => {\n      const timeA = new Date(a.json.data.timestamp).getTime();\n      const timeB = new Date(b.json.data.timestamp).getTime();\n      return timeB - timeA; // descending order\n    }) \nlet BasicInfo = sortedByTimeStamp.find((i) => i.json.parentId ==  \"HR-01A\")?.json.data.data.formData;\nlet ContractInfo = sortedByTimeStamp.find((i) => i.json.parentId ==  \"HR-01B\")?.json.data.data.formData;\nlet employeeInfo = {\n  employeeCode: BasicInfo.employeeCode,\n  fullName: BasicInfo.fullName,\n  jobTitle: ContractInfo.jobTitle,\n  department: ContractInfo.department,\n  position: ContractInfo.position\n}\nreturn employeeInfo;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1920,
+        820
+      ],
+      "id": "8968554b-ca0f-4ed0-a62d-550d31f67416",
+      "name": "Code1"
     }
   ],
   "pinData": {},
@@ -801,17 +1374,6 @@
         ]
       ]
     },
-    "ER-01-action": {
-      "main": [
-        [
-          {
-            "node": "Filter basic info1",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
     "Filter basic info1": {
       "main": [
         [
@@ -828,39 +1390,6 @@
         [
           {
             "node": "Respond to Webhook",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "ER-05-action": {
-      "main": [
-        [
-          {
-            "node": "Filter basic info2",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Filter basic info2": {
-      "main": [
-        [
-          {
-            "node": "save basic employee1",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "save basic employee1": {
-      "main": [
-        [
-          {
-            "node": "Respond to Webhook1",
             "type": "main",
             "index": 0
           }
@@ -951,39 +1480,6 @@
         ]
       ]
     },
-    "Filter basic info3": {
-      "main": [
-        [
-          {
-            "node": "Save employee to DB",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "HR-01-action": {
-      "main": [
-        [
-          {
-            "node": "Filter basic info3",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Save employee to DB": {
-      "main": [
-        [
-          {
-            "node": "Respond to Webhook3",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
     "Clone graph template1": {
       "main": [
         [
@@ -1000,17 +1496,6 @@
         [
           {
             "node": "MongoDB1",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "instance-graph": {
-      "main": [
-        [
-          {
-            "node": "Clone graph template1",
             "type": "main",
             "index": 0
           }
@@ -1039,11 +1524,377 @@
         ]
       ]
     },
-    "Get all employee": {
+    "LoadEmployeeTable": {
       "main": [
         [
           {
             "node": "MongoDB12",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MongoDB13": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook23",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "LoadEmployeeCreateProcess": {
+      "main": [
+        [
+          {
+            "node": "MongoDB13",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OnInstanceGraph": {
+      "main": [
+        [
+          {
+            "node": "Clone graph template1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Request GraphData": {
+      "main": [
+        [
+          {
+            "node": "Code2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code2": {
+      "main": [
+        [
+          {
+            "node": "MongoDB2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HR-01A-action": {
+      "main": [
+        [
+          {
+            "node": "Request GraphData",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HR-01B-action": {
+      "main": [
+        [
+          {
+            "node": "Request GraphData1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HR-01C-action": {
+      "main": [
+        [
+          {
+            "node": "Request GraphData2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HR-01D-action": {
+      "main": [
+        [
+          {
+            "node": "Request GraphData3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Graph3": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GetGraphDataBy_Id": {
+      "main": [
+        [
+          {
+            "node": "Get Graph3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MongoDB2": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Request GraphData1": {
+      "main": [
+        [
+          {
+            "node": "Code3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code3": {
+      "main": [
+        [
+          {
+            "node": "MongoDB3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MongoDB3": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook7",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Request GraphData2": {
+      "main": [
+        [
+          {
+            "node": "Code4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code4": {
+      "main": [
+        [
+          {
+            "node": "MongoDB4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MongoDB4": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook8",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Request GraphData3": {
+      "main": [
+        [
+          {
+            "node": "Code5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code5": {
+      "main": [
+        [
+          {
+            "node": "MongoDB5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MongoDB5": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook9",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HR-02-action": {
+      "main": [
+        [
+          {
+            "node": "Is Approve",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Is Approve": {
+      "main": [
+        [
+          {
+            "node": "Request GraphData4",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Respond to Webhook1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Request GraphData4": {
+      "main": [
+        [
+          {
+            "node": "Code6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code6": {
+      "main": [
+        [
+          {
+            "node": "MongoDB6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MongoDB6": {
+      "main": [
+        [
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Submission By Loader": {
+      "main": [
+        [
+          {
+            "node": "MongoDB7",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MongoDB7": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [
+          {
+            "node": "Code1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Get submission history",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get submission history": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code1": {
+      "main": [
+        [
+          {
+            "node": "Filter basic info1",
             "type": "main",
             "index": 0
           }
@@ -1055,11 +1906,11 @@
   "settings": {
     "executionOrder": "v1"
   },
-  "versionId": "d1719ba0-a3d1-4301-8d48-3cf179125e63",
+  "versionId": "b432c5db-9fc8-420f-b8d5-2bf7b3864309",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "60f558f2754ed85e2688a3bdaa286b8e7ee6e02ba567810884cfd3266c594ce4"
   },
-  "id": "MnEdJpWMpxRRt4xh",
+  "id": "83VrlS5PimArUFa7",
   "tags": []
 }

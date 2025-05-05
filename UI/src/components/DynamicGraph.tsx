@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import ReactFlow, {
   Background,
   Controls,
@@ -8,17 +8,16 @@ import ReactFlow, {
   Panel
 } from 'reactflow';
 import validator from '@rjsf/validator-ajv8';
-import { ActivateGraph, DeactivateGraph, fetchManualTriggers,  FetchSubmissionByLoader, HandleCreateFlowGraph, InstanceGraph, LazyLoadGraph,  LazyLoadNodeSchema,  SubmitForm, TriggerFormAction } from '../api';
+import { ActivateGraph, DeactivateGraph, fetchManualTriggers, FetchSubmissionByLoader, HandleCreateFlowGraph, InstanceGraph, LazyLoadGraph, LazyLoadNodeSchema, SubmitForm, TriggerFormAction } from '../api';
 import { GraphDataLazyLoad, NodeSubmission, Trigger } from '../types';
 import 'reactflow/dist/style.css';
 import { TabPanel, TabView } from 'primereact/tabview';
 import { Toast } from 'primereact/toast';
-// import { Button } from 'primereact/button';
 // import Form from '@rjsf/core';
 import Form from "@rjsf/bootstrap-4";
 import { Dialog } from 'primereact/dialog';
 import { Button } from 'primereact/button';
-import { data } from 'react-router';
+import 'primeicons/primeicons.css';
 
 
 interface ApprovalGraphProps {
@@ -64,12 +63,13 @@ interface Edge {
 
 interface PreviewTab {
   id: string;
+  header: string;
   formSchema: any;
   uiSchema: any;
   formData: any;
 }
 
-const DynamicGraph: React.FC<ApprovalGraphProps> = (props : ApprovalGraphProps) => {
+const DynamicGraph: React.FC<ApprovalGraphProps> = (props: ApprovalGraphProps) => {
   const [graphStatus, setGraphStatus] = useState<any>();
   const [nodes, setNodes, onNodesChange] = useNodesState<Node>([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>([]);
@@ -78,7 +78,7 @@ const DynamicGraph: React.FC<ApprovalGraphProps> = (props : ApprovalGraphProps) 
   const [manualTriggers, setManualTriggers] = useState<Trigger[]>([]);
   const toast = useRef<Toast>(null);
   const [graphData, setGraphData] = useState<GraphDataLazyLoad | null>(null);
-  const [selectedHistory, setSelectedHistory] = useState<NodeSubmission>();
+  const [selectedHistory, setSelectedHistory] = useState<NodeSubmission | null>();
   const [formSchema, setFormSchema] = useState<any>({});
   const [uiSchema, setUiSchema] = useState<any>({});
   const [previewData, setPreviewData] = useState<PreviewTab[]>([]);
@@ -91,7 +91,6 @@ const DynamicGraph: React.FC<ApprovalGraphProps> = (props : ApprovalGraphProps) 
       setGraphData(props.graphData);
       RenderFlowGraph(props.graphData);
       setGraphStatus(props.graphData.status);
-      console.log(props.attachmentData);
     } else {
       if (props.graphId && props.requestId) {
         LazyLoadGraph(props.graphId, props.requestId).then((data: GraphDataLazyLoad) => {
@@ -105,17 +104,17 @@ const DynamicGraph: React.FC<ApprovalGraphProps> = (props : ApprovalGraphProps) 
 
   const RenderFlowGraph = (graphData: GraphDataLazyLoad) => {
     if (!graphData || !graphData.definition?.events) return;
-  
+
     const levelMap: Record<string, number> = {};
     const inputs = graphData.definition.events.filter(e => !e.triggers?.some(t => t.triggerType === "Approve")); // Top-level inputs
     const review = graphData.definition.events.find(e => e.triggers?.some(t => t.triggerType === "Approve"));
     const final = graphData.definition.events.find(e => e.eventId !== review?.eventId && review?.triggers?.some(t => t.eventId === e.eventId));
-  
+
     const ySpacing = 150;
     const xSpacing = 220;
-  
+
     const positionMap: Record<string, { x: number; y: number }> = {};
-  
+
     // Place input nodes
     inputs.forEach((event, index) => {
       positionMap[event.eventId] = {
@@ -123,7 +122,7 @@ const DynamicGraph: React.FC<ApprovalGraphProps> = (props : ApprovalGraphProps) 
         y: 0,
       };
     });
-  
+
     // Place review node
     if (review) {
       positionMap[review.eventId] = {
@@ -131,7 +130,7 @@ const DynamicGraph: React.FC<ApprovalGraphProps> = (props : ApprovalGraphProps) 
         y: ySpacing,
       };
     }
-  
+
     // Place final node
     if (final) {
       positionMap[final.eventId] = {
@@ -139,24 +138,112 @@ const DynamicGraph: React.FC<ApprovalGraphProps> = (props : ApprovalGraphProps) 
         y: ySpacing * 2,
       };
     }
-  
+
     // Map events to nodes
-    const newNodes = graphData.definition.events.map((event) => ({
-      id: event.eventId,
-      type: 'default',
-      previews: event.previews,
-      toN8nLoader: event.toN8nLoader,
-      data: {
-        label: event.type,
-        event,
-      },
-      position: positionMap[event.eventId] || { x: 0, y: 0 },
-      style: {
-        background: graphData.currentEvent === event.eventId ? '#ffcc00' : '#fff',
-        padding: '10px',
-      },
-    }));
-  
+    // const newNodes = graphData.definition.events.map((event) => {
+    //   const isCurrent = graphData.currentEvent === event.eventId;
+    //   const isFiled = event.status === "filed";
+    //   return{
+    //     id: event.eventId,
+    //     type: 'default',
+    //     previews: event.previews,
+    //     toN8nLoader: event.toN8nLoader,
+    //     status: event.status,
+    //     filedBy: event.filedBy,
+    //     data: {
+    //       label: event.type,
+    //       event,
+    //     },
+    //     position: positionMap[event.eventId] || { x: 0, y: 0 },
+    //     style: {
+    //       background: isCurrent ? '#ffcc00' : isFiled ? '#b3e5fc' : '#fff', // blue highlight for filed
+    //       border: isFiled ? '2px solid #0288d1' : '1px solid #ccc',
+    //       padding: '10px',
+    //       borderRadius: '5px',
+    //     }
+    //   }
+    // });
+
+    const requirementMap: Record<string, string[]> = {};
+    graphData.definition.events.forEach(event => {
+      (event.triggers || []).forEach(trigger => {
+        if (!requirementMap[trigger.eventId]) {
+          requirementMap[trigger.eventId] = [];
+        }
+        requirementMap[trigger.eventId].push(event.eventId);
+      });
+    });
+
+    const newNodes = graphData.definition.events.map((event) => {
+      const isCurrent = graphData.currentEvent === event.eventId;
+      const isFiled = event.status === "filed";
+    
+      const requiredNodes = requirementMap[event.eventId] ?? [];
+      const allRequirementsMet = requiredNodes.length === 0 || requiredNodes.every(reqId => {
+        const reqEvent = graphData.definition.events.find(e => e.eventId === reqId);
+        return reqEvent?.status === "done";
+      });
+    
+      let background = '#fff';
+      let border = '1px solid #ccc';
+      
+      switch (event.status) {
+        case 'fail':
+          background = '#ef5350'; // Red
+          border = '2px solid #c62828';
+          break;
+        case 'done':
+          background = '#4caf50'; // Green
+          border = '2px solid #388e3c';
+          break;
+        case 'running':
+          background = '#ff9800'; // Orange
+          border = '2px solid #f57c00';
+          break;
+        case 'ready':
+          background = '#fff176'; // Yellow (Ready)
+          border = '2px solid #fdd835';
+          break;
+        default:
+          if (allRequirementsMet) {
+            background = '#42a5f5'; // Blue (Writable)
+            border = '2px solid #1e88e5';
+          } else {
+            background = '#cfd8dc'; // Gray (Requirements Not Met)
+            border = '2px dashed #b0bec5';
+          }
+          break;
+      }
+      
+      if (isCurrent) {
+        background = '#ffcc00'; // Highlight current node
+        border = '2px solid #ffb300';
+      }
+    
+      const writable = allRequirementsMet && !isFiled;
+    
+      return {
+        id: event.eventId,
+        type: 'default',
+        previews: event.previews,
+        toN8nLoader: event.toN8nLoader,
+        status: event.status,
+        filedBy: event.filedBy,
+        writable,
+        data: {
+          label: event.type,
+          event,
+        },
+        position: positionMap[event.eventId] || { x: 0, y: 0 },
+        style: {
+          background,
+          border,
+          padding: '10px',
+          borderRadius: '5px',
+        }
+      };
+    });
+
     // Map triggers to directional edges
     const newEdges = graphData.definition.events.flatMap(event =>
       (event.triggers || []).map((trigger) => ({
@@ -178,7 +265,7 @@ const DynamicGraph: React.FC<ApprovalGraphProps> = (props : ApprovalGraphProps) 
         markerEnd: 'url(#arrowhead)',
       }))
     );
-  
+
     setNodes(newNodes);
     setEdges(newEdges);
 
@@ -188,7 +275,7 @@ const DynamicGraph: React.FC<ApprovalGraphProps> = (props : ApprovalGraphProps) 
       graphData.history.forEach(item => {                                         // messed up somewhere, history list is doubled. hot fixed on node click
         if (item) {
           FetchSubmissionByLoader(item).then((data: any) => {
-            if(data[0]){
+            if (data[0]) {
               setHistoryLst(prev => [...prev, data[0]]);
             }
           });
@@ -197,21 +284,21 @@ const DynamicGraph: React.FC<ApprovalGraphProps> = (props : ApprovalGraphProps) 
     }
   };
 
-  useEffect(()=>{
-    if(graphData){
+  useEffect(() => {
+    if (graphData) {
       console.log(graphData);
       RenderFlowGraph(graphData);
       setGraphStatus(graphData.status);
     }
-  },[graphData])
+  }, [graphData])
 
-  useEffect(()=>{
-    if(graphStatus=="start"){
+  useEffect(() => {
+    if (graphStatus == "start") {
       setisFormStarted(true);
-    }else{
+    } else {
       setisFormStarted(false);
     }
-  },[graphStatus])
+  }, [graphStatus])
 
   useEffect(() => {
     if (selectedNode) {
@@ -225,6 +312,9 @@ const DynamicGraph: React.FC<ApprovalGraphProps> = (props : ApprovalGraphProps) 
           if (history) {
             setSelectedHistory(history.data.data.formData);
             setFormData(history.data.data.formData);
+          } else {
+            setSelectedHistory(null);
+            setFormData(null);
           }
           if (selectedNode.previews) {
             selectedNode.previews.forEach((element: string) => {
@@ -234,9 +324,10 @@ const DynamicGraph: React.FC<ApprovalGraphProps> = (props : ApprovalGraphProps) 
                   setPreviewData(pre => [...pre,
                   {
                     id: data[0].schemaId,
+                    header: element,
                     formSchema: data[0].formSchema,
                     uiSchema: data[0].uiSchema,
-                    formData: FindHistoryByEventId(data[0].schemaId)?.data.data
+                    formData: FindHistoryByEventId(element)?.data.data.formData
                   }
                   ]);
                 }
@@ -247,6 +338,7 @@ const DynamicGraph: React.FC<ApprovalGraphProps> = (props : ApprovalGraphProps) 
       });
     }
   }, [selectedNode, selectedEvent])
+
   const FindHistoryByEventId = (eventId: string) => {
     let result = historyLst.find((i) => i.parentId == eventId);
     return result;
@@ -254,7 +346,7 @@ const DynamicGraph: React.FC<ApprovalGraphProps> = (props : ApprovalGraphProps) 
 
   function DynamicForm({ data }: { data: Record<string, any> }) {
     return (
-      <form style={{ display: 'flex', flexDirection: 'column', gap: '1rem' , height:"100%", overflowY:"auto"}}>
+      <form style={{ display: 'flex', flexDirection: 'column', gap: '1rem', height: "100%", overflowY: "auto" }}>
         {Object.entries(data).map(([key, value]) => (
           <div key={key} style={{ display: 'flex', flexDirection: 'column' }}>
             <label style={{
@@ -284,6 +376,11 @@ const DynamicGraph: React.FC<ApprovalGraphProps> = (props : ApprovalGraphProps) 
     const uniqueHistory = [
       ...new Map(historyLst.map(item => [item._id, item])).values()
     ];
+    uniqueHistory.sort((a, b) => {
+      const timeA = new Date(a.timestamp || a.data.timestamp).getTime();
+      const timeB = new Date(b.timestamp || b.data.timestamp).getTime();
+      return timeB - timeA; // descending order
+    });
     setHistoryLst(uniqueHistory); // messed up history submission fetch -> double the array
     setSelectedNode(node);
     setSelectedEvent(node.data.event);
@@ -294,7 +391,7 @@ const DynamicGraph: React.FC<ApprovalGraphProps> = (props : ApprovalGraphProps) 
     return (
       <TabView>
         {previewData.map((tab, index) => (
-          <TabPanel key={tab.id+Date.now()} header={tab.id}>
+          <TabPanel key={tab.id + Date.now()} header={tab.header}>
             <Form
               schema={tab.formSchema}
               uiSchema={tab.uiSchema}
@@ -333,35 +430,52 @@ const DynamicGraph: React.FC<ApprovalGraphProps> = (props : ApprovalGraphProps) 
       parentGraph: graphData?._id,
       id: `${props.requestId}-${Date.now()}`,
       type: selectedNode?.type,
-      data: {formData},
+      data: { formData },
       timestamp: new Date().toISOString(),
     };
-    console.log("submitData",submitData);
-    if(graphData)
-    {
+    // console.log("submitData", submitData);
+    if (graphData) {
       SubmitForm(submitData, graphData.graphId);
     }
     showToast("sending...");
-    if (selectedNode.toN8nLoader) {
-      TriggerFormAction(submitData, selectedNode.toN8nLoader).then((data) => console.log("action response", data));
+    // if (selectedNode.toN8nLoader) {
+      // TriggerFormAction(submitData, selectedNode.toN8nLoader).then((data) => console.log("action response", data));
+    // }
+  }
+
+  const RunNode = () =>{
+    showToast("running...");
+    let latestHistory = FindHistoryByEventId(selectedNode.id)?.data.data.formData;
+    if(latestHistory){
+      let submitData = {
+        parentId: selectedNode.id,
+        parentGraph: graphData?._id,
+        id: `${props.requestId}-${Date.now()}`,
+        type: selectedNode?.type,
+        data: latestHistory,
+        timestamp: new Date().toISOString(),
+      };
+      if (selectedNode.toN8nLoader) {
+        TriggerFormAction(submitData, selectedNode.toN8nLoader).then((data) => console.log("action response", data));
+      }
     }
   }
 
-  const startProcess = () =>{
-    if(graphData&&graphStatus=="active"){
-      InstanceGraph(graphData.graphId, props.attachmentData).then((data)=>{
-        if(!data.error){
+  const startProcess = () => {
+    if (graphData && graphStatus == "active") {
+      InstanceGraph(graphData.graphId, props.attachmentData).then((data) => {
+        if (!data.error) {
           setGraphData(data);
         }
       });
     }
   }
 
-  const runWorkFlow = async () =>{
+  const runWorkFlow = async () => {
     ActivateGraph("asdasd").then((data) => {
-      if(!data.error){
+      if (!data.error) {
         showToast("WorkFlow Activated");
-      }else{
+      } else {
         showToast(data.error);
       }
     })
@@ -369,9 +483,9 @@ const DynamicGraph: React.FC<ApprovalGraphProps> = (props : ApprovalGraphProps) 
 
   const stopWorkFlow = () => {
     DeactivateGraph("asd").then((data) => {
-      if(!data.error){
+      if (!data.error) {
         showToast("WorkFlow Deactivated");
-      }else{
+      } else {
         showToast(data.error);
       }
     })
@@ -382,7 +496,7 @@ const DynamicGraph: React.FC<ApprovalGraphProps> = (props : ApprovalGraphProps) 
   }
 
   return (
-      <div style={{height:"100%"}}>
+    <div style={{ height: "100%" }}>
       <div className="card flex justify-content-center">
         <Toast ref={toast} />
       </div>
@@ -405,9 +519,9 @@ const DynamicGraph: React.FC<ApprovalGraphProps> = (props : ApprovalGraphProps) 
           padding: '1rem',
           borderRadius: '0.5rem',
           boxShadow: '0 10px 15px rgba(0,0,0,0.1)',
-          height:"95%"
+          height: "95%"
         }}>
-          <div style={{ height: "100%", overflowY:"auto" }}>
+          <div style={{ height: "100%", overflowY: "auto" }}>
             <div style={{ display: "block", gap: "1rem" }}>
               {graphData._id ?? (<div>{graphData._id}</div>)}
               {graphStatus && (<div>STATUS:{graphStatus}</div>)}
@@ -423,7 +537,7 @@ const DynamicGraph: React.FC<ApprovalGraphProps> = (props : ApprovalGraphProps) 
           </div>
         </Panel>
       </ReactFlow>
-      <Dialog header={selectedNode?.data.label||"Header"} visible={showCustomDialog} style={{ width: '60vw' }} onHide={() => CloseFormDialog()}>
+      <Dialog header={selectedNode?.data.label || "Header"} visible={showCustomDialog} style={{ width: '60vw' }} onHide={() => CloseFormDialog()}>
         <div style={{ display: "flex" }}>
           <TabView >
             <TabPanel header="Form">
@@ -440,7 +554,10 @@ const DynamicGraph: React.FC<ApprovalGraphProps> = (props : ApprovalGraphProps) 
                   }}
                   disabled={!isFormStarted}
                 />
-                <div className=" bottom-0 right-0 flex justify-end gap-2 p-4 flex justify-end gap-2">
+                <div className=" bottom-0 left-0 flex justify-end gap-2 p-4 flex justify-end gap-2">
+                  <Button className='pi pi-play-circle' onClick={()=> RunNode()}>
+                    RUN
+                  </Button>
                 </div>
               </div>
             </TabPanel>

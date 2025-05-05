@@ -62,6 +62,7 @@ export interface GraphNodeData {
     eventId: string;
     triggerType: string;
   }>;
+  require?: Array<string>;
 }
 
 export interface ToGateWayPayload {
@@ -90,7 +91,8 @@ export interface CustomButton {
   link?:string;
   data?: any;
 }
-interface TableSchema {
+
+export interface TableSchema {
   row: Array<string>;                             // row header
   rowAttribute: Array<string>                     // row data to display
 }
@@ -115,7 +117,7 @@ export const dummyScreenSettingV2: ScreenSettingV2 = {
       name: "Create New",
       type: "new_process",
       requestId: "get-template",
-      toN8nLoader: "quy_trinh_mau_nv_01"
+      toN8nLoader: "quy_trinh_mau_nv_04"
     },
     {
       name: "Export",

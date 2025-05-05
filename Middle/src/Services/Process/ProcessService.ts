@@ -123,13 +123,13 @@ export class ProcessService {
     }
 
     async triggerFormAction(rqId: string, data: any, sender: any): Promise<any> {
-        const url = `http://localhost:5678/webhook/${encodeURIComponent(rqId)}`;
+        const url =  `http://localhost:5678/webhook/${encodeURIComponent(rqId)}`;
         const payload = {
             data: data,
         }
         const header = {
             headers: {
-              'x-user-id': sender.name,
+              'x-user-id': sender.employeeCode,
               'Content-Type': 'application/json'
             }
           }
@@ -137,8 +137,6 @@ export class ProcessService {
             const response = await firstValueFrom(
                 this.httpService.post(url, payload, header)
             );
-            // console.log("GOTTEN:");
-            // console.log(response.data);
             return response.data;
         } catch (error: any) {
             console.error('FetchData error:', error?.response?.data || error.message);
