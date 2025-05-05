@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo:latest # Use the latest official MongoDB image
+    container_name: mongodb
+    restart: always
+    ports:
+      - "27017:27017" # Map the default MongoDB port
+    volumes:
+      - ~/.mongodb/data:/data/db # Persist MongoDB data on the host
+    # Optional: Add environment variables for authentication if needed
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: your_username
+      MONGO_INITDB_ROOT_PASSWORD: your_password

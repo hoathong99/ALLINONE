@@ -1,0 +1,12 @@
+version: '3.8' # Specify a version, 3.8 is a common modern choice
+
+services:
+  maxkb:
+    image: 1panel/maxkb
+    container_name: maxkb
+    restart: always
+    ports:
+      - "8080:8080"
+    volumes:
+      - ~/.maxkb:/var/lib/postgresql/data
+      - ~/.python-packages:/opt/maxkb/app/sandbox/python-packages
