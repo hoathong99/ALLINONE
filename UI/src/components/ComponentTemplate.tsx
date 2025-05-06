@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Dialog } from 'primereact/dialog';
 import { Button } from 'primereact/button';
 import { LazyLoadGraphTemplate,  LoadResource } from '../api';
-import {ScreenSettingV2, TableSetting } from '../types';
+import {CustomButton, ScreenSettingV2, TableSetting } from '../types';
 import { Toast } from 'primereact/toast';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
@@ -19,6 +19,7 @@ function TemplateComponent (props: props) {
   const [dialogVisible, setDialogVisible] = useState(false);
   const [graphData, setGraphData] = useState<any>();
   const [tableData, setTableData] = useState<any>();
+  const [currentTableButtonSetting, setCurrentTableButtonSetting] = useState<any>();
   const [selectedRowData, setSelectedRowData] = useState<any>(null);
   const toast = useRef<Toast>(null);
   const [activeIndex, setActiveIndex] = useState(0);
@@ -67,11 +68,13 @@ function TemplateComponent (props: props) {
     }
   }
 
-  const OnClickTableAction = async (data?: any, n8nLoader?:string, requestId?: string) =>{
-    if(data&&n8nLoader&&requestId){
+  const OnClickTableAction = async (buttonSetting: CustomButton, data?: any, ) =>{
+    if(data&&buttonSetting.toN8nLoader&&buttonSetting.requestId){
       console.log("row data", data);
-      LazyLoadGraphTemplate(n8nLoader, requestId).then((graph) => setGraphData(graph));
+      LazyLoadGraphTemplate(buttonSetting.toN8nLoader, buttonSetting.requestId).then((graph) => setGraphData(graph));
+      // LoadResource(requestId,n8nLoader,data).then((graph) => setGraphData(graph));
       setSelectedRowData(data);
+      setCurrentTableButtonSetting({rqId: buttonSetting.resourceRequestId, loader:buttonSetting.toN8nLoader});
       OpenDialog();
     }
   }
@@ -119,7 +122,7 @@ function TemplateComponent (props: props) {
                       color: "white",
                     }}
                     onClick={() => {
-                      OnClickTableAction(rowData, attr.toN8nLoader, attr.requestId);
+                      OnClickTableAction(attr,rowData);
                     }}
                   />
                 );
@@ -216,8 +219,12 @@ function TemplateComponent (props: props) {
           )}
         </div>
       </div>
-      <Dialog header={setting.screenHeader} visible={dialogVisible} style={{ width: '90vw', height:"90vh" }} onHide={() => {CloseDialog()}}>
-          <DynamicGraph graphData={graphData} attachmentData={selectedRowData}/>
+      <Dialog header={setting.screenHeader} visible={dialogVisible} style={{ width: '90vw', height: "90vh" }} onHide={() => { CloseDialog() }}>
+        <DynamicGraph
+          graphData={graphData}
+          attachmentData={selectedRowData}
+          TableButtonSetting={currentTableButtonSetting}
+        />
       </Dialog>
     </div>
   );

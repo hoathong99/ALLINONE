@@ -90,6 +90,7 @@ export interface CustomButton {
   type: string;
   link?:string;
   data?: any;
+  resourceRequestId?: string;
 }
 
 export interface TableSchema {
@@ -136,13 +137,15 @@ export const dummyScreenSettingV2: ScreenSettingV2 = {
           name: "Edit",
           type: "new_process",
           requestId: "get-template",
-          toN8nLoader: "graph-02-Edit-Mode"
+          toN8nLoader: "Employee-Edit",
+          resourceRequestId: "GetEmployeeEditGraphData"
         },
         {
           name: "Delete",
           type: "new_process",
           requestId: "deleteRequest",
-          toN8nLoader: "graph-02-delete"
+          toN8nLoader: "graph-02-delete",
+          resourceRequestId: "GetDeleteDisplay"
         }
       ],
       tableSchema: {

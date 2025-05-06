@@ -8,7 +8,7 @@ import ReactFlow, {
   Panel
 } from 'reactflow';
 import validator from '@rjsf/validator-ajv8';
-import { ActivateGraph, DeactivateGraph, fetchManualTriggers, FetchSubmissionByLoader, HandleCreateFlowGraph, InstanceGraph, LazyLoadGraph, LazyLoadNodeSchema, SubmitForm, TriggerFormAction } from '../api';
+import { ActivateGraph, DeactivateGraph, fetchManualTriggers, FetchSubmissionByLoader, HandleCreateFlowGraph, InstanceGraph, LazyLoadGraph, LazyLoadNodeSchema, LoadResource, SubmitForm, TriggerFormAction } from '../api';
 import { GraphDataLazyLoad, NodeSubmission, Trigger } from '../types';
 import 'reactflow/dist/style.css';
 import { TabPanel, TabView } from 'primereact/tabview';
@@ -25,7 +25,7 @@ interface ApprovalGraphProps {
   requestId?: string;
   graphData?: any;
   attachmentData?: any;
-  // status: string;
+  TableButtonSetting?: any;
 }
 
 interface N8nNodeSchema {
@@ -86,6 +86,8 @@ const DynamicGraph: React.FC<ApprovalGraphProps> = (props: ApprovalGraphProps) =
   const [formData, setFormData] = useState<any>();
   const [historyLst, setHistoryLst] = useState<NodeSubmission[]>([]);                                     // store whole graph submission list
   const [isFormStarted, setisFormStarted] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
   useEffect(() => {
     if (props.graphData) {
       setGraphData(props.graphData);
@@ -99,6 +101,10 @@ const DynamicGraph: React.FC<ApprovalGraphProps> = (props: ApprovalGraphProps) =
           setGraphStatus(data.status);
         });
       }
+    }
+    // console.log("attachment", props.attachmentData);
+    if(props.attachmentData&&props.TableButtonSetting){
+      GetGraphDataFromAttachment(props.attachmentData);
     }
   }, [props]);
 
@@ -283,6 +289,13 @@ const DynamicGraph: React.FC<ApprovalGraphProps> = (props: ApprovalGraphProps) =
       });
     }
   };
+
+  const GetGraphDataFromAttachment = (data: any) => {
+    LoadResource(props.TableButtonSetting.rqId, props.TableButtonSetting.loader, data)
+    .then((dataNodeSubmission) =>
+      setHistoryLst([dataNodeSubmission])
+    );
+  }
 
   useEffect(() => {
     if (graphData) {
@@ -526,8 +539,8 @@ const DynamicGraph: React.FC<ApprovalGraphProps> = (props: ApprovalGraphProps) =
               {graphData._id ?? (<div>{graphData._id}</div>)}
               {graphStatus && (<div>STATUS:{graphStatus}</div>)}
               {graphStatus == "active" && <Button label='Start' onClick={() => { startProcess() }} className="btn btn-theme" data-bs-toggle="modal" data-bs-target="#employeeModal" style={{ backgroundColor: "#1f2c64", color: "white" }}></Button>}
-              {graphStatus == "start" && <Button label='Cancel' onClick={() => { console.log("click!") }} className="btn btn-theme" data-bs-toggle="modal" data-bs-target="#employeeModal" style={{ backgroundColor: "#1f2c64", color: "white" }}></Button>}
-              {graphStatus == "start" && <Button label='Run' onClick={() => { }} className="btn btn-theme" data-bs-toggle="modal" data-bs-target="#employeeModal" style={{ backgroundColor: "#1f2c64", color: "white" }}></Button>}
+              {/* {graphStatus == "start" && <Button label='Cancel' onClick={() => { console.log("click!") }} className="btn btn-theme" data-bs-toggle="modal" data-bs-target="#employeeModal" style={{ backgroundColor: "#1f2c64", color: "white" }}></Button>}
+              {graphStatus == "start" && <Button label='Run' onClick={() => { }} className="btn btn-theme" data-bs-toggle="modal" data-bs-target="#employeeModal" style={{ backgroundColor: "#1f2c64", color: "white" }}></Button>} */}
             </div>
             <div>
               {props.attachmentData && (
