@@ -7,18 +7,22 @@ import { firstValueFrom, retry } from 'rxjs';
 export class FormService {
     constructor(private readonly httpService: HttpService) { }
 
-    async SubmitFormData(data: any, parentId: string, graphId: string): Promise<any> {
-        console.log("---------------------------SubmitFormData----------------------------------")
-        const url = `http://localhost:5678/webhook/saveSubmission`;
+    async SubmitFormData(data: any, parentId: string, graphId: string, sender: any): Promise<any> {
+        const url = `http://13.212.177.47:5678/webhook/saveSubmission`;
         const payload = {
             parentId: parentId,
             data: data,
             graphId: graphId
         }
-        console.log(payload);
+        const header = {
+            headers: {
+              'x-user-id': sender?.name,
+              'Content-Type': 'application/json'
+            }
+          }
         try {
             const response = await firstValueFrom(
-                this.httpService.post(url, payload)
+                this.httpService.post(url, payload,header)
             );
             return response.data;
             
@@ -32,7 +36,7 @@ export class FormService {
     }
 
     async GetLatestSubmission(parentId: string): Promise<any> {
-        const url = `http://localhost:5678/webhook/GetLatestSubmit`;
+        const url = `http://13.212.177.47:5678/webhook/GetLatestSubmit`;
         const payload = {
             data: parentId,
         }
@@ -53,7 +57,7 @@ export class FormService {
     }
 
     async DeleteSubmission(Id: string): Promise<any> {
-        const url = `http://localhost:5678/webhook/DeleteSubmission`;
+        const url = `http://13.212.177.47:5678/webhook/DeleteSubmission`;
         const payload = {
             data: Id,
         }
@@ -75,7 +79,7 @@ export class FormService {
 
     async GetAllSubmission(loader: string): Promise<any> {
         console.log("---------------------------GetSubmission----------------------------------")
-        const url = `http://localhost:5678/webhook/GetAllSubmit`;
+        const url = `http://13.212.177.47:5678/webhook/GetAllSubmit`;
         const payload = {
             data: loader,
         }
@@ -97,7 +101,7 @@ export class FormService {
 
     async GetSubmissionByLoader(loader: string): Promise<any> {
         console.log("---------------------------GetSubmission----------------------------------")
-        const url = `http://localhost:5678/webhook/GetSubmitByLoader`;
+        const url = `http://13.212.177.47:5678/webhook/GetSubmitByLoader`;
         const payload = {
             data: loader,
         }
@@ -119,7 +123,7 @@ export class FormService {
 
     async GetAllEmployee(loader: string): Promise<any> {
         console.log("---------------------------GetSubmission----------------------------------")
-        const url = `http://localhost:5678/webhook/GetAllEmployee`;
+        const url = `http://13.212.177.47:5678//webhook/GetAllEmployee`;
         const payload = {
             data: loader,
         }
@@ -141,7 +145,7 @@ export class FormService {
 
     async GenerateFormSchema(html: string, desc: string): Promise<any> {
         console.log("---------------------------GenerateFormSchema----------------------------------")
-        const url = `http://localhost:5678/webhook/generateSchema`;
+        const url = `http://13.212.177.47:5678/webhook/generateSchema`;
         const payload = {
             html: html,
             describe: desc

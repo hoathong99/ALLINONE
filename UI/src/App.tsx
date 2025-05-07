@@ -10,7 +10,11 @@ import FormFactory from './components/FormFactory';
 import TemplateGraph from './components/GraphTemplate';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import TemplateComponent from './components/ComponentTemplate';
-import { dummyScreenSetting } from './types';
+import { dummyAttendanceScrenceSetting, dummyScreenSetting, dummyScreenSettingV2 } from './types';
+import TemplateComponentGenerator from './components/ComponentTemplateGenerator';
+import FlowEditor from './components/FlowEditor';
+import DumpsterTestingGround from './components/DumpsterTestingGround';
+import TestingGround from './components/DumpsterTestingGround';
 
 
 function App() {
@@ -33,7 +37,11 @@ function App() {
              >
               </TemplateGraph>
             } />
-            <Route path="/component-template" element={<TemplateComponent setting={dummyScreenSetting} />} />
+            <Route path="/component-template" element={<TemplateComponent setting={dummyScreenSettingV2} />} />
+            <Route path="/component-template-2" element={<TemplateComponent setting={dummyAttendanceScrenceSetting} />} />
+            <Route path="/component-template-generator" element={<TemplateComponentGenerator/>} />
+            <Route path="/flow-editor" element={<FlowEditor></FlowEditor>} />
+            <Route path="/testing" element={<TestingGround></TestingGround>} />
           </Routes>
           </div>
         </div>

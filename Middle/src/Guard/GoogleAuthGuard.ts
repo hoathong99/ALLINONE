@@ -24,7 +24,8 @@ export class GoogleAuthGuard implements CanActivate {
 
     try {
       // Validate the Google token using the AuthService
-      const user = await this.authService.verifyGoogleToken(token);
+      // const user = await this.authService.verifyGoogleToken(token);
+      const user = await this.authService.verifyToken(token);
       request.user = user;  // Attach the validated user to the request
       const isUserExist = await this.authService.checkUseInDB(user);
       return isUserExist;

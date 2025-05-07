@@ -4,8 +4,8 @@ import { OAuth2Client } from 'google-auth-library';
 import axios from 'axios';
 import { error } from 'console';
 
-const findUserUrl = "http://localhost:5678/webhook/Login";
-const createUserUrl = "http://localhost:5678/webhook/createUser";
+const findUserUrl = "http://13.212.177.47:5678/webhook/Login";
+const createUserUrl = "http://13.212.177.47:5678/webhook/createUser";
 
 enum ROLE {
   USER="USER",
@@ -14,8 +14,9 @@ enum ROLE {
 interface userInfo {
   name: string,
   email: string,
-  sub: string, // gg ID
-  role: ROLE
+  sub?: string, // gg ID
+  role: ROLE,
+  employeeCode?: string
 }
 
 @Injectable()
@@ -56,6 +57,24 @@ export class AuthService {
     }
   }
 
+  async verifyToken(idToken: string) {
+    try {
+      let ggUser = await this.verifyGoogleToken(idToken);
+      const findUserResponse = await axios.post(findUserUrl, {
+        sub: ggUser.sub
+      })
+      const result = findUserResponse.data;
+      const isEmptyObject = result && Object.keys(result).length === 0;
+
+      if (isEmptyObject) {
+        throw new UnauthorizedException('no user found');
+      }
+      return result;
+    } catch (error) {
+      throw new UnauthorizedException('Invalid or expired Google token');
+    }
+  }
+
   /**
    * Handles the login flow by checking if the user exists in the database
    * via n8n webhook and creating the user if not found.
@@ -74,17 +93,12 @@ export class AuthService {
     try {
       // Attempt to find the user using the n8n webhook
       const findUserResponse = await axios.post(findUserUrl, {
-        email: userInfo.email,
-        name: userInfo.name,
-        sub: userInfo.sub
+        email: userInfo.sub
       })
 
       const result = findUserResponse.data;
-      // console.log("result", result);
       const isEmptyObject = result && Object.keys(result).length === 0;
 
-      // const isEmptyArray = Array.isArray(result) && result.length === 0;
-      console.log("n8n response", isEmptyObject);
       if (isEmptyObject) {
         console.log('User not found. Creating user...');
         // const createUserResponse = await axios.post(createUserUrl, {
@@ -94,17 +108,19 @@ export class AuthService {
         //   sub: userInfo.sub,
         // });
         // user = createUserResponse.data;
-        if(userInfo.name&&userInfo.email){
-          let userDetail : userInfo = {
-            name: userInfo.name,
-            email: userInfo.email,
-            sub: userInfo.sub,
-            role: ROLE.USER
-          }
-          this.register(userDetail);
-        }else{
-          console.log('GOOGLE ACCOUNT IS MISSING CONTAIN NAME OR EMAIL');
-        }
+
+        // if(userInfo.name&&userInfo.email){                                         // this will add google account to user DB if not register yet
+        //   let userDetail : userInfo = {
+        //     name: userInfo.name,
+        //     email: userInfo.email,
+        //     sub: userInfo.sub,
+        //     role: ROLE.USER
+        //   }
+        //   this.register(userDetail);
+        // }else{
+        //   console.log('GOOGLE ACCOUNT IS MISSING CONTAIN NAME OR EMAIL');
+        // }
+
       } else {
         user = result;
       }

@@ -71,8 +71,8 @@ export class ProcessControllerController {
                 try {
                     let data = rq.body.data.data;
                     let parent = rq.body.data.parentId;
-                    let graphId = rq.body.data.graphId
-                    const respond = await this.formService.SubmitFormData(data, parent, graphId);
+                    let graphId = rq.body.data.graphId;
+                    const respond = await this.formService.SubmitFormData(data, parent, graphId, rq.user);
                     return respond;
                 } catch (error) {
                     return { error: 'Failed to fetch flow chart from external API' };
@@ -135,27 +135,68 @@ export class ProcessControllerController {
                     return { error: 'Failed to fetch flow chart from external API' };
                 }
             }
-
             case 'FORM_ACTION_TRIGGER':{
                 try {
                     let data = rq.body.data;
-                    const respond = await this.processService.triggerFormAction(data.loader, data.data);
+                    const respond = await this.processService.triggerFormAction(data.loader, data.data, rq.user);
                     return respond;
                 } catch (error) {
                     return { error: 'Failed to fetch flow chart from external API' };
                 }
             }
-
-            case 'GET_INITAL_RESOURCE':{
+            case 'GET_RESOURCE':{
                 try {
                     let data = rq.body.data;
-                    const respond = await this.formService.GetAllEmployee(data.loader);
+                    let sender = rq.user;
+                    const respond = await this.processService.requestData(data.rqId, data.loader, sender, data.data);
+                    return respond;
+                } catch (error) {
+                    return { error: 'Failed to fetch Data from external API' };
+                }
+            }
+            case 'GET_ROW_GRAPH_DATA':{
+                try {
+                    console.log(rq);
+                    let data = rq.body.data;
+                    const respond = await this.processService.getRowGraphData(data.rqId, data.loader, data.data, rq.user);
                     return respond;
                 } catch (error) {
                     return { error: 'Failed to fetch flow chart from external API' };
                 }
             }
-
+            case 'START_GRAPH':{
+                try {
+                    console.log(rq);
+                    let data = rq.body.data;
+                    let user = rq.user;
+                    const respond = await this.processService.instanceGraph(data.loader, user, data.data);
+                    return respond;
+                } catch (error) {
+                    return { error: 'Failed to fetch flow chart from external API' };
+                }
+            }
+            case 'ACTIVATE_GRAPH':{
+                try {
+                    console.log(rq);
+                    let data = rq.body.data;
+                    let user = rq.user;
+                    const respond = await this.processService.activateWorkflow(data.loader, user);
+                    return respond;
+                } catch (error) {
+                    return { error: 'Failed to fetch flow chart from external API' };
+                }
+            }
+            case 'DEACTIVATE_GRAPH':{
+                try {
+                    console.log(rq);
+                    let data = rq.body.data;
+                    let user = rq.user;
+                    const respond = await this.processService.deactivateWorkflow(data.loader, user);
+                    return respond;
+                } catch (error) {
+                    return { error: 'Failed to fetch flow chart from external API' };
+                }
+            }
             default: {
                 return { error: 'UNAVAILABLE TYPE' };
             }
