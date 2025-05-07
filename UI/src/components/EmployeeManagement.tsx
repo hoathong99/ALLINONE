@@ -4,7 +4,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Dialog } from 'primereact/dialog';
 import { Button } from 'primereact/button';
 import {  DeleteSubmission, FetchEmployee, FetchGraphTable, FetchSubmission, LazyLoadNodeSchema, SubmitForm } from '../api';
-import { GraphNodeData, ScreenSetting } from '../types';
+import { GraphNodeData, ScreenSettingV2 } from '../types';
 import { Toast } from 'primereact/toast';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
@@ -19,7 +19,7 @@ interface EmploymentManagementProps {
   graphTemplateId: string,
   bigGraphLoader? : string,
   smallGraphLoader?: string,
-  setting?: ScreenSetting
+  setting?: ScreenSettingV2
 };
 
 interface EmployeeTableItem {

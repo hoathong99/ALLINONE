@@ -1,4 +1,3 @@
-// import { mockData, transformedDataForLazyLoad, transformedHistoryData, transformedSchemaData } from './dto/data';
 import { GraphData, GraphDataLazyLoad, GraphNodeData, NodeSubmission, ToGateWayPayload, Trigger } from './types';
 
 // Mock API functions
@@ -124,22 +123,7 @@ export const submitEvent = async (graphId: string, event: Record<string, unknown
 
 //--------->Test
 const STORAGE_KEY = "superduperSecret";
-
-// export const FetchData = async (graphId: string, requestId: string): Promise<GraphData> => {     // call n8n directly to get graph data
-//   const requestBody = {
-//     type: "GET_GRAPH",
-//     data: {
-//       grId: graphId,
-//       rqId: requestId
-//     }
-//   }
-//   try {
-//     const respond = await ToGateWay(requestBody);
-//     return respond.json();
-//   } catch (error) {
-//     throw error;
-//   }
-// }
+const GATEWAY_URL = import.meta.env.VITE_GATEWAY_URL;
 
 export const LazyLoadGraph = async (graphId: string, requestId: string): Promise<GraphDataLazyLoad> => {
   const requestBody: ToGateWayPayload = {
@@ -389,7 +373,7 @@ export const DeleteSubmission = async (submissionId: string): Promise<any> => {
 }
 
 export const ToGateWay = async (content: any): Promise<any> => {                               // Call Gateway server to handle guiding n8n instead
-  const url = `http://localhost:3000/process-controller/Gateway`;                         //Gateway API 
+  const url = `${GATEWAY_URL}/process-controller/Gateway`;                         //Gateway API 
   const token = localStorage.getItem(STORAGE_KEY);
   try {
     const response = await fetch(url, {

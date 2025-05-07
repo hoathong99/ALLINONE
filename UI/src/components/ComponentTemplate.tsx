@@ -15,7 +15,7 @@ interface props {
 
 function TemplateComponent (props: props) {
   const [loading, setLoading] = useState(true); 
-  const [setting] = useState<ScreenSettingV2>(props.setting); 
+  const [setting, setSetting] = useState<ScreenSettingV2>(props.setting); 
   const [dialogVisible, setDialogVisible] = useState(false);
   const [graphData, setGraphData] = useState<any>();
   const [tableData, setTableData] = useState<any>();
@@ -23,6 +23,12 @@ function TemplateComponent (props: props) {
   const [selectedRowData, setSelectedRowData] = useState<any>(null);
   const toast = useRef<Toast>(null);
   const [activeIndex, setActiveIndex] = useState(0);
+
+  useEffect(()=>{
+    setTableData(null);
+    setGraphData(null);
+    setSetting(props.setting);
+  },[props.setting])
 
   useEffect(() => {
     if(props.setting.tables)

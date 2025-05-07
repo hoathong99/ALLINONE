@@ -7,13 +7,13 @@ import { firstValueFrom } from 'rxjs';
 export class ProcessService {
     constructor(private readonly httpService: HttpService) { }
 
-    private readonly n8nBaseUrl = 'http://localhost:5678'; // Replace with your n8n instance
+    private readonly n8nBaseUrl = 'http://13.212.177.47:5678'; // Replace with your n8n instance
     private readonly apiKey = 'your-n8n-api-key'; // Replace with your actual API key
 
     static currentUser = {};
 
     async getFlowChart(rqId: string, chartId: string): Promise<any> {
-        const url = `http://localhost:5678/webhook/${encodeURIComponent(rqId)}`;
+        const url = `http://13.212.177.47:5678/webhook/${encodeURIComponent(rqId)}`;
         const payload = {
             graphId: chartId,
         }
@@ -35,7 +35,7 @@ export class ProcessService {
     }
 
     async getAllChart(loader: string): Promise<any> {
-        const url = `http://localhost:5678/webhook/GetGraphData`;
+        const url = `http://13.212.177.47:5678/webhook/GetGraphData`;
         const payload = {
             loader: loader,
         }
@@ -57,7 +57,7 @@ export class ProcessService {
     }
 
     async getFlowChartTemplate(rqId: string, chartId: string): Promise<any> {
-        const url = `http://localhost:5678/webhook/${encodeURIComponent(rqId)}`;
+        const url = `http://13.212.177.47:5678/webhook/${encodeURIComponent(rqId)}`;
         const payload = {
             graphId: chartId,
         }
@@ -79,7 +79,7 @@ export class ProcessService {
     }
 
     async CreateFlowChart(tId: string, c: any): Promise<any> {
-        const url = `http://localhost:5678/webhook/InitProcess`;
+        const url = `http://13.212.177.47:5678/webhook/InitProcess`;
         const payload = {
             templateId: tId,
             content: c
@@ -101,7 +101,7 @@ export class ProcessService {
     }
 
     async getNodeSchema(rqId: string, loader: string): Promise<any> {
-        const url = `http://localhost:5678/webhook/${encodeURIComponent(rqId)}`;
+        const url = `http://13.212.177.47:5678/webhook/${encodeURIComponent(rqId)}`;
         const payload = {
             schemaId: loader,
         }
@@ -123,7 +123,7 @@ export class ProcessService {
     }
 
     async triggerFormAction(rqId: string, data: any, sender: any): Promise<any> {
-        const url =  `http://localhost:5678/webhook/${encodeURIComponent(rqId)}`;
+        const url =  `http://13.212.177.47:5678/webhook/${encodeURIComponent(rqId)}`;
         const payload = {
             data: data,
         }
@@ -148,7 +148,7 @@ export class ProcessService {
     }
 
     async getRowGraphData(rqId: string, loader: string, data: any, sender: any): Promise<any> {
-        const url = `http://localhost:5678/webhook/${encodeURIComponent(rqId)}`;
+        const url = `http://13.212.177.47:5678/webhook/${encodeURIComponent(rqId)}`;
         const payload = {
             loader: loader,
             data: data,
@@ -176,7 +176,7 @@ export class ProcessService {
     }
 
     async instanceGraph(loader: string, sender: any, data?: any){
-        const url = `http://localhost:5678/webhook/instance-graph`;
+        const url = `http://13.212.177.47:5678/webhook/instance-graph`;
         const payload = {
             loader: loader,
             data: data,
@@ -202,7 +202,7 @@ export class ProcessService {
     }
 
     async requestData(rqId: string, loader: string, sender?: any, data?: any){
-        const url = `http://localhost:5678/webhook/${encodeURIComponent(rqId)}`;
+        const url = `http://13.212.177.47:5678/webhook/${encodeURIComponent(rqId)}`;
         const payload = {
             loader: loader,
             data: data

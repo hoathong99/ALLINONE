@@ -7,9 +7,11 @@ declare global {
   }
 }
 
-const GOOGLE_CLIENT_ID = "458291474425-l9jd9q0a4qd6dgn6q2cjehv40btqid31.apps.googleusercontent.com";
+const GATEWAY_URL = import.meta.env.VITE_GATEWAY_URL;
+
+const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 const STORAGE_KEY = "superduperSecret";
-const LoginURL = "http://localhost:3000/auth-controller/login";
+const LoginURL = `${GATEWAY_URL}/auth-controller/login`;
 
 const GoogleLogin = () => {
   const [user, setUser] = useState<any>(null);

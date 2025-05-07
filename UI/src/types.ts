@@ -219,4 +219,49 @@ export const dummyScreenSettingV2: ScreenSettingV2 = {
   ]
 };
 
+export const dummyAttendanceScrenceSetting: ScreenSettingV2 = {
+  headerActions: [
+    {
+      name: "Create New",
+      type: "new_process",
+      requestId: "get-template",
+      toN8nLoader: "quy_trinh_mau_nv_03"
+    },
+    {
+      name: "Create action 3",
+      type: "new_process",
+      requestId: "get-template",
+      toN8nLoader: "quy_trinh_mau_nv_03"
+    }
+  ],
+  screenHeader: "Attendace Management",
+  tables: [
+    {
+      header: "Attendance",
+      requestId: "LoadAttendanceTable",
+      n8nLoader: "what_ever_it_it_Not_needed_in_this_case_any_way",
+      tableActions: [
+        // {
+        //   name: "Edit",
+        //   type: "new_process",
+        //   requestId: "get-template",
+        //   toN8nLoader: "Employee-Edit",
+        //   resourceRequestId: "GetEmployeeEditGraphData"
+        // },
+        // {
+        //   name: "Delete",
+        //   type: "new_process",
+        //   requestId: "deleteRequest",
+        //   toN8nLoader: "graph-02-delete",
+        //   resourceRequestId: "GetDeleteDisplay"
+        // }
+      ],
+      tableSchema: {
+        row: ["ID", "Name", "CHECKIN", "CHECKOUT"],
+        rowAttribute: ["_id", "fullName", "laborType", "status"]
+      }
+    }
+  ]
+};
+
 //<----------------------------------Test
