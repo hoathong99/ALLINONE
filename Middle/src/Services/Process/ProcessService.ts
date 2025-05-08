@@ -132,7 +132,7 @@ export class ProcessService {
     }
 
     async triggerFormAction(rqId: string, data: any, sender: any): Promise<any> {
-        const url = `${this.n8nBaseUrl}/webhook-test/${encodeURIComponent(rqId)}`;
+        const url = `${this.n8nBaseUrl}/webhook/${encodeURIComponent(rqId)}`;
         const payload = {
             data: data,
         }
