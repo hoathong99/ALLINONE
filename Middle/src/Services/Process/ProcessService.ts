@@ -1,28 +1,19 @@
 import { HttpService } from '@nestjs/axios';
 import { Body, HttpException, Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import { AxiosError } from 'axios';
 import { firstValueFrom } from 'rxjs';
 
 @Injectable()
 export class ProcessService {
-    constructor(
-        private readonly httpService: HttpService,
-        private readonly configService: ConfigService,
-    ) { }
+    constructor(private readonly httpService: HttpService) { }
 
-    private get n8nBaseUrl(): string {
-        return this.configService.get<string>('N8N_BASE_URL', 'http://13.212.177.47:5678');
-    }
-
-    private get apiKey(): string {
-        return this.configService.get<string>('N8N_API_KEY', 'your-n8n-api-key');
-    }
+    private readonly n8nBaseUrl = 'http://13.212.177.47:5678'; // Replace with your n8n instance
+    private readonly apiKey = 'your-n8n-api-key'; // Replace with your actual API key
 
     static currentUser = {};
 
     async getFlowChart(rqId: string, chartId: string): Promise<any> {
-        const url = `${this.n8nBaseUrl}/webhook/${encodeURIComponent(rqId)}`;
+        const url = `http://13.212.177.47:5678/webhook/${encodeURIComponent(rqId)}`;
         const payload = {
             graphId: chartId,
         }
@@ -31,6 +22,8 @@ export class ProcessService {
                 this.httpService.post(url, payload)
             );
 
+            // console.log("GOTTEN:");
+            // console.log(response.data);
             return response.data;
         } catch (error: any) {
             console.error('FetchData error:', error?.response?.data || error.message);
@@ -42,7 +35,7 @@ export class ProcessService {
     }
 
     async getAllChart(loader: string): Promise<any> {
-        const url = `${this.n8nBaseUrl}/webhook/GetGraphData`;
+        const url = `http://13.212.177.47:5678/webhook/GetGraphData`;
         const payload = {
             loader: loader,
         }
@@ -51,6 +44,8 @@ export class ProcessService {
                 this.httpService.post(url, payload)
             );
 
+            // console.log("GOTTEN:");
+            // console.log(response.data);
             return response.data;
         } catch (error: any) {
             console.error('FetchData error:', error?.response?.data || error.message);
@@ -62,7 +57,7 @@ export class ProcessService {
     }
 
     async getFlowChartTemplate(rqId: string, chartId: string): Promise<any> {
-        const url = `${this.n8nBaseUrl}/webhook/${encodeURIComponent(rqId)}`;
+        const url = `http://13.212.177.47:5678/webhook/${encodeURIComponent(rqId)}`;
         const payload = {
             graphId: chartId,
         }
@@ -71,6 +66,8 @@ export class ProcessService {
                 this.httpService.post(url, payload)
             );
 
+            // console.log("GOTTEN:");
+            // console.log(response.data);
             return response.data;
         } catch (error: any) {
             console.error('FetchData error:', error?.response?.data || error.message);
@@ -82,7 +79,7 @@ export class ProcessService {
     }
 
     async CreateFlowChart(tId: string, c: any): Promise<any> {
-        const url = `${this.n8nBaseUrl}/webhook/InitProcess`;
+        const url = `http://13.212.177.47:5678/webhook/InitProcess`;
         const payload = {
             templateId: tId,
             content: c
@@ -91,6 +88,8 @@ export class ProcessService {
             const response = await firstValueFrom(
                 this.httpService.post(url, payload)
             );
+            // console.log("GOTTEN:");
+            // console.log(response.data);
             return response.data;
         } catch (error: any) {
             console.error('FetchData error:', error?.response?.data || error.message);
@@ -102,7 +101,7 @@ export class ProcessService {
     }
 
     async getNodeSchema(rqId: string, loader: string): Promise<any> {
-        const url = `${this.n8nBaseUrl}/webhook/${encodeURIComponent(rqId)}`;
+        const url = `http://13.212.177.47:5678/webhook/${encodeURIComponent(rqId)}`;
         const payload = {
             schemaId: loader,
         }
@@ -111,6 +110,8 @@ export class ProcessService {
                 this.httpService.post(url, payload)
             );
 
+            // console.log("GOTTEN:");
+            // console.log(response.data);
             return response.data;
         } catch (error: any) {
             console.error('FetchData error:', error?.response?.data || error.message);
@@ -122,7 +123,7 @@ export class ProcessService {
     }
 
     async triggerFormAction(rqId: string, data: any, sender: any): Promise<any> {
-        const url = `${this.n8nBaseUrl}/webhook/${encodeURIComponent(rqId)}`;
+        const url =  `http://13.212.177.47:5678/webhook/785284fe-39d3-414f-a38c-fc719288ca48/NodeAction/${encodeURIComponent(rqId)}`;
         const payload = {
             data: data,
         }
@@ -147,7 +148,7 @@ export class ProcessService {
     }
 
     async getRowGraphData(rqId: string, loader: string, data: any, sender: any): Promise<any> {
-        const url = `${this.n8nBaseUrl}/webhook/${encodeURIComponent(rqId)}`;
+        const url = `http://13.212.177.47:5678/webhook/${encodeURIComponent(rqId)}`;
         const payload = {
             loader: loader,
             data: data,
@@ -162,6 +163,8 @@ export class ProcessService {
             const response = await firstValueFrom(
                 this.httpService.post(url, payload, header)
             );
+            // console.log("GOTTEN:");
+            // console.log(response.data);
             return response.data;
         } catch (error: any) {
             console.error('FetchData error:', error?.response?.data || error.message);
@@ -173,7 +176,7 @@ export class ProcessService {
     }
 
     async instanceGraph(loader: string, sender: any, data?: any){
-        const url = `${this.n8nBaseUrl}/webhook/instance-graph`;
+        const url = `http://13.212.177.47:5678/webhook/instance-graph`;
         const payload = {
             loader: loader,
             data: data,
@@ -199,7 +202,7 @@ export class ProcessService {
     }
 
     async requestData(rqId: string, loader: string, sender?: any, data?: any){
-        const url = `${this.n8nBaseUrl}/webhook/${encodeURIComponent(rqId)}`;
+        const url = `http://13.212.177.47:5678/webhook/${encodeURIComponent(rqId)}`;
         const payload = {
             loader: loader,
             data: data
