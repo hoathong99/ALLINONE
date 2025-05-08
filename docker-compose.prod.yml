@@ -1,82 +1,62 @@
-version: '3.8'
-
 services:
-  frontend:
-    build:
-      context: ./UI
-      dockerfile: Dockerfile.prod
-    ports:
-      - "80:80"
-    environment:
-      - VITE_API_URL=http://localhost:3000
-    depends_on:
-      - backend
-
-  backend:
-    build:
-      context: ./Middle
-      dockerfile: Dockerfile.prod
+  gateway:
+    image: middle_erp
     ports:
       - "3000:3000"
-    environment:
-      - PORT=3000
-      - MONGODB_URI=mongodb://mongodb:27017/n8n
-      - N8N_URL=http://n8n:5678
-      - NODE_ENV=production
+    env_file:
+      - .env
+  frontend:
+    image: ui_erp
+    ports:
+      - "80:80"
+    env_file:
+      -.env
     depends_on:
-      - mongodb
-      - n8n
-
+      - gateway
   n8n:
-    image: n8nio/n8n:latest
+    image: n8nio/n8n
     ports:
       - "5678:5678"
     environment:
-      - N8N_HOST=n8n
-      - N8N_PORT=5678
-      - N8N_PROTOCOL=http
-      - N8N_EDITOR_BASE_URL=http://localhost:5678
+      - N8N_BASIC_AUTH_ACTIVE=true
+      - N8N_BASIC_AUTH_USER=user
+      - N8N_BASIC_AUTH_PASSWORD=password
       - DB_TYPE=postgresdb
-      - DB_POSTGRESDB_HOST=postgres
+      - DB_POSTGRESDB_HOST=db
       - DB_POSTGRESDB_PORT=5432
       - DB_POSTGRESDB_DATABASE=n8n
       - DB_POSTGRESDB_USER=n8n
-      - DB_POSTGRESDB_PASSWORD=n8n_password
-      - DB_POSTGRESDB_SCHEMA=public
-      - NODE_ENV=production
-    volumes:
-      - n8n_data:/home/node/.n8n
-      - ./N8N/local-files:/files
+      - DB_POSTGRESDB_PASSWORD=n8n
+      - NODE_FUNCTION_ALLOW_EXTERNAL=*
+      - N8N_SECURE_COOKIE=false
+      - WEBHOOK_URL=http://13.212.177.47:5678/
+      - N8N_ENCRYPTION_KEY=super-secret-key
     depends_on:
-      postgres:
-        condition: service_healthy
-      
-  postgres:
-    image: postgres:15-alpine
-    ports:
-      - "5439:5432"
+      - db
+    links:
+      - mongodb
+    restart: unless-stopped
+
+  db:
+    image: postgres:15
+    volumes:
+      - db-data:/var/lib/postgresql/data
     environment:
       - POSTGRES_USER=n8n
-      - POSTGRES_PASSWORD=n8n_password
+      - POSTGRES_PASSWORD=n8n
       - POSTGRES_DB=n8n
-      - POSTGRES_NON_ROOT_USER=n8n
-      - POSTGRES_NON_ROOT_PASSWORD=n8n_password
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U n8n"]
-      interval: 5s
-      timeout: 5s
-      retries: 5
-
+    restart: unless-stopped
   mongodb:
     image: mongo:latest
+    command: mongod
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=mongoadmin
+      - MONGO_INITDB_ROOT_PASSWORD=mongopasswd
+    volumes:
+      - mongo_storage_2:/data/db
+    restart: always
     ports:
       - "27017:27017"
-    volumes:
-      - mongodb_data:/data/db
-
 volumes:
-  mongodb_data:
-  postgres_data:
-  n8n_data:
+  db-data:
+  mongo_storage_2:
