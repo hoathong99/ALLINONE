@@ -120,11 +120,11 @@ export const dummyScreenSettingV2: ScreenSettingV2 = {
       requestId: "get-template",
       toN8nLoader: "quy_trinh_mau_nv_05"
     },
-    {
-      name: "Export",
-      type: "link",
-      link: "/export-data"
-    }
+    // {
+    //   name: "Export",
+    //   type: "link",
+    //   link: "/export-data"
+    // }
   ],
   screenHeader: "Employee Management",
   tables: [

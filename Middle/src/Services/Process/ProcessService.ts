@@ -123,7 +123,7 @@ export class ProcessService {
     }
 
     async triggerFormAction(rqId: string, data: any, sender: any): Promise<any> {
-        const url =  `http://13.212.177.47:5678/webhook/${encodeURIComponent(rqId)}`;
+        const url =  `http://13.212.177.47:5678/webhook/785284fe-39d3-414f-a38c-fc719288ca48/NodeAction/${encodeURIComponent(rqId)}`;
         const payload = {
             data: data,
         }
@@ -249,27 +249,27 @@ export class ProcessService {
         }
       }
 
-      async deactivateWorkflow(workflowId: string, sender: any): Promise<any> {
+    async deactivateWorkflow(workflowId: string, sender: any): Promise<any> {
         const url = `${this.n8nBaseUrl}/rest/workflows/${workflowId}/deactivate`;
-    
+
         try {
-          const response = await firstValueFrom(
-            this.httpService.post(url, null, {
-              headers: { Authorization: `Bearer ${this.apiKey}` },
-            }),
-          );
-          return {
-            success: true,
-            data: response.data,
-            status: response.status,
-          };
+            const response = await firstValueFrom(
+                this.httpService.post(url, null, {
+                    headers: { Authorization: `Bearer ${this.apiKey}` },
+                }),
+            );
+            return {
+                success: true,
+                data: response.data,
+                status: response.status,
+            };
         } catch (error) {
-          return {
-            success: false,
-            message: error?.response?.data || 'Deactivation failed',
-            status: error?.response?.status || 500,
-          };
+            return {
+                success: false,
+                message: error?.response?.data || 'Deactivation failed',
+                status: error?.response?.status || 500,
+            };
         }
-      }
+    }
 }
 
