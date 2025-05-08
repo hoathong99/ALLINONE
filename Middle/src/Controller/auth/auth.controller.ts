@@ -20,4 +20,9 @@ export class AuthController {
         console.log("------------------------------LOGIN--------------------------", req.body);
       return this.authService.login(req.body.token);
     }
+    @Post('register')
+    async register(@Req() req) {
+        console.log("------------------------------Register--------------------------", req.body);
+      return this.authService.register(req.body);
+    }
 }

@@ -3,14 +3,13 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { OAuth2Client } from 'google-auth-library';
 import axios from 'axios';
 import { error } from 'console';
-
-const findUserUrl = "http://13.212.177.47:5678/webhook/Login";
-const createUserUrl = "http://13.212.177.47:5678/webhook/createUser";
+import { ConfigService } from '@nestjs/config';
 
 enum ROLE {
   USER="USER",
   ADMIN="ADMIN"
 }
+
 interface userInfo {
   name: string,
   email: string,
@@ -19,14 +18,32 @@ interface userInfo {
   employeeCode?: string
 }
 
+interface registerPayload {
+  email:string,
+  password: string,
+  googleToken: string
+}
+
 @Injectable()
 export class AuthService {
   private client: OAuth2Client;
+  private n8nBaseUrl;
+  private findUserUrl;
+  private createUserUrl; 
 
-  constructor() {
+  constructor(private readonly configService: ConfigService) {
     // Initialize the Google OAuth client with your Google Client ID
     this.client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+    this.n8nBaseUrl = this.configService.get<number>('n8nUrl');
+    // this.findUserUrl = `${this.configService.get<number>('n8nUrl')}/webhook/Login`;
+    // this.createUserUrl = `${this.configService.get<number>('n8nUrl')}/webhook/CreateUser`;
+    this.findUserUrl = `${process.env.VITE_N8N_URL}/webhook/Login`;
+    this.createUserUrl = `${process.env.VITE_N8N_URL}/webhook/CreateUser`;
   }
+  // n8nBaseUrl(): string {
+  //   return this.configService.get<string>('N8N_BASE_URL', 'http://13.212.177.47:5678');
+  // }
+
 
   /**
    * Verifies the Google ID token and returns the user's info if valid.
@@ -60,7 +77,7 @@ export class AuthService {
   async verifyToken(idToken: string) {
     try {
       let ggUser = await this.verifyGoogleToken(idToken);
-      const findUserResponse = await axios.post(findUserUrl, {
+      const findUserResponse = await axios.post(this.findUserUrl, {
         sub: ggUser.sub
       })
       const result = findUserResponse.data;
@@ -83,24 +100,23 @@ export class AuthService {
    */
   async login(idToken: string) {
     // Step 1: Verify the Google ID token
+    console.log("findUserURL",this.findUserUrl);
     const userInfo = await this.verifyGoogleToken(idToken);
 
     // Step 2: Call the n8n webhook to check if the user already exists in the database
-    // const findUserUrl = process.env.N8N_FIND_USER_WEBHOOK;
-    // const createUserUrl = process.env.N8N_CREATE_USER_WEBHOOK;
-
     let user;
     try {
       // Attempt to find the user using the n8n webhook
-      const findUserResponse = await axios.post(findUserUrl, {
-        email: userInfo.sub
-      })
+      const findUserResponse = await axios.post(this.findUserUrl, {
+        sub: userInfo.sub
+      });
 
       const result = findUserResponse.data;
+      console.log("login res", result);
       const isEmptyObject = result && Object.keys(result).length === 0;
 
       if (isEmptyObject) {
-        console.log('User not found. Creating user...');
+        console.log('User not found...');
         // const createUserResponse = await axios.post(createUserUrl, {
         //   email: userInfo.email,
         //   name: userInfo.name,
@@ -150,18 +166,23 @@ export class AuthService {
     };
   }
 
-  async register(userInfo: userInfo) {
-    axios.post(createUserUrl, {
-      email: userInfo.email,
-      name: userInfo.name,
-      sub: userInfo.sub,
-      role: userInfo.role
+  async register(Payload: registerPayload) {
+
+    this.verifyGoogleToken(Payload.googleToken).then((data)=>{
+      let userInfo : userInfo = {
+        email: Payload.email,
+        name: data.name?data.name:"",
+        sub: data.sub,
+        role: ROLE.USER
+      }
+      axios.post(this.createUserUrl, userInfo)
+      .then(data => { return data })
+      .catch(error => { throw (error) });
     })
-    .then(data => { return data })
-    .catch(error => { throw (error) });
   }
 
   async checkUseInDB(user : any) {
+
     const extract = {
       name: user.name,
       email: user.email,
@@ -169,7 +190,7 @@ export class AuthService {
     }
     try {
       // Attempt to find the user using the n8n webhook
-      const findUserResponse = await axios.post(findUserUrl, {
+      const findUserResponse = await axios.post(this.findUserUrl, {
         email: extract.email,
         name: extract.name,
         sub: extract.sub
