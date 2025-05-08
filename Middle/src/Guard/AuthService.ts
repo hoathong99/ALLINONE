@@ -5,7 +5,7 @@ import axios from 'axios';
 import { error } from 'console';
 
 const findUserUrl = "http://13.212.177.47:5678/webhook/Login";
-const createUserUrl = "http://13.212.177.47:5678/webhook/createUser";
+const createUserUrl = "http://13.212.177.47:5678/webhook-test/createUser";
 
 enum ROLE {
   USER="USER",
@@ -17,6 +17,12 @@ interface userInfo {
   sub?: string, // gg ID
   role: ROLE,
   employeeCode?: string
+}
+
+interface registerPayload {
+  email:string,
+  password,
+  googleToken: string
 }
 
 @Injectable()
@@ -150,15 +156,18 @@ export class AuthService {
     };
   }
 
-  async register(userInfo: userInfo) {
-    axios.post(createUserUrl, {
-      email: userInfo.email,
-      name: userInfo.name,
-      sub: userInfo.sub,
-      role: userInfo.role
+  async register(Payload: registerPayload) {
+    this.verifyGoogleToken(Payload.googleToken).then((data)=>{
+      let userInfo : userInfo = {
+        email: Payload.email,
+        name: data.name?data.name:"",
+        sub: data.sub,
+        role: ROLE.USER
+      }
+      axios.post(createUserUrl, userInfo)
+      .then(data => { return data })
+      .catch(error => { throw (error) });
     })
-    .then(data => { return data })
-    .catch(error => { throw (error) });
   }
 
   async checkUseInDB(user : any) {

@@ -78,7 +78,7 @@ function App() {
       <Router>
         <Routes>
           {/* Route with NO sidebar */}
-          <Route path="/auth" element={<AuthForm />} />
+          <Route path="/auth" element={<AuthForm/>} />
 
           {/* Routes WITH sidebar */}
           <Route path="*" element={

@@ -7,13 +7,14 @@ import { Divider } from 'primereact/divider';
 import { GoogleLogin } from '@react-oauth/google';
 import {jwtDecode} from 'jwt-decode';
 import './Authorization.css'; // Optional custom styles
+import { Register } from '../api';
 
 interface Props {
   onLoginSuccess: (token: string) => void;
   onRegisterSuccess: (token: string) => void;
 }
 
-const AuthForm: React.FC<Props> = ({ onLoginSuccess, onRegisterSuccess }) => {
+const AuthForm: React.FC = () => {
   const [mode, setMode] = useState<'login' | 'register'>('login');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -29,14 +30,16 @@ const AuthForm: React.FC<Props> = ({ onLoginSuccess, onRegisterSuccess }) => {
     if (mode === 'login') {
       // 🔐 Login request (simulate)
       console.log('Logging in with', { email, password });
-      onLoginSuccess('fake-login-token');
+      // onLoginSuccess('fake-login-token');
     } else {
       // 📝 Register request
       if (!googleToken) return alert('Please login with Google first');
       if (password !== rePassword) return alert('Passwords do not match');
 
-      console.log('Registering with', { email, password, googleToken });
-      onRegisterSuccess('fake-register-token');
+      // console.log('Registering with', { email, password, googleToken });
+      Register({email, password, googleToken})
+      // .then((res)=>console.log("res",res)).catch((error)=> console.log("error",error));
+      // onRegisterSuccess('fake-register-token');
     }
   };
 
