@@ -1,0 +1,94 @@
+{
+  "name": "Noti telegram for new employee",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "employee/noti-telegram",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -400,
+        -40
+      ],
+      "id": "1cf3409d-dafa-4ec5-863d-2d5d31d5dc0a",
+      "name": "Webhook",
+      "webhookId": "eeff837b-32da-43a9-91a7-3781df346c70"
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $json.body.groupId }}",
+        "text": "={{ $json.body.message }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        -60,
+        -40
+      ],
+      "id": "f84752bd-f90f-4a38-8f63-d64d15818adc",
+      "name": "Telegram",
+      "webhookId": "b406dac1-9484-4e99-a4cf-423c6beb0ba9",
+      "credentials": {
+        "telegramApi": {
+          "id": "0zMxVA0L8aC9oN52",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "allIncomingItems",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.2,
+      "position": [
+        160,
+        -40
+      ],
+      "id": "d44acdf1-bb82-4f95-b45c-a0b022f7ec6a",
+      "name": "Respond to Webhook"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Telegram",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Telegram": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "0f79a52b-dc29-4631-86cd-ae806be41418",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "558d88703fb65b2d0e44613bc35916258b0f0bf983c5d4730c00c424b77ca36a"
+  },
+  "id": "2Ohbf39uObGd0R4A",
+  "tags": []
+}
