@@ -5,14 +5,21 @@ import { firstValueFrom } from 'rxjs';
 
 @Injectable()
 export class FormService {
+    private n8nBaseUrl;
+    private apiKey;
     constructor(
         private readonly httpService: HttpService,
         private readonly configService: ConfigService,
-    ) { }
+    ) {
+        this.n8nBaseUrl = process.env.VITE_N8N_URL;
+        console.log("n8n", process.env.VITE_N8N_URL)
+        this.apiKey = process.env.GOOGLE_CLIENT_ID;
+        console.log("apiKey", process.env.GOOGLE_CLIENT_ID)
+     }
 
-    private get n8nBaseUrl(): string {
-        return this.configService.get<string>('N8N_BASE_URL', 'http://13.212.177.47:5678');
-    }
+    // private get n8nBaseUrl(): string {
+    //     return this.configService.get<string>('N8N_BASE_URL', 'http://13.212.177.47:5678');
+    // }
 
     async SubmitFormData(data: any, parentId: string, graphId: string, sender: any): Promise<any> {
         const url = `${this.n8nBaseUrl}/webhook/saveSubmission`;
