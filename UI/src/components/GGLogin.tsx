@@ -7,6 +7,12 @@ declare global {
   }
 }
 
+interface GoogleProfile {
+  email: string;
+  name: string;
+  picture: string;
+}
+
 const GATEWAY_URL = import.meta.env.VITE_GATEWAY_URL;
 
 const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
@@ -16,7 +22,8 @@ const LoginURL = `${GATEWAY_URL}/auth-controller/login`;
 const GoogleLogin = () => {
   const [user, setUser] = useState<any>(null);
   const [isLogin, setIsLogin] = useState<boolean>(false);
-
+  const [googleToken, setGoogleToken] = useState('');
+  const [profile, setProfile] = useState<GoogleProfile | null>(null);
   useEffect(() => {
     const token = localStorage.getItem(STORAGE_KEY);
     if (token) {
@@ -63,7 +70,6 @@ const GoogleLogin = () => {
 
   const handleCredentialResponse = (response: any) => {
     const idToken = response.credential;
-    console.log("Google JWT ID Token:", idToken);
 
     // Save token
     localStorage.setItem(STORAGE_KEY, idToken);
