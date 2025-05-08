@@ -494,6 +494,26 @@ export const DeactivateGraph = async (loader: string): Promise<any> =>{
   }
 }
 
+export const Register = async (content: any): Promise<any> => {                               // Call Gateway server to handle guiding n8n instead
+  const url = `${GATEWAY_URL}/auth-controller/register`;                                      //Gateway API 
+  //const token = localStorage.getItem(STORAGE_KEY);
+  try {
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(content),
+    });
 
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+    return response;
+  } catch (error) {
+    throw error; // Propagate error
+  }
+}
 
 //<------------Test

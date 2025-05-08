@@ -100,7 +100,7 @@ const GoogleLogin = () => {
       {!isLogin && <div id="google-button"></div>}
       {isLogin && (
         <div>
-          <p>Welcome {user.name}</p>
+          <p>Welcome</p>
           {/* <img src={user.picture} alt="Profile" width={40} height={40} style={{ borderRadius: "50%" }} /> */}
           <br />
           <button onClick={()=>logOut()}>Log out</button>

@@ -12,9 +12,12 @@ import { ConfigModule } from '@nestjs/config';
 import config from './configuration'
 @Module({
   imports: [HttpModule,
+    // ConfigModule.forRoot({
+    //   isGlobal: true, // Makes ConfigModule available in all modules
+    //   // load: [config], // Loads the configuration function
+    // })
     ConfigModule.forRoot({
-      isGlobal: true, // Makes ConfigModule available in all modules
-      load: [config], // Loads the configuration function
+      isGlobal: true, // So you don't need to import it in every module
     })
   ],
   controllers: [AppController, BasicControllerController, ProcessControllerController, AuthController],
