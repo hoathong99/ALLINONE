@@ -9,11 +9,12 @@ import { FormService } from './Services/Process/FormService';
 import { AuthController } from './Controller/auth/auth.controller';
 import { AuthService } from './Guard/AuthService';
 import { ConfigModule } from '@nestjs/config';
-
+import config from './configuration'
 @Module({
   imports: [HttpModule,
     ConfigModule.forRoot({
       isGlobal: true, // Makes ConfigModule available in all modules
+      load: [config], // Loads the configuration function
     })
   ],
   controllers: [AppController, BasicControllerController, ProcessControllerController, AuthController],
