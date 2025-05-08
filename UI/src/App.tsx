@@ -68,7 +68,6 @@ import TemplateComponentGenerator from './components/ComponentTemplateGenerator'
 import FlowEditor from './components/FlowEditor';
 import TestingGround from './components/DumpsterTestingGround';
 import { GoogleOAuthProvider } from '@react-oauth/google';
-
 import { dummyAttendanceScrenceSetting, dummyScreenSettingV2 } from './types';
 import AuthForm from './components/Authorization';
 import LayoutWithSidebar from './components/GeneralLayout';
