@@ -1,0 +1,340 @@
+{
+  "name": "oboard-create-email",
+  "nodes": [
+    {
+      "parameters": {
+        "collection": "employee",
+        "options": {},
+        "query": "={\n\"_id\": {{ JSON.stringify($json.id) }},\n  \"email\": \"{{ $json.email }}\"\n}"
+      },
+      "type": "n8n-nodes-base.mongoDb",
+      "typeVersion": 1.1,
+      "position": [
+        -900,
+        -60
+      ],
+      "id": "1bc92e5e-2bf8-4185-8c6b-01ffc15adc97",
+      "name": "MongoDB-not exists-employee-by-code3",
+      "alwaysOutputData": true,
+      "credentials": {
+        "mongoDb": {
+          "id": "RU11iII2JOqjxzS6",
+          "name": "MongoDB account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "let result =  {\n  validated: true,\n  errorMessage:'Success',\n  id:$input.first().json.query.id,\n  body: $input.first().json.body\n};\n\nif(result.body){\n  if(!result.id){\n     result.validated = false;\n    result.errorMessage = 'Id is required!'; \n  }else\n  if(!result.body.email){\n     result.validated = false;\n    result.errorMessage = 'email is required!'; \n  }\n}\n  \nreturn result;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1600,
+        -40
+      ],
+      "id": "b47505f3-5345-48d7-9af7-d322d718e2e1",
+      "name": "Code convert"
+    },
+    {
+      "parameters": {
+        "httpMethod": "PUT",
+        "path": "=employee/create-email",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -1840,
+        -40
+      ],
+      "id": "a09f2426-43d6-49a7-b930-f56fe11718f5",
+      "name": "PUT employee",
+      "webhookId": "3e5f04e9-b66c-4ca6-bc86-4c68590eae9f"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\n\"validated\":false,\n\"errorMessage\": \"Duplicate email\"\n} ",
+        "options": {
+          "responseCode": 400
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        -680,
+        180
+      ],
+      "id": "0fea3da1-963f-4bb7-bae6-79d61ca9549c",
+      "name": "Respond to Webhook5"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "f986cd91-ed43-49aa-be3a-7a868fdefe94",
+              "leftValue": "={{ $('MongoDB-not exists-employee-by-code3').first().json.keys() }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "array",
+                "operation": "empty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -680,
+        -60
+      ],
+      "id": "cd92c8f0-d2ba-4432-9f17-5dcf158ab499",
+      "name": "If check exist1"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Loop over input items and add a new field called 'myNewField' to the JSON of each one\nconst { ObjectId } = require('mongodb');\n\nreturn {\n  id: { $ne: new ObjectId($input.first().json.id) } ,\n  \"email\": $input.first().json.body.email\n};\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1100,
+        -60
+      ],
+      "id": "1c2230cb-6699-4188-90b7-be7acfd07b8c",
+      "name": "Code7"
+    },
+    {
+      "parameters": {
+        "jsCode": "\nreturn  {\n  _id:$(\"Code convert\").first().json.id,\n  ...$(\"Code convert\").first().json.body\n}"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -420,
+        -80
+      ],
+      "id": "1093564f-ae98-45ed-a740-616fe74f8bcb",
+      "name": "Code6"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\n\"validated\":\"{{ $json.validated }}\",\n  \"errorMessage\": \"{{ $json.errorMessage }}\"\n} ",
+        "options": {
+          "responseCode": 400
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        -1080,
+        180
+      ],
+      "id": "cd6b5644-2226-4fe7-9284-822f4582b248",
+      "name": "Respond to Webhook4"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "3421ead1-2d62-45aa-9428-da63b2386f89",
+              "leftValue": "={{ $json.validated }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -1380,
+        -40
+      ],
+      "id": "8c744b6e-52ed-48e1-96e0-e17a29e342cc",
+      "name": "If1"
+    },
+    {
+      "parameters": {
+        "respondWith": "allIncomingItems",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        100,
+        -80
+      ],
+      "id": "6fc1012f-f044-45a3-b9a9-4205d47dea1d",
+      "name": "Respond to Webhook20"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "collection": "=employee",
+        "updateKey": "_id",
+        "fields": "email",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.mongoDb",
+      "typeVersion": 1.1,
+      "position": [
+        -120,
+        -80
+      ],
+      "id": "d4eab348-d89f-491a-ae1d-191189dbdb87",
+      "name": "MongoDB",
+      "alwaysOutputData": true,
+      "credentials": {
+        "mongoDb": {
+          "id": "RU11iII2JOqjxzS6",
+          "name": "MongoDB account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Code convert": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "PUT employee": {
+      "main": [
+        [
+          {
+            "node": "Code convert",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MongoDB-not exists-employee-by-code3": {
+      "main": [
+        [
+          {
+            "node": "If check exist1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If check exist1": {
+      "main": [
+        [
+          {
+            "node": "Code6",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Respond to Webhook5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code7": {
+      "main": [
+        [
+          {
+            "node": "MongoDB-not exists-employee-by-code3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "Code7",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Respond to Webhook4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code6": {
+      "main": [
+        [
+          {
+            "node": "MongoDB",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MongoDB": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook20",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "7737a1c3-b2bc-45c0-ad6e-00aa13929832",
+  "meta": {
+    "instanceId": "558d88703fb65b2d0e44613bc35916258b0f0bf983c5d4730c00c424b77ca36a"
+  },
+  "id": "9fT3pReEjBc5OqFT",
+  "tags": []
+}
