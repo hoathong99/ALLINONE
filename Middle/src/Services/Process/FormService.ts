@@ -1,14 +1,21 @@
 import { HttpService } from '@nestjs/axios';
-import { Body, HttpException, Injectable } from '@nestjs/common';
-import { AxiosError } from 'axios';
-import { firstValueFrom, retry } from 'rxjs';
+import { HttpException, Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { firstValueFrom } from 'rxjs';
 
 @Injectable()
 export class FormService {
-    constructor(private readonly httpService: HttpService) { }
+    constructor(
+        private readonly httpService: HttpService,
+        private readonly configService: ConfigService,
+    ) { }
+
+    private get n8nBaseUrl(): string {
+        return this.configService.get<string>('N8N_BASE_URL', 'http://13.212.177.47:5678');
+    }
 
     async SubmitFormData(data: any, parentId: string, graphId: string, sender: any): Promise<any> {
-        const url = `http://13.212.177.47:5678/webhook/saveSubmission`;
+        const url = `${this.n8nBaseUrl}/webhook/saveSubmission`;
         const payload = {
             parentId: parentId,
             data: data,
@@ -36,7 +43,7 @@ export class FormService {
     }
 
     async GetLatestSubmission(parentId: string): Promise<any> {
-        const url = `http://13.212.177.47:5678/webhook/GetLatestSubmit`;
+        const url = `${this.n8nBaseUrl}/webhook/GetLatestSubmit`;
         const payload = {
             data: parentId,
         }
@@ -57,7 +64,7 @@ export class FormService {
     }
 
     async DeleteSubmission(Id: string): Promise<any> {
-        const url = `http://13.212.177.47:5678/webhook/DeleteSubmission`;
+        const url = `${this.n8nBaseUrl}/webhook/DeleteSubmission`;
         const payload = {
             data: Id,
         }
@@ -79,7 +86,7 @@ export class FormService {
 
     async GetAllSubmission(loader: string): Promise<any> {
         console.log("---------------------------GetSubmission----------------------------------")
-        const url = `http://13.212.177.47:5678/webhook/GetAllSubmit`;
+        const url = `${this.n8nBaseUrl}/webhook/GetAllSubmit`;
         const payload = {
             data: loader,
         }
@@ -101,7 +108,7 @@ export class FormService {
 
     async GetSubmissionByLoader(loader: string): Promise<any> {
         console.log("---------------------------GetSubmission----------------------------------")
-        const url = `http://13.212.177.47:5678/webhook/GetSubmitByLoader`;
+        const url = `${this.n8nBaseUrl}/webhook/GetSubmitByLoader`;
         const payload = {
             data: loader,
         }
@@ -123,7 +130,7 @@ export class FormService {
 
     async GetAllEmployee(loader: string): Promise<any> {
         console.log("---------------------------GetSubmission----------------------------------")
-        const url = `http://13.212.177.47:5678//webhook/GetAllEmployee`;
+        const url = `${this.n8nBaseUrl}/webhook/GetAllEmployee`;
         const payload = {
             data: loader,
         }
@@ -145,7 +152,7 @@ export class FormService {
 
     async GenerateFormSchema(html: string, desc: string): Promise<any> {
         console.log("---------------------------GenerateFormSchema----------------------------------")
-        const url = `http://13.212.177.47:5678/webhook/generateSchema`;
+        const url = `${this.n8nBaseUrl}/webhook/generateSchema`;
         const payload = {
             html: html,
             describe: desc

@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  n8n:
+    image: n8nio/n8n:latest # Use the latest official n8n image
+    container_name: n8n
+    restart: always
+    ports:
+      - "5678:5678" # Map the default n8n port
+    volumes:
+      - ~/.n8n:/home/node/.n8n # Persist n8n data and configurations
+    environment:
+      - GENERIC_TIMEZONE=Europe/Berlin # Set your timezone, change as needed
+    # Optional: Add user management environment variables if needed
+    # environment:
+    #   N8N_BASIC_AUTH_ACTIVE: "true"
+    #   N8N_BASIC_AUTH_USER: "your_username"
+    #   N8N_BASIC_AUTH_PASSWORD: "your_password"
+
+volumes:
+  n8n_data: # Define the named volume (alternative to host mount)
+
+# Note: The volume definition above (`volumes: n8n_data:`) is an alternative
+# to the host mount (`~/.n8n:/home/node/.n8n`). If you prefer Docker managed
+# volumes, you can use this instead:
+#
+# services:
+#   n8n:
+#     ... # other service config
+#     volumes:
+#       - n8n_data:/home/node/.n8n
+#     ... # other service config
+#
+# volumes:
+#  n8n_data: {}
