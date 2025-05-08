@@ -1,5 +1,5 @@
 {
-  "name": "onboard-webhook",
+  "name": "onboard-webhook-basic-info",
   "nodes": [
     {
       "parameters": {
@@ -41,7 +41,7 @@
     },
     {
       "parameters": {
-        "jsCode": "let result =  {\n  validated: true,\n  errorMessage:'Success',\n  body: $input.first().json.body\n};\n\nif(!result.body){\n  if(!result.body.code){\n     result.validated = false;\n    result.errorMessage = 'Code is required!'; \n  }\n  if(!result.body.name){\n     result.validated = false;\n    result.errorMessage = 'name is required!'; \n  }\n}\n  \nreturn result;"
+        "jsCode": "let result =  {\n  validated: true,\n  errorMessage:'Success',\n  body: $input.first().json.body\n};\n\n\nif(result.body){\n  if(!result.body.employeeCode){\n     result.validated = false;\n    result.errorMessage = 'Code is required!'; \n  }else\n  if(!result.body.fullName){\n     result.validated = false;\n    result.errorMessage = 'Name is required!'; \n  }\n}\n  \nreturn result;"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -536,7 +536,7 @@
     },
     {
       "parameters": {
-        "jsCode": "let result =  {\n  validated: true,\n  errorMessage:'Success',\n  id:$input.first().json.query.id,\n  body: $input.first().json.body\n};\n\nif(!result.body){\n  if(!result.body.id){\n     result.validated = false;\n    result.errorMessage = 'Code is required!'; \n  }\n  if(!result.body.code){\n     result.validated = false;\n    result.errorMessage = 'Code is required!'; \n  }\n  if(!result.body.name){\n     result.validated = false;\n    result.errorMessage = 'name is required!'; \n  }\n}\n  \nreturn result;"
+        "jsCode": "let result =  {\n  validated: true,\n  errorMessage:'Success',\n  id:$input.first().json.query.id,\n  body: $input.first().json.body\n};\n\nif(result.body){\n    if(!result.id){\n     result.validated = false;\n    result.errorMessage = 'Id is required!'; \n  }else\n  if(!result.body.employeeCode){\n     result.validated = false;\n    result.errorMessage = 'Code is required!'; \n  }else\n  if(!result.body.fullName){\n     result.validated = false;\n    result.errorMessage = 'name is required!'; \n  }\n}\n  \nreturn result;"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -643,8 +643,8 @@
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.2,
       "position": [
-        800,
-        1000
+        760,
+        940
       ],
       "id": "4c11474e-f65a-4190-9a72-b1d41fff9b2c",
       "name": "Respond to Webhook7"
@@ -660,8 +660,8 @@
       "type": "n8n-nodes-base.mongoDb",
       "typeVersion": 1.1,
       "position": [
-        520,
-        1000
+        480,
+        940
       ],
       "id": "3c471b4c-cd0f-4ea2-8146-95aaf2f6bca1",
       "name": "MongoDB-employee-by-code4",
@@ -680,8 +680,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        160,
-        1000
+        120,
+        940
       ],
       "id": "b7f5bf4f-6538-45bf-9106-70e0d8967aa4",
       "name": "Code8"
@@ -696,8 +696,8 @@
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2,
       "position": [
-        -120,
-        1000
+        -160,
+        940
       ],
       "id": "858f537d-c093-4195-8b45-c3c48c999ea2",
       "name": "Delete employee by id",
@@ -1047,10 +1047,10 @@
   "settings": {
     "executionOrder": "v1"
   },
-  "versionId": "c0417057-3436-454b-9bc8-1e4b6b4d21be",
+  "versionId": "d82553b0-eab8-4de9-9064-2a28b16d177b",
   "meta": {
     "templateCredsSetupCompleted": true,
-    "instanceId": "330e1884243448820139e10f27ac06d16742fa2397dc967d663702a8e3481806"
+    "instanceId": "558d88703fb65b2d0e44613bc35916258b0f0bf983c5d4730c00c424b77ca36a"
   },
   "id": "zEkyPNQiYjHyyr9v",
   "tags": []

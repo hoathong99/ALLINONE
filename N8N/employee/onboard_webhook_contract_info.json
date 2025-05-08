@@ -1,0 +1,859 @@
+{
+  "name": "onboard-webhook-contract-info",
+  "nodes": [
+    {
+      "parameters": {
+        "operation": "insert",
+        "collection": "=contractInfo",
+        "fields": " employeeId, contractCode,   contractType,   department,   position,   jobTitle,   rank,   workingForm,   workplace,   effectiveFrom,   effectiveTo,   signDate,   signer,   signature,   salaryStartDate,   salary,   salaryAmount,   salaryNote,   allowanceType,   allowanceNote",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.mongoDb",
+      "typeVersion": 1.1,
+      "position": [
+        1280,
+        -980
+      ],
+      "id": "761f083f-b934-43a0-8e88-5315b33eb1ce",
+      "name": "MongoDB11",
+      "credentials": {
+        "mongoDb": {
+          "id": "RU11iII2JOqjxzS6",
+          "name": "MongoDB account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "allIncomingItems",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        1500,
+        -980
+      ],
+      "id": "a248864b-58e2-420e-836c-f7d6c954ed8b",
+      "name": "Respond to Webhook19"
+    },
+    {
+      "parameters": {
+        "jsCode": "let result =  {\n  validated: true,\n  errorMessage:'Success',\n  body: $input.first().json.body\n};\n\n\nif(result.body){\n  \n  if(!result.body.employeeId){\n     result.validated = false;\n     result.errorMessage = 'EmployeeId is required!'; \n  } else\n  if(!result.body.contractCode){\n     result.validated = false;\n     result.errorMessage = 'Code is required!'; \n  }\n}\n  \nreturn result;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -200,
+        -940
+      ],
+      "id": "2064b158-18ff-49f9-9d57-0f375fac34c2",
+      "name": "Code"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "3421ead1-2d62-45aa-9428-da63b2386f89",
+              "leftValue": "={{ $json.validated }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        20,
+        -940
+      ],
+      "id": "7f49adf9-6f34-4a8f-92d1-198b17dcfdd9",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\n\"validated\":\"{{ $json.validated }}\",\n  \"errorMessage\": \"{{ $json.errorMessage }}\"\n} ",
+        "options": {
+          "responseCode": 400
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        320,
+        -720
+      ],
+      "id": "e049e247-2678-4e07-835a-48408075f955",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "jsCode": "\nreturn  $(\"Code\").first().json.body"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        980,
+        -980
+      ],
+      "id": "47b79b29-3c1e-4bd8-86b8-33933ac42cab",
+      "name": "Code1"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Loop over input items and add a new field called 'myNewField' to the JSON of each one\n\nreturn {\"contractCode\": $input.first().json.body.contractCode};\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        300,
+        -960
+      ],
+      "id": "f31b7cf9-0417-4065-be45-5f83034e68d2",
+      "name": "Code3"
+    },
+    {
+      "parameters": {
+        "collection": "contractInfo",
+        "options": {},
+        "query": "={\n  \"contractCode\": \"{{ $json.contractCode }}\"\n}"
+      },
+      "type": "n8n-nodes-base.mongoDb",
+      "typeVersion": 1.1,
+      "position": [
+        500,
+        -960
+      ],
+      "id": "73e29c7c-5ec1-48c4-9358-be40f6381ea8",
+      "name": "MongoDB-employee-by-code1",
+      "alwaysOutputData": true,
+      "credentials": {
+        "mongoDb": {
+          "id": "RU11iII2JOqjxzS6",
+          "name": "MongoDB account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "f986cd91-ed43-49aa-be3a-7a868fdefe94",
+              "leftValue": "={{ $('MongoDB-employee-by-code1').first().json.keys() }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "array",
+                "operation": "empty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        720,
+        -960
+      ],
+      "id": "d8153f35-fcec-4295-b77f-b1a2b008872a",
+      "name": "If check exist"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\n\"validated\":false,\n\"errorMessage\": \"Duplicate Code\"\n} ",
+        "options": {
+          "responseCode": 400
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        720,
+        -720
+      ],
+      "id": "220d36b9-199b-449e-884b-a6437cc71547",
+      "name": "Respond to Webhook2"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "collection": "=contractInfo",
+        "updateKey": "_id",
+        "fields": " employeeId, contractCode,   contractType,   department,   position,   jobTitle,   rank,   workingForm,   workplace,   effectiveFrom,   effectiveTo,   signDate,   signer,   signature,   salaryStartDate,   salary,   salaryAmount,   salaryNote,   allowanceType,   allowanceNote",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.mongoDb",
+      "typeVersion": 1.1,
+      "position": [
+        1280,
+        -480
+      ],
+      "id": "69e6cd8b-0629-4cd0-8cd7-01ab6521d0e0",
+      "name": "MongoDB",
+      "alwaysOutputData": true,
+      "credentials": {
+        "mongoDb": {
+          "id": "RU11iII2JOqjxzS6",
+          "name": "MongoDB account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "allIncomingItems",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        1500,
+        -480
+      ],
+      "id": "96a92922-dfbe-4202-b3cd-21fa4d585dbf",
+      "name": "Respond to Webhook20"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "3421ead1-2d62-45aa-9428-da63b2386f89",
+              "leftValue": "={{ $json.validated }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        20,
+        -440
+      ],
+      "id": "8fb01f45-5e33-4ae7-9c5c-001eebf1891b",
+      "name": "If1"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\n\"validated\":\"{{ $json.validated }}\",\n  \"errorMessage\": \"{{ $json.errorMessage }}\"\n} ",
+        "options": {
+          "responseCode": 400
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        320,
+        -220
+      ],
+      "id": "fe7ccce5-4c85-4990-a9e9-42958fcfb3a0",
+      "name": "Respond to Webhook4"
+    },
+    {
+      "parameters": {
+        "jsCode": "\nreturn  {\n  _id:$(\"Code convert\").first().json.id,\n  ...$(\"Code convert\").first().json.body\n}"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        980,
+        -480
+      ],
+      "id": "44e4344a-4c34-45b1-bdc6-410cc42eb7fe",
+      "name": "Code6"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Loop over input items and add a new field called 'myNewField' to the JSON of each one\nconst { ObjectId } = require('mongodb');\n\nreturn {\n  id: { $ne: new ObjectId($input.first().json.id) } ,\n  \"contractCode\": $input.first().json.body.contractCode\n};\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        300,
+        -460
+      ],
+      "id": "80c9e539-a2f7-44ed-b53e-91be1073a2f8",
+      "name": "Code7"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "f986cd91-ed43-49aa-be3a-7a868fdefe94",
+              "leftValue": "={{ $('MongoDB-not exists-employee-by-code3').first().json.keys() }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "array",
+                "operation": "empty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        720,
+        -460
+      ],
+      "id": "73c32e51-c975-4a59-8dbf-bf2c78a64c65",
+      "name": "If check exist1"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\n\"validated\":false,\n\"errorMessage\": \"Duplicate Code\"\n} ",
+        "options": {
+          "responseCode": 400
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        720,
+        -220
+      ],
+      "id": "3a1d95dc-9e3b-49d9-8c23-0c9fcb0a0831",
+      "name": "Respond to Webhook5"
+    },
+    {
+      "parameters": {
+        "jsCode": "let result =  {\n  validated: true,\n  errorMessage:'Success',\n  id:$input.first().json.query.id,\n  body: $input.first().json.body\n};\n\n\nif(result.body){\n  if(!result.id){\n     result.validated = false;\n    result.errorMessage = 'Id is required!'; \n  }else\n  if(!result.body.employeeId){\n     result.validated = false;\n     result.errorMessage = 'EmployeeId is required!'; \n  } else\n  if(!result.body.contractCode){\n     result.validated = false;\n     result.errorMessage = 'Code is required!'; \n  }\n}\n  \n  \nreturn result;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -200,
+        -440
+      ],
+      "id": "91ea64ed-ae2b-485e-8051-66efb1d8bc82",
+      "name": "Code convert"
+    },
+    {
+      "parameters": {
+        "collection": "contractInfo",
+        "options": {},
+        "query": "={\n\"_id\": {{ JSON.stringify($json.id) }},\n  \"contractCode\": \"{{ $json.contractCode }}\"\n}"
+      },
+      "type": "n8n-nodes-base.mongoDb",
+      "typeVersion": 1.1,
+      "position": [
+        500,
+        -460
+      ],
+      "id": "c058862e-179b-4341-bfc4-f62b35a02698",
+      "name": "MongoDB-not exists-employee-by-code3",
+      "alwaysOutputData": true,
+      "credentials": {
+        "mongoDb": {
+          "id": "RU11iII2JOqjxzS6",
+          "name": "MongoDB account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "allIncomingItems",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.2,
+      "position": [
+        600,
+        1440
+      ],
+      "id": "56ad4629-c126-4e07-ac94-c7ac277cf677",
+      "name": "Respond to Webhook7"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "collection": "employee",
+        "updateKey": "_id",
+        "fields": "=deleted",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.mongoDb",
+      "typeVersion": 1.1,
+      "position": [
+        320,
+        1440
+      ],
+      "id": "e36f0d95-cf98-4de7-beb5-98c382c4881a",
+      "name": "MongoDB-employee-by-code4",
+      "alwaysOutputData": true,
+      "credentials": {
+        "mongoDb": {
+          "id": "RU11iII2JOqjxzS6",
+          "name": "MongoDB account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const { ObjectId } = require('mongodb');\nreturn {_id: new ObjectId($input.first().json.query.id)\n       ,deleted: true}\n\n//return $input.first().json.query;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -40,
+        1440
+      ],
+      "id": "be912a36-6433-4055-846c-120ff0c955ad",
+      "name": "Code8"
+    },
+    {
+      "parameters": {
+        "httpMethod": "DELETE",
+        "path": "employee",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -320,
+        1440
+      ],
+      "id": "a1216d9a-922a-4c95-8cc1-301a401166b7",
+      "name": "Delete employee by id",
+      "webhookId": "3c73de48-9d21-47a9-9a7f-2ed353043a7d"
+    },
+    {
+      "parameters": {
+        "respondWith": "allIncomingItems",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.2,
+      "position": [
+        780,
+        -1180
+      ],
+      "id": "d0876cfc-c856-49c1-9457-cf96e44aefa7",
+      "name": "Respond to Webhook6"
+    },
+    {
+      "parameters": {
+        "collection": "contractInfo",
+        "options": {},
+        "query": "={\n  \"employeeId\": {{ JSON.stringify($json.employeeId) }}\n}"
+      },
+      "type": "n8n-nodes-base.mongoDb",
+      "typeVersion": 1.1,
+      "position": [
+        440,
+        -1180
+      ],
+      "id": "4b7303d6-659a-47cc-8807-9643b303f8af",
+      "name": "MongoDB-employee-by-code",
+      "alwaysOutputData": true,
+      "credentials": {
+        "mongoDb": {
+          "id": "RU11iII2JOqjxzS6",
+          "name": "MongoDB account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const { ObjectId } = require('mongodb');\nreturn {employeeId: new ObjectId($input.first().json.query.employeeId)}\n//return $input.first().json.query;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -160,
+        -1180
+      ],
+      "id": "5b6d51d5-0ea3-4ffc-9776-bb6cae9e6c55",
+      "name": "Code5"
+    },
+    {
+      "parameters": {
+        "path": "contract/by-employee-id",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -440,
+        -1180
+      ],
+      "id": "912240ea-92cf-4963-8c23-ee58e9225fee",
+      "name": "Get Contract by employeeId",
+      "webhookId": "3c73de48-9d21-47a9-9a7f-2ed353043a7d"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "contract/create",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -440,
+        -940
+      ],
+      "id": "c0471be3-2c56-4b51-a62f-1efe533a83b9",
+      "name": "POST contract",
+      "webhookId": "3e5f04e9-b66c-4ca6-bc86-4c68590eae9f"
+    },
+    {
+      "parameters": {
+        "httpMethod": "PUT",
+        "path": "=contract/update",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -440,
+        -440
+      ],
+      "id": "65c5720f-0477-45a8-b15b-56671bf81732",
+      "name": "PUT contract",
+      "webhookId": "3e5f04e9-b66c-4ca6-bc86-4c68590eae9f"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "MongoDB11": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook19",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Code3",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code1": {
+      "main": [
+        [
+          {
+            "node": "MongoDB11",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code3": {
+      "main": [
+        [
+          {
+            "node": "MongoDB-employee-by-code1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MongoDB-employee-by-code1": {
+      "main": [
+        [
+          {
+            "node": "If check exist",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If check exist": {
+      "main": [
+        [
+          {
+            "node": "Code1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Respond to Webhook2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MongoDB": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook20",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "Code7",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Respond to Webhook4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code6": {
+      "main": [
+        [
+          {
+            "node": "MongoDB",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code7": {
+      "main": [
+        [
+          {
+            "node": "MongoDB-not exists-employee-by-code3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If check exist1": {
+      "main": [
+        [
+          {
+            "node": "Code6",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Respond to Webhook5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code convert": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MongoDB-not exists-employee-by-code3": {
+      "main": [
+        [
+          {
+            "node": "If check exist1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MongoDB-employee-by-code4": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook7",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code8": {
+      "main": [
+        [
+          {
+            "node": "MongoDB-employee-by-code4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Delete employee by id": {
+      "main": [
+        [
+          {
+            "node": "Code8",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MongoDB-employee-by-code": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code5": {
+      "main": [
+        [
+          {
+            "node": "MongoDB-employee-by-code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Contract by employeeId": {
+      "main": [
+        [
+          {
+            "node": "Code5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "POST contract": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "PUT contract": {
+      "main": [
+        [
+          {
+            "node": "Code convert",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "dc1002e9-09b7-4352-b5fb-01814e299715",
+  "meta": {
+    "instanceId": "558d88703fb65b2d0e44613bc35916258b0f0bf983c5d4730c00c424b77ca36a"
+  },
+  "id": "WtXExYiKtdER3Yfa",
+  "tags": []
+}
