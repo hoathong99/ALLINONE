@@ -1,0 +1,16 @@
+services:
+  gateway:
+    image: middle_erp
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
+  frontend:
+    image: ui_erp
+    ports:
+      - "80:80"
+    env_file:
+      -.env
+    depends_on:
+      - gateway
+ 
