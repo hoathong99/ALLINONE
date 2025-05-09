@@ -2,6 +2,7 @@
 import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { AuthService } from './AuthService';
+import e from 'express';
 
 @Injectable()
 export class GoogleAuthGuard implements CanActivate {
@@ -26,7 +27,17 @@ export class GoogleAuthGuard implements CanActivate {
       // Validate the Google token using the AuthService
       // const user = await this.authService.verifyGoogleToken(token);
       const user = await this.authService.verifyToken(token);
-      request.user = user;  // Attach the validated user to the request
+      if(user){
+        request.user = user;  // Attach the validated user to the request
+      }else{
+        request.user = {
+          employeeCode: null,
+          name: null,
+          role: null,
+          email: null,
+          sub: null
+        }
+      }
       const isUserExist = await this.authService.checkUseInDB(user);
       return isUserExist;
     } catch (error) {

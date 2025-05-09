@@ -71,6 +71,7 @@ import { GoogleOAuthProvider } from '@react-oauth/google';
 import { dummyAttendanceScrenceSetting, dummyScreenSettingV2 } from './types';
 import AuthForm from './components/Authorization';
 import LayoutWithSidebar from './components/GeneralLayout';
+import Anonymous from './components/AnonymousTemplate';
 const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 
 function App() {
@@ -91,8 +92,8 @@ function App() {
                 } />
                 <Route path="/form-factory" element={<FormFactory />} />
                 <Route path="/graph-template" element={<TemplateGraph requestId='get-template' graphId='graph-02' />} />
-                <Route path="/component-template" element={<TemplateComponent setting={dummyScreenSettingV2} />} />
-                <Route path="/component-template-2" element={<TemplateComponent setting={dummyAttendanceScrenceSetting} />} />
+                <Route path="/demo" element={<TemplateComponent setting={dummyScreenSettingV2} />} />
+                <Route path="/free" element={<Anonymous requestId='get-template' graphId='quy_trinh_mau_nv_06' ></Anonymous>} />
                 <Route path="/component-template-generator" element={<TemplateComponentGenerator />} />
                 <Route path="/flow-editor" element={<FlowEditor />} />
                 <Route path="/testing" element={<TestingGround />} />

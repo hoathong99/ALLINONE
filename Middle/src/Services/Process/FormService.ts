@@ -12,9 +12,7 @@ export class FormService {
         private readonly configService: ConfigService,
     ) {
         this.n8nBaseUrl = process.env.VITE_N8N_URL;
-        console.log("n8n", process.env.VITE_N8N_URL)
         this.apiKey = process.env.GOOGLE_CLIENT_ID;
-        console.log("apiKey", process.env.GOOGLE_CLIENT_ID)
      }
 
     // private get n8nBaseUrl(): string {
@@ -22,6 +20,14 @@ export class FormService {
     // }
 
     async SubmitFormData(data: any, parentId: string, graphId: string, sender: any): Promise<any> {
+        if(!data){
+            data = null;
+        }
+        if(!sender){
+            sender = {
+                employeeCode:null
+            }
+        }
         const url = `${this.n8nBaseUrl}/webhook/saveSubmission`;
         const payload = {
             parentId: parentId,
@@ -30,7 +36,7 @@ export class FormService {
         }
         const header = {
             headers: {
-              'x-user-id': sender?.name,
+              'x-user-id': sender?.employeeCode,
               'Content-Type': 'application/json'
             }
           }

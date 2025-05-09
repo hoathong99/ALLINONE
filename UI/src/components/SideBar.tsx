@@ -25,17 +25,17 @@ function Sidebar() {
       <hr />
       <ul className="nav nav-pills flex-column mb-auto">
         <li className="nav-item">
-            <ul className="nav flex-column ms-3">
-              {/* <li><Link to="/employee" className="nav-link text-white">Employee</Link></li> */}
-              <li><Link to="/form-factory" className="nav-link text-white">Form Factory</Link></li>
-              {/* <li><Link to="/graph-template" className="nav-link text-white">Form Template</Link></li> */}
-              <li><Link to="/component-template" className="nav-link text-white">Demo Page</Link></li>
-              <li><Link to="/component-template-generator" className="nav-link text-white">Generate page</Link></li>
-              <li><Link to="/flow-editor" className="nav-link text-white">Flow Editor</Link></li>
-              {/* <li><Link to="component-template-2" className="nav-link text-white">Attendance</Link></li> */}
-              {/* <li><Link to="/leave" className="nav-link text-white">Leave</Link></li> */}
-              {/* <li><Link to="/testing" className="nav-link text-white">Testing</Link></li> */}
-            </ul>
+          <ul className="nav flex-column ms-3">
+            {/* <li><Link to="/employee" className="nav-link text-white">Employee</Link></li> */}
+            <li><Link to="/form-factory" className="nav-link text-white">Form Factory</Link></li>
+            {/* <li><Link to="/graph-template" className="nav-link text-white">Form Template</Link></li> */}
+            <li><Link to="/demo" className="nav-link text-white">Demo Page</Link></li>
+            <li><Link to="/free" className="nav-link text-white"> Anonymous</Link></li>
+            <li><Link to="/component-template-generator" className="nav-link text-white">Generate page</Link></li>
+            <li><Link to="/flow-editor" className="nav-link text-white">Flow Editor</Link></li>
+            {/* <li><Link to="/leave" className="nav-link text-white">Leave</Link></li> */}
+            {/* <li><Link to="/testing" className="nav-link text-white">Testing</Link></li> */}
+          </ul>
         </li>
       </ul>
       <div>

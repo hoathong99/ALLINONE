@@ -182,19 +182,31 @@ export class ProcessService {
         }
     }
 
-    async instanceGraph(loader: string, sender: any, data?: any){
+    async instanceGraph(loader: string, sender?: any, data?: any){
+        if(!data){
+            data = null;
+        }
+        if(!sender){
+            sender = {
+                employeeCode:null
+            }
+        }
         const url = `${this.n8nBaseUrl}/webhook/instance-graph`;
+        console.log("instanceGraph url", url);
+        console.log("sender",sender);
         const payload = {
             loader: loader,
             data: data,
-        }
+        };
+        console.log("payload",payload);
         const header = {
             headers: {
               'x-user-id': sender.employeeCode,
               'Content-Type': 'application/json'
             }
-          }
+          };
         try {
+            console.log("header",header);
             const response = await firstValueFrom(
                 this.httpService.post(url, payload, header)
             );

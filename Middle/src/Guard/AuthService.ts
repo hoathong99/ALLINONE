@@ -4,6 +4,9 @@ import { OAuth2Client } from 'google-auth-library';
 import axios from 'axios';
 import { error } from 'console';
 import { ConfigService } from '@nestjs/config';
+import { UsersService } from 'src/Services/User/UserService';
+import { JwtService } from '@nestjs/jwt';
+import * as bcrypt from 'bcrypt';
 
 enum ROLE {
   USER="USER",
@@ -13,6 +16,7 @@ enum ROLE {
 interface userInfo {
   name: string,
   email: string,
+  password: string,
   sub?: string, // gg ID
   role: ROLE,
   employeeCode?: string
@@ -31,19 +35,17 @@ export class AuthService {
   private findUserUrl;
   private createUserUrl; 
 
-  constructor(private readonly configService: ConfigService) {
+  constructor(private readonly configService: ConfigService,
+    // private usersService: UsersService,
+    // private jwtService: JwtService
+  ) {
     // Initialize the Google OAuth client with your Google Client ID
     this.client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
     this.n8nBaseUrl = this.configService.get<number>('n8nUrl');
-    // this.findUserUrl = `${this.configService.get<number>('n8nUrl')}/webhook/Login`;
-    // this.createUserUrl = `${this.configService.get<number>('n8nUrl')}/webhook/CreateUser`;
+
     this.findUserUrl = `${process.env.VITE_N8N_URL}/webhook/Login`;
     this.createUserUrl = `${process.env.VITE_N8N_URL}/webhook-test/createUser`;
   }
-  // n8nBaseUrl(): string {
-  //   return this.configService.get<string>('N8N_BASE_URL', 'http://13.212.177.47:5678');
-  // }
-
 
   /**
    * Verifies the Google ID token and returns the user's info if valid.
@@ -167,11 +169,15 @@ export class AuthService {
   }
 
   async register(Payload: registerPayload) {
+    const salt = await bcrypt.genSalt();
+    const hashedPassword = await bcrypt.hash(Payload.password, salt);
 
     this.verifyGoogleToken(Payload.googleToken).then((data)=>{
+      
       let userInfo : userInfo = {
         email: Payload.email,
         name: data.name?data.name:"",
+        password: hashedPassword,
         sub: data.sub,
         role: ROLE.USER
       }
@@ -210,4 +216,29 @@ export class AuthService {
       return false;
     }
   }
+
+  //   async validateUser(username: string, password: string) {
+  //   const user = await this.usersService.findByUsername(username);
+  //   if (user && user.password === password) {
+  //     const { password, ...result } = user;
+  //     return result;
+  //   }
+  //   return null;
+  // }
+
+  // async validateUserByUsernamePassword(username: string, password: string) {
+  //   const user = await this.usersService.findByUsername(username);
+  //   if (user && user.password === password) {
+  //     const { password, ...result } = user;
+  //     return result;
+  //   }
+  //   return null;
+  // }
+
+  // async loginWithUserNamePaswword(userinfo: any) {
+  //   const payload = { username: userinfo.username, sub: userinfo.id };
+  //   return {
+  //     access_token: this.jwtService.sign(payload),
+  //   };
+  // }
 }

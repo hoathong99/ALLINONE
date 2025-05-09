@@ -9,19 +9,20 @@ import { FormService } from './Services/Process/FormService';
 import { AuthController } from './Controller/auth/auth.controller';
 import { AuthService } from './Guard/AuthService';
 import { ConfigModule } from '@nestjs/config';
-// import { OpenApiController } from './controller/open-api/open-api/open-api.controller';
+import { FreeAccessController } from './Controller/free-access/free-access.controller';
 import config from './configuration'
+
 @Module({
   imports: [HttpModule,
     // ConfigModule.forRoot({
     //   isGlobal: true, // Makes ConfigModule available in all modules
     //   // load: [config], // Loads the configuration function
-    // })
+    // }),
     ConfigModule.forRoot({
       isGlobal: true, // So you don't need to import it in every module
     })
   ],
-  controllers: [AppController, BasicControllerController, ProcessControllerController, AuthController],
-  providers: [AppService, ProcessService, FormService, AuthService],
+  controllers: [AppController, BasicControllerController, ProcessControllerController, AuthController, FreeAccessController],
+  providers: [AppService, ProcessService, FormService, AuthService, ],
 })
 export class AppModule { }
