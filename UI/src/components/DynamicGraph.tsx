@@ -87,6 +87,8 @@ const DynamicGraph: React.FC<ApprovalGraphProps> = (props: ApprovalGraphProps) =
   const [historyLst, setHistoryLst] = useState<NodeSubmission[]>([]);                                     // store whole graph submission list
   const [isFormStarted, setisFormStarted] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [graphviewMode, setGraphviewMode] = useState<boolean>(true);
+  const [activeIndex, setActiveIndex] = useState(0);
 
   useEffect(() => {
     if (props.graphData) {
@@ -297,6 +299,12 @@ const DynamicGraph: React.FC<ApprovalGraphProps> = (props: ApprovalGraphProps) =
     );
   }
 
+  useEffect(()=>{
+    if(activeIndex){
+      setSelectedNode(nodes[activeIndex]);
+    }
+  },[activeIndex])
+
   useEffect(() => {
     if (graphData) {
       console.log(graphData);
@@ -418,6 +426,58 @@ const DynamicGraph: React.FC<ApprovalGraphProps> = (props: ApprovalGraphProps) =
     );
   };
 
+  const ViewInTabs = () => {
+    return (
+      <TabView activeIndex={activeIndex} onTabChange={(e) => setActiveIndex(e.index)} >
+        {nodes.map((n, index) => (
+          <TabPanel key={n.id + Date.now()} header={n.data.label}>
+            <TabView >
+              <TabPanel header="Form">
+                <div style={{ marginBottom: "3rem"}}>
+                  <Form
+                    schema={formSchema}
+                    uiSchema={uiSchema}
+                    validator={validator}
+                    formData={formData}
+                    onSubmit={handleFormSubmit}
+                    onChange={(e) => {
+                      const updatedFormData = e.formData;
+                      setFormData(updatedFormData); // assuming you have a useState for formData
+                    }}
+                    disabled={!isFormStarted}
+                  />
+                  <div className=" bottom-0 left-0 flex justify-end gap-2 p-4 flex justify-end gap-2">
+                    <Button className='pi pi-play-circle' onClick={() => RunNode()}>
+                      RUN
+                    </Button>
+                  </div>
+                </div>
+              </TabPanel>
+              <TabPanel header="History">
+                <div style={{ width: "250%" }}>
+                  <Form
+                    schema={formSchema}
+                    uiSchema={uiSchema}
+                    validator={validator}
+                    formData={selectedHistory}
+                    disabled
+                  />
+                </div>
+              </TabPanel>
+              <TabPanel header="Review(s)">
+                <div style={{ width: "250%" }}>
+                  {
+                    PreviewTabs()
+                  }
+                </div>
+              </TabPanel>
+            </TabView>
+          </TabPanel>
+        ))}
+      </TabView>
+    )
+  }
+
   const CloseFormDialog = () => {
     console.log("history", formData)
     setShowCustomDialog(false);
@@ -441,12 +501,13 @@ const DynamicGraph: React.FC<ApprovalGraphProps> = (props: ApprovalGraphProps) =
     let submitData = {
       parentId: selectedNode.id,
       parentGraph: graphData?._id,
+      ActionType : selectedNode.toN8nLoader,
       id: `${props.requestId}-${Date.now()}`,
       type: selectedNode?.type,
       data: { formData },
       timestamp: new Date().toISOString(),
     };
-    // console.log("submitData", submitData);
+    console.log("submitData", submitData);
     if (graphData) {
       SubmitForm(submitData, graphData.graphId);
     }
@@ -514,6 +575,7 @@ const DynamicGraph: React.FC<ApprovalGraphProps> = (props: ApprovalGraphProps) =
         <Toast ref={toast} />
       </div>
       <ReactFlow
+        hidden={!graphviewMode}
         nodes={nodes}
         edges={edges}
         onNodesChange={onNodesChange}
@@ -531,8 +593,7 @@ const DynamicGraph: React.FC<ApprovalGraphProps> = (props: ApprovalGraphProps) =
           backgroundColor: 'white',
           padding: '1rem',
           borderRadius: '0.5rem',
-          boxShadow: '0 10px 15px rgba(0,0,0,0.1)',
-          height: "95%"
+          boxShadow: '0 10px 15px rgba(0,0,0,0.1)'
         }}>
           <div style={{ height: "100%", overflowY: "auto" }}>
             <div style={{ display: "block", gap: "1rem" }}>
@@ -541,6 +602,7 @@ const DynamicGraph: React.FC<ApprovalGraphProps> = (props: ApprovalGraphProps) =
               {graphStatus == "active" && <Button label='Start' onClick={() => { startProcess() }} className="btn btn-theme" data-bs-toggle="modal" data-bs-target="#employeeModal" style={{ backgroundColor: "#1f2c64", color: "white" }}></Button>}
               {/* {graphStatus == "start" && <Button label='Cancel' onClick={() => { console.log("click!") }} className="btn btn-theme" data-bs-toggle="modal" data-bs-target="#employeeModal" style={{ backgroundColor: "#1f2c64", color: "white" }}></Button>}
               {graphStatus == "start" && <Button label='Run' onClick={() => { }} className="btn btn-theme" data-bs-toggle="modal" data-bs-target="#employeeModal" style={{ backgroundColor: "#1f2c64", color: "white" }}></Button>} */}
+              <Button label='Switch View' onClick={() => { setGraphviewMode(!graphviewMode) }} className="btn btn-theme" data-bs-toggle="modal" data-bs-target="#employeeModal" style={{ backgroundColor: "#1f2c64", color: "white" }}></Button>
             </div>
             <div>
               {props.attachmentData && (
@@ -595,6 +657,9 @@ const DynamicGraph: React.FC<ApprovalGraphProps> = (props: ApprovalGraphProps) =
           </TabView>
         </div>
       </Dialog>
+      <div hidden={graphviewMode}>
+      <ViewInTabs></ViewInTabs>
+      </div>
     </div>
   );
 };

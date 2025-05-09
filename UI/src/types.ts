@@ -118,7 +118,7 @@ export const dummyScreenSettingV2: ScreenSettingV2 = {
       name: "Create New",
       type: "new_process",
       requestId: "get-template",
-      toN8nLoader: "quy_trinh_mau_nv_04"
+      toN8nLoader: "quy_trinh_mau_nv_06"
     },
     {
       name: "Export",

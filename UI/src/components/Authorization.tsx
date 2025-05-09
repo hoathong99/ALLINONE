@@ -5,7 +5,7 @@ import { Button } from 'primereact/button';
 import { Card } from 'primereact/card';
 import { Divider } from 'primereact/divider';
 import { GoogleLogin } from '@react-oauth/google';
-import {jwtDecode} from 'jwt-decode';
+// import {jwtDecode} from 'jwt-decode';
 import './Authorization.css'; // Optional custom styles
 import { Register } from '../api';
 
@@ -37,7 +37,13 @@ const AuthForm: React.FC = () => {
       if (password !== rePassword) return alert('Passwords do not match');
 
       // console.log('Registering with', { email, password, googleToken });
-      Register({email, password, googleToken})
+      try{
+        Register({email, password, googleToken}).then((data) => console.log("res",data));
+      }
+      catch(error){
+        console.log("error",error);
+      }
+      
       // .then((res)=>console.log("res",res)).catch((error)=> console.log("error",error));
       // onRegisterSuccess('fake-register-token');
     }

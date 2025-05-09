@@ -38,7 +38,7 @@ export class AuthService {
     // this.findUserUrl = `${this.configService.get<number>('n8nUrl')}/webhook/Login`;
     // this.createUserUrl = `${this.configService.get<number>('n8nUrl')}/webhook/CreateUser`;
     this.findUserUrl = `${process.env.VITE_N8N_URL}/webhook/Login`;
-    this.createUserUrl = `${process.env.VITE_N8N_URL}/webhook/CreateUser`;
+    this.createUserUrl = `${process.env.VITE_N8N_URL}/webhook-test/createUser`;
   }
   // n8nBaseUrl(): string {
   //   return this.configService.get<string>('N8N_BASE_URL', 'http://13.212.177.47:5678');
