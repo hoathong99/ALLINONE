@@ -373,7 +373,7 @@ export const DeleteSubmission = async (submissionId: string): Promise<any> => {
 }
 
 export const ToGateWay = async (content: any): Promise<any> => {                               // Call Gateway server to handle guiding n8n instead
-  const url = `${GATEWAY_URL}/process-controller/Gateway`;                         //Gateway API 
+  const url = `${GATEWAY_URL}/protected`;                                                       //Gateway API 
   const token = localStorage.getItem(STORAGE_KEY);
   try {
     const response = await fetch(url, {
@@ -495,7 +495,7 @@ export const DeactivateGraph = async (loader: string): Promise<any> =>{
 }
 
 export const Register = async (content: any): Promise<any> => {                               // Call Gateway server to handle guiding n8n instead
-  const url = `${GATEWAY_URL}/auth-controller/register`;                                      //Gateway API 
+  const url = `${GATEWAY_URL}/auth/register`;                                      //Gateway API 
   //const token = localStorage.getItem(STORAGE_KEY);
   try {
     const response = await fetch(url, {
@@ -516,4 +516,154 @@ export const Register = async (content: any): Promise<any> => {                 
   }
 }
 
+export const Login = async (content: any): Promise<any> => {                               // Call Gateway server to handle guiding n8n instead
+  const url = `${GATEWAY_URL}/auth/login`;                                      //Gateway API 
+  //const token = localStorage.getItem(STORAGE_KEY);
+  try {
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(content),
+    });
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+    return response.json();
+  } catch (error) {
+    throw error; // Propagate error
+  }
+}
+
+//------------_FREE_ACCESS--------------------------
+export const ToFreeAccessGateWay = async (content: any): Promise<any> => {                               // Call Gateway server to handle guiding n8n instead
+  const url = `${GATEWAY_URL}/public`;                                                       //Gateway API 
+  const token = localStorage.getItem(STORAGE_KEY);
+  try {
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(content),
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+    return response;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export const LazyLoadNodeSchemaFreeAccess = async (loaderId: string, requestId: string): Promise<any> => {
+  const requestBody: ToGateWayPayload = {
+    type: "GET_NODE",
+    data: {
+      loaderId: loaderId,
+      rqId: requestId
+    }
+  }
+  try {
+    const respond = await ToFreeAccessGateWay(requestBody);
+    return respond.json();
+  } catch (error) {
+    // throw error;
+    console.error("Error fetching schema:", error);
+    let emptyObj: GraphNodeData = {
+      eventId: '',
+      type: '',
+      dataSchema: {
+        formSchema: {},
+        uiSchema: {}
+      },
+      triggers: []
+    };
+    return {
+      eventId: '',
+      type: '',
+      dataSchema: {
+        formSchema: {},
+        uiSchema: {}
+      },
+      triggers: []
+    };
+  }
+}
+
+export const LazyLoadGraphFreeAccess = async (graphId: string, requestId: string): Promise<GraphDataLazyLoad> => {
+  const requestBody: ToGateWayPayload = {
+    type: "GET_GRAPH",
+    data: {
+      grId: graphId,
+      rqId: requestId
+    }
+  }
+  try {
+    const respond = await ToFreeAccessGateWay(requestBody);
+    return respond.json();
+  } catch (error) {
+    throw error;
+  }
+}
+
+export const FetchSubmissionByLoaderFreeAccess = async (loaderId: string): Promise<any> => {
+  const requestBody: ToGateWayPayload = {
+    type: "GET_SUBMISSION_BY_LOADER",
+    data: {
+      loader: loaderId,
+    }
+  }
+  try {
+    const respond = await ToFreeAccessGateWay(requestBody);
+    return respond.json();
+  } catch (error) {
+    console.error("Error fetching schema:", error);
+    return [];
+  }
+}
+
+export const SubmitFormFreeAccess = async (data: any, graphId: string): Promise<any> => {
+  const requestBody: ToGateWayPayload = {
+    type: "SUBMIT_FORM",
+    data: {
+      data: data,
+      parentId: data.parentId,
+      graphId: graphId
+    }
+  }
+  try {
+    const respond = await ToFreeAccessGateWay(requestBody);
+    return respond;
+    // console.log(requestBody);
+  } catch (error) {
+    // throw error;
+    console.error("Error fetching schema:", error);
+    return {
+      status: "success?",
+    };
+  }
+}
+
+export const InstanceGraphFreeAccess = async (loader: string, attachmentData?: any): Promise<any> =>{
+  const requestBody: ToGateWayPayload = {
+    type: "START_GRAPH",
+    data: {
+      loader: loader,
+      data: attachmentData
+    }
+  }
+  try {
+    const respond = await ToFreeAccessGateWay(requestBody);
+    return respond.json();
+  } catch (error) {
+    throw error;
+  }
+}
 //<------------Test

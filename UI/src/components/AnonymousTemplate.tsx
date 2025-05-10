@@ -8,7 +8,7 @@ import ReactFlow, {
   Panel
 } from 'reactflow';
 import validator from '@rjsf/validator-ajv8';
-import { ActivateGraph, DeactivateGraph, fetchManualTriggers, FetchSubmissionByLoader, HandleCreateFlowGraph, InstanceGraph, LazyLoadGraph, LazyLoadNodeSchema, LoadResource, SubmitForm, TriggerFormAction } from '../api';
+import { ActivateGraph, DeactivateGraph, fetchManualTriggers, FetchSubmissionByLoader, FetchSubmissionByLoaderFreeAccess, HandleCreateFlowGraph, InstanceGraph, InstanceGraphFreeAccess, LazyLoadGraph, LazyLoadGraphFreeAccess, LazyLoadNodeSchema, LazyLoadNodeSchemaFreeAccess, LoadResource, SubmitForm, SubmitFormFreeAccess, TriggerFormAction } from '../api';
 import { GraphDataLazyLoad, NodeSubmission, Trigger } from '../types';
 import 'reactflow/dist/style.css';
 import { TabPanel, TabView } from 'primereact/tabview';
@@ -69,7 +69,7 @@ interface PreviewTab {
   formData: any;
 }
 
-const DynamicGraph: React.FC<ApprovalGraphProps> = (props: ApprovalGraphProps) => {
+const Anonymous: React.FC<ApprovalGraphProps> = (props: ApprovalGraphProps) => {
   const [graphStatus, setGraphStatus] = useState<any>();
   const [nodes, setNodes, onNodesChange] = useNodesState<Node>([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>([]);
@@ -97,16 +97,12 @@ const DynamicGraph: React.FC<ApprovalGraphProps> = (props: ApprovalGraphProps) =
       setGraphStatus(props.graphData.status);
     } else {
       if (props.graphId && props.requestId) {
-        LazyLoadGraph(props.graphId, props.requestId).then((data: GraphDataLazyLoad) => {
+        LazyLoadGraphFreeAccess(props.graphId, props.requestId).then((data: GraphDataLazyLoad) => {
           setGraphData(data);
           RenderFlowGraph(data);
           setGraphStatus(data.status);
         });
       }
-    }
-    // console.log("attachment", props.attachmentData);
-    if(props.attachmentData&&props.TableButtonSetting){
-      GetGraphDataFromAttachment(props.attachmentData);
     }
   }, [props]);
 
@@ -282,7 +278,7 @@ const DynamicGraph: React.FC<ApprovalGraphProps> = (props: ApprovalGraphProps) =
       setHistoryLst([]); // clear before loading
       graphData.history.forEach(item => {                                         // messed up somewhere, history list is doubled. hot fixed on node click
         if (item) {
-          FetchSubmissionByLoader(item).then((data: any) => {
+          FetchSubmissionByLoaderFreeAccess(item).then((data: any) => {
             if (data[0]) {
               setHistoryLst(prev => [...prev, data[0]]);
             }
@@ -291,13 +287,6 @@ const DynamicGraph: React.FC<ApprovalGraphProps> = (props: ApprovalGraphProps) =
       });
     }
   };
-
-  const GetGraphDataFromAttachment = (data: any) => {
-    LoadResource(props.TableButtonSetting.rqId, props.TableButtonSetting.loader, data)
-    .then((dataNodeSubmission) =>
-      setHistoryLst([dataNodeSubmission])
-    );
-  }
 
   useEffect(()=>{
     setSelectedNode(nodes[activeIndex]);
@@ -323,7 +312,7 @@ const DynamicGraph: React.FC<ApprovalGraphProps> = (props: ApprovalGraphProps) =
     console.log("select node", selectedNode);
     if (selectedNode) {
       setPreviewData([]);
-      LazyLoadNodeSchema(selectedNode.data.event.dataSchema, "GetSchemaByID").then((data: any) => {
+      LazyLoadNodeSchemaFreeAccess(selectedNode.data.event.dataSchema, "GetSchemaByID").then((data: any) => {
         if (data[0]) {
           // setSchema(data[0]);
           setUiSchema(data[0].uiSchema);
@@ -364,72 +353,6 @@ const DynamicGraph: React.FC<ApprovalGraphProps> = (props: ApprovalGraphProps) =
     return result;
   }
 
-  function DynamicForm({ data }: { data: Record<string, any> }) {
-    return (
-      <form style={{ display: 'flex', flexDirection: 'column', gap: '1rem', height: "100%", overflowY: "auto" }}>
-        {Object.entries(data).map(([key, value]) => (
-          <div key={key} style={{ display: 'flex', flexDirection: 'column' }}>
-            <label style={{
-              marginBottom: '0.5rem',
-              fontWeight: '600',
-              textTransform: 'capitalize',
-            }}>{key}</label>
-            <input
-              type="text"
-              value={value}
-              disabled
-              style={{
-                border: '1px solid #ccc',
-                padding: '0.5rem',
-                borderRadius: '5px',
-                backgroundColor: '#f5f5f5',
-                color: '#333',
-              }}
-            />
-          </div>
-        ))}
-      </form>
-    );
-  }
-
-  const OnClickNode = (event: any, node: any) => {
-    const uniqueHistory = [
-      ...new Map(historyLst.map(item => [item._id, item])).values()
-    ];
-    uniqueHistory.sort((a, b) => {
-      const timeA = new Date(a.timestamp).getTime();
-      const timeB = new Date(b.timestamp).getTime();
-      return timeB - timeA; // descending order
-    });
-    setHistoryLst(uniqueHistory); // messed up history submission fetch -> double the array
-    setSelectedNode(node);
-    setSelectedEvent(node.data.event);
-    setShowCustomDialog(true);
-  }
-
-  const PreviewTabs = () => {
-    return (
-      <TabView>
-        {previewData.map((tab, index) => (
-          <TabPanel key={tab.id + Date.now()} header={tab.header}>
-            <Form
-              schema={tab.formSchema}
-              uiSchema={tab.uiSchema}
-              formData={tab.formData}
-              disabled // make it read-only
-              validator={validator}
-            />
-          </TabPanel>
-        ))}
-      </TabView>
-    );
-  };
-
-  const switchView = () =>{
-    setActiveIndex(0);
-    setGraphviewMode(!graphviewMode);
-  }
-
   const ViewInTabs = () => {
     return (
       <TabView activeIndex={activeIndex} onTabChange={(e) => setActiveIndex(e.index)} >
@@ -451,28 +374,7 @@ const DynamicGraph: React.FC<ApprovalGraphProps> = (props: ApprovalGraphProps) =
                     disabled={!isFormStarted}
                   />
                   <div className=" bottom-0 left-0 flex justify-end gap-2 p-4 flex justify-end gap-2">
-                    {/* <Button className='pi pi-play-circle' onClick={() => RunNode()}>
-                      RUN
-                    </Button> */}
                   </div>
-                </div>
-              </TabPanel>
-              <TabPanel header="History">
-                <div style={{ width: "250%" }}>
-                  <Form
-                    schema={formSchema}
-                    uiSchema={uiSchema}
-                    validator={validator}
-                    formData={selectedHistory}
-                    disabled
-                  />
-                </div>
-              </TabPanel>
-              <TabPanel header="Review(s)">
-                <div style={{ width: "250%" }}>
-                  {
-                    PreviewTabs()
-                  }
                 </div>
               </TabPanel>
             </TabView>
@@ -480,15 +382,6 @@ const DynamicGraph: React.FC<ApprovalGraphProps> = (props: ApprovalGraphProps) =
         ))}
       </TabView>
     )
-  }
-
-  const CloseFormDialog = () => {
-    console.log("history", formData)
-    setShowCustomDialog(false);
-    // setSchema(null);
-    setFormSchema({});
-    setUiSchema({});
-    // setSelectedHistory(undefined);
   }
 
   const showToast = (message: string) => {
@@ -514,7 +407,7 @@ const DynamicGraph: React.FC<ApprovalGraphProps> = (props: ApprovalGraphProps) =
     };
     console.log("submitData", submitData);
     if (graphData) {
-      SubmitForm(submitData, graphData.graphId);
+      SubmitFormFreeAccess(submitData, graphData.graphId);
     }
     showToast("sending...");
     // if (selectedNode.toN8nLoader) {
@@ -522,27 +415,9 @@ const DynamicGraph: React.FC<ApprovalGraphProps> = (props: ApprovalGraphProps) =
     // }
   }
 
-  const RunNode = () =>{
-    showToast("running...");
-    let latestHistory = FindHistoryByEventId(selectedNode.id)?.formData;
-    if(latestHistory){
-      let submitData = {
-        parentId: selectedNode.id,
-        parentGraph: graphData?._id,
-        id: `${props.requestId}-${Date.now()}`,
-        type: selectedNode?.type,
-        data: latestHistory,
-        timestamp: new Date().toISOString(),
-      };
-      if (selectedNode.toN8nLoader) {
-        TriggerFormAction(submitData, selectedNode.toN8nLoader).then((data) => console.log("action response", data));
-      }
-    }
-  }
-
   const startProcess = () => {
     if (graphData && graphStatus == "active") {
-      InstanceGraph(graphData.graphId, props.attachmentData).then((data) => {
+      InstanceGraphFreeAccess(graphData.graphId).then((data) => {
         if (!data.error) {
           setGraphData(data);
         }
@@ -550,124 +425,17 @@ const DynamicGraph: React.FC<ApprovalGraphProps> = (props: ApprovalGraphProps) =
     }
   }
 
-  const runWorkFlow = async () => {
-    ActivateGraph("asdasd").then((data) => {
-      if (!data.error) {
-        showToast("WorkFlow Activated");
-      } else {
-        showToast(data.error);
-      }
-    })
-  }
-
-  const stopWorkFlow = () => {
-    DeactivateGraph("asd").then((data) => {
-      if (!data.error) {
-        showToast("WorkFlow Deactivated");
-      } else {
-        showToast(data.error);
-      }
-    })
-  }
-
   if (!graphData) {
     return <div className="flex items-center justify-center h-screen">Loading...</div>;
   }
 
   return (
-    <div style={{ height: "100%" }}>
-      <div className="card flex justify-content-center">
-        <Toast ref={toast} />
-      </div>
-      <ReactFlow
-        hidden={!graphviewMode}
-        nodes={nodes}
-        edges={edges}
-        onNodesChange={onNodesChange}
-        onEdgesChange={onEdgesChange}
-        onNodeClick={OnClickNode}
-        fitView={true}
-        minZoom={0.5}
-        maxZoom={1.5}
-        defaultViewport={{ x: 0, y: 0, zoom: 0.5 }}
-      >
-        <Background color="#aaa" gap={16} />
-        <Controls />
-        <MiniMap />
-        <Panel position="top-left" style={{
-          backgroundColor: 'white',
-          padding: '1rem',
-          borderRadius: '0.5rem',
-          boxShadow: '0 10px 15px rgba(0,0,0,0.1)'
-        }}>
-          <div style={{ height: "100%", overflowY: "auto" }}>
-            <div style={{ display: "block", gap: "1rem" }}>
-              {graphData._id ?? (<div>{graphData._id}</div>)}
-              {graphStatus && (<div>STATUS:{graphStatus}</div>)}
-              {graphStatus == "active" && <Button label='Start' onClick={() => { startProcess() }} className="btn btn-theme" data-bs-toggle="modal" data-bs-target="#employeeModal" style={{ backgroundColor: "#1f2c64", color: "white" }}></Button>}
-              {/* {graphStatus == "start" && <Button label='Cancel' onClick={() => { console.log("click!") }} className="btn btn-theme" data-bs-toggle="modal" data-bs-target="#employeeModal" style={{ backgroundColor: "#1f2c64", color: "white" }}></Button>}
-              {graphStatus == "start" && <Button label='Run' onClick={() => { }} className="btn btn-theme" data-bs-toggle="modal" data-bs-target="#employeeModal" style={{ backgroundColor: "#1f2c64", color: "white" }}></Button>} */}
-              <Button label='Switch View' onClick={() => { switchView() }} className="btn btn-theme" data-bs-toggle="modal" data-bs-target="#employeeModal" style={{ backgroundColor: "#1f2c64", color: "white" }}></Button>
-            </div>
-            <div>
-              {props.attachmentData && (
-                <DynamicForm data={props.attachmentData} />
-              )}
-            </div>
-          </div>
-        </Panel>
-      </ReactFlow>
-      <Dialog header={selectedNode?.data.label || "Header"} visible={showCustomDialog} style={{ width: '60vw' }} onHide={() => CloseFormDialog()}>
-        <div style={{ display: "flex" }}>
-          <TabView >
-            <TabPanel header="Form">
-              <div style={{ marginBottom: "3rem", width: "250%" }}>
-                <Form
-                  schema={formSchema}
-                  uiSchema={uiSchema}
-                  validator={validator}
-                  formData={formData}
-                  onSubmit={handleFormSubmit}
-                  onChange={(e) => {
-                    const updatedFormData = e.formData;
-                    setFormData(updatedFormData); // assuming you have a useState for formData
-                  }}
-                  disabled={!isFormStarted}
-                />
-                <div className=" bottom-0 left-0 flex justify-end gap-2 p-4 flex justify-end gap-2">
-                  <Button className='pi pi-play-circle' onClick={()=> RunNode()}>
-                    RUN
-                  </Button>
-                </div>
-              </div>
-            </TabPanel>
-            <TabPanel header="History">
-              <div style={{ width: "250%" }}>
-                <Form
-                  schema={formSchema}
-                  uiSchema={uiSchema}
-                  validator={validator}
-                  formData={selectedHistory}
-                  disabled
-                />
-              </div>
-            </TabPanel>
-            <TabPanel header="Review(s)">
-              <div style={{ width: "250%" }}>
-                {
-                  PreviewTabs()
-                }
-              </div>
-            </TabPanel>
-          </TabView>
-        </div>
-      </Dialog>
-      <div hidden={graphviewMode}>
-      <Button label='Switch View' onClick={() => { switchView() }} className="btn btn-theme" data-bs-toggle="modal" data-bs-target="#employeeModal" style={{ backgroundColor: "#1f2c64", color: "white" }}></Button>
+    <div style={{ height: "100vh", overflowY:"auto" , width:"100%"}}>
+      <Toast ref={toast} />
+      {graphStatus == "active" && <Button label='Start' onClick={() => { startProcess() }} className="btn btn-theme" data-bs-toggle="modal" data-bs-target="#employeeModal" style={{ backgroundColor: "#1f2c64", color: "white" }}></Button>}
       <ViewInTabs></ViewInTabs>
-      </div>
     </div>
   );
 };
 
-export default DynamicGraph;
+export default Anonymous;

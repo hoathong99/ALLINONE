@@ -53,6 +53,7 @@ export interface GraphNodeData {
   type: string;
   previews?: Array<string>;
   toN8nLoader?: string;
+  dataLoader?: string;
   dataSchema: any;
   actorRole?:string;
   status?: string;
@@ -73,13 +74,20 @@ export interface ToGateWayPayload {
 export interface NodeSubmission {
   _id? : string,
   parentId : string,
-  data: {
-    parentId?: string
-    id: string,
-    type:string,
-    data:any,
-    timestamp:string
-  }
+  parentGraph: string,
+  GraphTemplateId: string,
+  ActionType: string,
+  Target: string,
+  id?: string,
+  type: string,
+  formData: any,
+  // data: {
+  //   parentId?: string
+  //   id: string,
+  //   type:string,
+  //   data:any,
+  //   timestamp:string
+  // }
   timestamp?:string
 }
 
@@ -118,7 +126,7 @@ export const dummyScreenSettingV2: ScreenSettingV2 = {
       name: "Create New",
       type: "new_process",
       requestId: "get-template",
-      toN8nLoader: "quy_trinh_mau_nv_04"
+      toN8nLoader: "quy_trinh_mau_nv_05"
     },
     {
       name: "Export",
