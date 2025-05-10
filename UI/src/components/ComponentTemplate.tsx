@@ -208,7 +208,7 @@ function TemplateComponent (props: props) {
   }
 
   return (
-    <div className="d-flex">
+    <div className="d-flex" style={{height:"100vh", overflow:"auto"}}>
       <div className="card flex justify-content-center">
         <Toast ref={toast} />
       </div>
