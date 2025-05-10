@@ -373,7 +373,7 @@ export const DeleteSubmission = async (submissionId: string): Promise<any> => {
 }
 
 export const ToGateWay = async (content: any): Promise<any> => {                               // Call Gateway server to handle guiding n8n instead
-  const url = `${GATEWAY_URL}/process-controller/Gateway`;                         //Gateway API 
+  const url = `${GATEWAY_URL}/protected`;                                                       //Gateway API 
   const token = localStorage.getItem(STORAGE_KEY);
   try {
     const response = await fetch(url, {
@@ -495,7 +495,7 @@ export const DeactivateGraph = async (loader: string): Promise<any> =>{
 }
 
 export const Register = async (content: any): Promise<any> => {                               // Call Gateway server to handle guiding n8n instead
-  const url = `${GATEWAY_URL}/auth-controller/register`;                                      //Gateway API 
+  const url = `${GATEWAY_URL}/auth/register`;                                      //Gateway API 
   //const token = localStorage.getItem(STORAGE_KEY);
   try {
     const response = await fetch(url, {
@@ -516,10 +516,31 @@ export const Register = async (content: any): Promise<any> => {                 
   }
 }
 
+export const Login = async (content: any): Promise<any> => {                               // Call Gateway server to handle guiding n8n instead
+  const url = `${GATEWAY_URL}/auth/login`;                                      //Gateway API 
+  //const token = localStorage.getItem(STORAGE_KEY);
+  try {
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(content),
+    });
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+    return response.json();
+  } catch (error) {
+    throw error; // Propagate error
+  }
+}
 
 //------------_FREE_ACCESS--------------------------
 export const ToFreeAccessGateWay = async (content: any): Promise<any> => {                               // Call Gateway server to handle guiding n8n instead
-  const url = `${GATEWAY_URL}/free-access/Gateway`;                                                       //Gateway API 
+  const url = `${GATEWAY_URL}/public`;                                                       //Gateway API 
   const token = localStorage.getItem(STORAGE_KEY);
   try {
     const response = await fetch(url, {

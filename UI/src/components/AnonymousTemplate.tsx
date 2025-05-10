@@ -104,10 +104,6 @@ const Anonymous: React.FC<ApprovalGraphProps> = (props: ApprovalGraphProps) => {
         });
       }
     }
-    // console.log("attachment", props.attachmentData);
-    // if(props.attachmentData&&props.TableButtonSetting){
-    //   GetGraphDataFromAttachment(props.attachmentData);
-    // }
   }, [props]);
 
   const RenderFlowGraph = (graphData: GraphDataLazyLoad) => {
@@ -292,13 +288,6 @@ const Anonymous: React.FC<ApprovalGraphProps> = (props: ApprovalGraphProps) => {
     }
   };
 
-  // const GetGraphDataFromAttachment = (data: any) => {
-  //   LoadResource(props.TableButtonSetting.rqId, props.TableButtonSetting.loader, data)
-  //   .then((dataNodeSubmission) =>
-  //     setHistoryLst([dataNodeSubmission])
-  //   );
-  // }
-
   useEffect(()=>{
     setSelectedNode(nodes[activeIndex]);
   },[activeIndex])
@@ -364,72 +353,6 @@ const Anonymous: React.FC<ApprovalGraphProps> = (props: ApprovalGraphProps) => {
     return result;
   }
 
-  function DynamicForm({ data }: { data: Record<string, any> }) {
-    return (
-      <form style={{ display: 'flex', flexDirection: 'column', gap: '1rem', height: "100%", overflowY: "auto" }}>
-        {Object.entries(data).map(([key, value]) => (
-          <div key={key} style={{ display: 'flex', flexDirection: 'column' }}>
-            <label style={{
-              marginBottom: '0.5rem',
-              fontWeight: '600',
-              textTransform: 'capitalize',
-            }}>{key}</label>
-            <input
-              type="text"
-              value={value}
-              disabled
-              style={{
-                border: '1px solid #ccc',
-                padding: '0.5rem',
-                borderRadius: '5px',
-                backgroundColor: '#f5f5f5',
-                color: '#333',
-              }}
-            />
-          </div>
-        ))}
-      </form>
-    );
-  }
-
-  const OnClickNode = (event: any, node: any) => {
-    const uniqueHistory = [
-      ...new Map(historyLst.map(item => [item._id, item])).values()
-    ];
-    uniqueHistory.sort((a, b) => {
-      const timeA = new Date(a.timestamp).getTime();
-      const timeB = new Date(b.timestamp).getTime();
-      return timeB - timeA; // descending order
-    });
-    setHistoryLst(uniqueHistory); // messed up history submission fetch -> double the array
-    setSelectedNode(node);
-    setSelectedEvent(node.data.event);
-    setShowCustomDialog(true);
-  }
-
-  const PreviewTabs = () => {
-    return (
-      <TabView>
-        {previewData.map((tab, index) => (
-          <TabPanel key={tab.id + Date.now()} header={tab.header}>
-            <Form
-              schema={tab.formSchema}
-              uiSchema={tab.uiSchema}
-              formData={tab.formData}
-              disabled // make it read-only
-              validator={validator}
-            />
-          </TabPanel>
-        ))}
-      </TabView>
-    );
-  };
-
-  const switchView = () =>{
-    setActiveIndex(0);
-    setGraphviewMode(!graphviewMode);
-  }
-
   const ViewInTabs = () => {
     return (
       <TabView activeIndex={activeIndex} onTabChange={(e) => setActiveIndex(e.index)} >
@@ -451,28 +374,7 @@ const Anonymous: React.FC<ApprovalGraphProps> = (props: ApprovalGraphProps) => {
                     disabled={!isFormStarted}
                   />
                   <div className=" bottom-0 left-0 flex justify-end gap-2 p-4 flex justify-end gap-2">
-                    {/* <Button className='pi pi-play-circle' onClick={() => RunNode()}>
-                      RUN
-                    </Button> */}
                   </div>
-                </div>
-              </TabPanel>
-              <TabPanel header="History">
-                <div style={{ width: "250%" }}>
-                  <Form
-                    schema={formSchema}
-                    uiSchema={uiSchema}
-                    validator={validator}
-                    formData={selectedHistory}
-                    disabled
-                  />
-                </div>
-              </TabPanel>
-              <TabPanel header="Review(s)">
-                <div style={{ width: "250%" }}>
-                  {
-                    PreviewTabs()
-                  }
                 </div>
               </TabPanel>
             </TabView>
@@ -480,15 +382,6 @@ const Anonymous: React.FC<ApprovalGraphProps> = (props: ApprovalGraphProps) => {
         ))}
       </TabView>
     )
-  }
-
-  const CloseFormDialog = () => {
-    console.log("history", formData)
-    setShowCustomDialog(false);
-    // setSchema(null);
-    setFormSchema({});
-    setUiSchema({});
-    // setSelectedHistory(undefined);
   }
 
   const showToast = (message: string) => {
@@ -522,24 +415,6 @@ const Anonymous: React.FC<ApprovalGraphProps> = (props: ApprovalGraphProps) => {
     // }
   }
 
-  // const RunNode = () =>{
-  //   showToast("running...");
-  //   let latestHistory = FindHistoryByEventId(selectedNode.id)?.formData;
-  //   if(latestHistory){
-  //     let submitData = {
-  //       parentId: selectedNode.id,
-  //       parentGraph: graphData?._id,
-  //       id: `${props.requestId}-${Date.now()}`,
-  //       type: selectedNode?.type,
-  //       data: latestHistory,
-  //       timestamp: new Date().toISOString(),
-  //     };
-  //     if (selectedNode.toN8nLoader) {
-  //       TriggerFormAction(submitData, selectedNode.toN8nLoader).then((data) => console.log("action response", data));
-  //     }
-  //   }
-  // }
-
   const startProcess = () => {
     if (graphData && graphStatus == "active") {
       InstanceGraphFreeAccess(graphData.graphId).then((data) => {
@@ -548,26 +423,6 @@ const Anonymous: React.FC<ApprovalGraphProps> = (props: ApprovalGraphProps) => {
         }
       });
     }
-  }
-
-  const runWorkFlow = async () => {
-    ActivateGraph("asdasd").then((data) => {
-      if (!data.error) {
-        showToast("WorkFlow Activated");
-      } else {
-        showToast(data.error);
-      }
-    })
-  }
-
-  const stopWorkFlow = () => {
-    DeactivateGraph("asd").then((data) => {
-      if (!data.error) {
-        showToast("WorkFlow Deactivated");
-      } else {
-        showToast(data.error);
-      }
-    })
   }
 
   if (!graphData) {
