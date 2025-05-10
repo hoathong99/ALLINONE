@@ -7,18 +7,6 @@ import { FormService } from 'services/FormService';
 export class AppController {
 
   constructor(private readonly processService: ProcessService, private readonly formService: FormService) { }
-
-  // @Get('public')
-  // getPublic() {
-  //   return { message: 'This is a public endpoint' };
-  // }
-
-  // @UseGuards(AuthGuard)
-  // @Get('protected')
-  // getProtected() {
-  //   return { message: 'This is a protected endpoint' };
-  // }
-
   @UseGuards(AuthGuard)
   @Post("/protected")
   async ProtectedPortal(@Req() rq: any): Promise<any> {

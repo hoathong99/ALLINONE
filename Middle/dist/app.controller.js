@@ -22,15 +22,6 @@ let AppController = class AppController {
         this.processService = processService;
         this.formService = formService;
     }
-    // @Get('public')
-    // getPublic() {
-    //   return { message: 'This is a public endpoint' };
-    // }
-    // @UseGuards(AuthGuard)
-    // @Get('protected')
-    // getProtected() {
-    //   return { message: 'This is a protected endpoint' };
-    // }
     async ProtectedPortal(rq) {
         console.log(rq.body);
         switch (rq.body.type) {

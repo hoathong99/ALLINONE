@@ -575,7 +575,7 @@ const DynamicGraph: React.FC<ApprovalGraphProps> = (props: ApprovalGraphProps) =
   }
 
   return (
-    <div style={{ height: "100%" }}>
+    <div style={{ height: "100vh" }}>
       <div className="card flex justify-content-center">
         <Toast ref={toast} />
       </div>

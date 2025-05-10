@@ -28,11 +28,8 @@
     "react-router": "^7.5.0",
     "react-router-dom": "^7.5.0",
     "reactflow": "^11.10.4",
-<<<<<<< HEAD
-    "uuid": "^11.1.0"
-=======
+    "uuid": "^11.1.0",
     "vite-plugin-vercel": "^9.0.5"
->>>>>>> master
   },
   "devDependencies": {
     "@eslint/js": "^9.9.1",
